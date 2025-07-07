@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmmanagement Dokumentationssystem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="home-button">Zur Startseite</a>
+            <h1>Programmmanagement Dokumentationssystem</h1>
+            <p>Umfassende Vorlage für die gesamte Programmlebensdauer</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('grundlagen')">Programmgrundlagen</button>
+            <button class="nav-tab" onclick="showTab('vorbereitung')">Vorbereitungsphase</button>
+            <button class="nav-tab" onclick="showTab('steuerung')">Programmsteuerung</button>
+            <button class="nav-tab" onclick="showTab('reporting')">Reporting & Monitoring</button>
+            <button class="nav-tab" onclick="showTab('governance')">Governance</button>
+            <button class="nav-tab" onclick="showTab('vorlagen')">Vorlagen & Tools</button>
+        </div>
+        
+        <div class="content">
+            <!-- Programmgrundlagen -->
+            <div id="grundlagen" class="tab-content active">
+                <div class="section">
+                    <h2>Programmgrundlagen</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <h3>Organisationsdaten</h3>
+                            <label>Organisation/Unternehmen:</label>
+                            <input type="text" placeholder="Firmenname eintragen">
+                            
+                            <label>Programm-Sponsor:</label>
+                            <input type="text" placeholder="Name & Position">
+                            
+                            <label>Steering Committee:</label>
+                            <textarea placeholder="Mitglieder des Lenkungsausschusses"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3>Programmdaten</h3>
+                            <label>Programmname:</label>
+                            <input type="text" placeholder="Programmbezeichnung">
+                            
+                            <label>Programm-ID:</label>
+                            <input type="text" placeholder="Interne Kennung">
+                            
+                            <label>Programmmanager:</label>
+                            <input type="text" placeholder="Name verantwortlich">
+                            
+                            <label>Programmlaufzeit:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date" placeholder="Start">
+                                <input type="date" placeholder="Ende">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Programmvision & Strategische Ziele</h3>
+                        <label>Programmvision:</label>
+                        <textarea placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"></textarea>
+                        
+                        <label>Strategische Ziele:</label>
+                        <textarea placeholder="Messbare strategische Ziele und erwartete Benefits"></textarea>
+                        
+                        <label>Business Case:</label>
+                        <textarea placeholder="Geschäftlicher Nutzen und ROI-Erwartungen"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vorbereitungsphase -->
+            <div id="vorbereitung" class="tab-content">
+                <div class="section">
+                    <h2>Vorbereitungsphase</h2>
+                    
+                    <h3>1. Programmanalyse & Setup</h3>
+                    <div class="form-group">
+                        <label>Strategische Ausgangslage:</label>
+                        <textarea placeholder="Analyse der strategischen Ausgangslage und Treiber"></textarea>
+                        
+                        <label>Programmarchitektur:</label>
+                        <textarea placeholder="Struktur und Abhängigkeiten der Teilprojekte"></textarea>
+                        
+                        <label>Governance-Struktur:</label>
+                        <textarea placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten"></textarea>
+                    </div>
+                    
+                    <h3>2. Stakeholder & Kommunikation</h3>
+                    <div class="form-group">
+                        <label>Stakeholder-Mapping:</label>
+                        <textarea placeholder="Identifikation und Kategorisierung aller Stakeholder"></textarea>
+                        
+                        <label>Kommunikationsstrategie:</label>
+                        <textarea placeholder="Kommunikationsplan für verschiedene Stakeholder-Gruppen"></textarea>
+                        
+                        <label>Change Management Ansatz:</label>
+                        <textarea placeholder="Strategie für organisatorische Veränderungen"></textarea>
+                    </div>
+                    
+                    <h3>3. Ressourcen & Budgetplanung</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gesamtbudget:</label>
+                            <input type="text" placeholder="Gesamtbudget des Programms">
+                            
+                            <label>Budgetverteilung:</label>
+                            <textarea placeholder="Verteilung auf Teilprojekte und Programme"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Ressourcenplanung:</label>
+                            <textarea placeholder="Personelle und technische Ressourcen"></textarea>
+                            
+                            <label>Kapazitätsplanung:</label>
+                            <textarea placeholder="Kapazitäten und Verfügbarkeiten"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Programmsteuerung -->
+            <div id="steuerung" class="tab-content">
+                <div class="section">
+                    <h2>Programmsteuerung & Koordination</h2>
+                    
+                    <h3>Projekt-Portfolio Übersicht</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Projekt/Initiative</th>
+                                <th>Projektleiter</th>
+                                <th>Status</th>
+                                <th>Budget</th>
+                                <th>Start</th>
+                                <th>Ende (Plan)</th>
+                                <th>Abhängigkeiten</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projektTable">
+                            <tr>
+                                <td><input type="text" placeholder="Projektname"></td>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td>
+                                    <select>
+                                        <option>Geplant</option>
+                                        <option>Aktiv</option>
+                                        <option>Risiko</option>
+                                        <option>Abgeschlossen</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" placeholder="Budget"></td>
+                                <td><input type="date"></td>
+                                <td><input type="date"></td>
+                                <td><input type="text" placeholder="Abhängigkeiten"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addProjectRow()">+ Weiteres Projekt hinzufügen</button>
+                    
+                    <h3>Programm-Meilensteine</h3>
+                    <div id="milestones">
+                        <div class="milestone-item">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Meilenstein:</label>
+                                    <input type="text" placeholder="Meilenstein-Bezeichnung">
+                                </div>
+                                <div class="form-group">
+                                    <label>Zieldatum:</label>
+                                    <input type="date">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Beschreibung & Erfolgskriterien:</label>
+                                <textarea placeholder="Detaillierte Beschreibung und messbare Erfolgskriterien"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addMilestone()">+ Weiteren Meilenstein hinzufügen</button>
+                    
+                    <h3>Risiko- & Issue-Management</h3>
+                    <div class="form-group">
+                        <label>Aktuelle Programmrisiken:</label>
+                        <textarea placeholder="Identifizierte Risiken auf Programmebene"></textarea>
+                        
+                        <label>Eskalierte Issues:</label>
+                        <textarea placeholder="Aus Projekten eskalierte Probleme"></textarea>
+                        
+                        <label>Maßnahmenplan:</label>
+                        <textarea placeholder="Konkrete Maßnahmen zur Risikominimierung"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reporting & Monitoring -->
+            <div id="reporting" class="tab-content">
+                <div class="section">
+                    <h2>Reporting & Monitoring</h2>
+                    
+                    <h3>1. Executive Dashboard</h3>
+                    <div class="highlight-box">
+                        <strong>Programmstatus auf einen Blick</strong> - Übersicht für Steering Committee und Senior Management
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gesamtstatus Programm:</label>
+                            <select>
+                                <option>🟢 Grün - Im Plan</option>
+                                <option>🟡 Gelb - Achtung</option>
+                                <option>🔴 Rot - Kritisch</option>
+                            </select>
+                            
+                            <label>Budget-Status:</label>
+                            <input type="text" placeholder="% des Budgets verbraucht">
+                        </div>
+                        <div class="form-group">
+                            <label>Zeitplan-Status:</label>
+                            <input type="text" placeholder="Abweichung zum Masterplan">
+                            
+                            <label>Benefit-Realisierung:</label>
+                            <input type="text" placeholder="Realisierte Benefits in %">
+                        </div>
+                    </div>
+                    
+                    <h3>2. Detailliertes Monitoring</h3>
+                    <div class="form-group">
+                        <label>KPI-Tracking:</label>
+                        <textarea placeholder="Schlüsselkennzahlen und deren aktuelle Werte"></textarea>
+                        
+                        <label>Projekt-Interdependenzen:</label>
+                        <textarea placeholder="Status kritischer Abhängigkeiten zwischen Projekten"></textarea>
+                        
+                        <label>Resource Utilization:</label>
+                        <textarea placeholder="Auslastung und Verfügbarkeit kritischer Ressourcen"></textarea>
+                    </div>
+                    
+                    <h3>3. Stakeholder Kommunikation</h3>
+                    <div class="form-group">
+                        <label>Meeting-Zyklen:</label>
+                        <textarea placeholder="Regelmäßige Meetings (Steering Committee, PMO, etc.)"></textarea>
+                        
+                        <label>Berichtswesen:</label>
+                        <textarea placeholder="Berichte und Dashboards für verschiedene Zielgruppen"></textarea>
+                        
+                        <label>Eskalationsprozesse:</label>
+                        <textarea placeholder="Definierte Eskalationswege und -kriterien"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Governance -->
+            <div id="governance" class="tab-content">
+                <div class="section">
+                    <h2>Governance & Entscheidungsstrukturen</h2>
+                    
+                    <h3>1. Governance-Framework</h3>
+                    <div class="form-group">
+                        <label>Entscheidungskompetenzen:</label>
+                        <textarea placeholder="RACI-Matrix für Entscheidungen auf Programmebene"></textarea>
+                        
+                        <label>Steering Committee Charter:</label>
+                        <textarea placeholder="Aufgaben, Verantwortlichkeiten und Befugnisse"></textarea>
+                        
+                        <label>PMO-Rolle:</label>
+                        <textarea placeholder="Programme Management Office Aufgaben und Services"></textarea>
+                    </div>
+                    
+                    <h3>2. Standards & Prozesse</h3>
+                    <div class="form-group">
+                        <label>PM-Standards:</label>
+                        <textarea placeholder="Einheitliche Projektmanagement-Standards im Programm"></textarea>
+                        
+                        <label>Quality Gates:</label>
+                        <textarea placeholder="Qualitätssicherungsprozesse und Freigabeverfahren"></textarea>
+                        
+                        <label>Change Control:</label>
+                        <textarea placeholder="Änderungsmanagement-Prozess auf Programmebene"></textarea>
+                    </div>
+                    
+                    <h3>3. Compliance & Dokumentation</h3>
+                    <div class="form-group">
+                        <label>Compliance-Anforderungen:</label>
+                        <textarea placeholder="Regulatorische und interne Compliance-Vorgaben"></textarea>
+                        
+                        <label>Dokumentationsstandards:</label>
+                        <textarea placeholder="Vorgaben für Dokumentation und Archivierung"></textarea>
+                        
+                        <label>Audit-Bereitschaft:</label>
+                        <textarea placeholder="Vorbereitung auf interne/externe Audits"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vorlagen & Tools -->
+            <div id="vorlagen" class="tab-content">
+                <div class="section">
+                    <h2>Vorlagen & Tools</h2>
+                    
+                    <!-- Inhalt wurde entfernt -->
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
+            <button class="btn btn-primary" onclick="saveDocument()">💾 Dokument speichern</button>
+            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function addProjectRow() {
+            const tableBody = document.getElementById('projektTable');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Projektname"></td>
+                <td><input type="text" placeholder="Name"></td>
+                <td>
+                    <select>
+                        <option>Geplant</option>
+                        <option>Aktiv</option>
+                        <option>Risiko</option>
+                        <option>Abgeschlossen</option>
+                    </select>
+                </td>
+                <td><input type="text" placeholder="Budget"></td>
+                <td><input type="date"></td>
+                <td><input type="date"></td>
+                <td><input type="text" placeholder="Abhängigkeiten"></td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+        
+        function addMilestone() {
+            const milestonesContainer = document.getElementById('milestones');
+            const newMilestone = document.createElement('div');
+            newMilestone.className = 'milestone-item';
+            newMilestone.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meilenstein:</label>
+                        <input type="text" placeholder="Meilenstein-Bezeichnung">
+                    </div>
+                    <div class="form-group">
+                        <label>Zieldatum:</label>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Beschreibung & Erfolgskriterien:</label>
+                    <textarea placeholder="Detaillierte Beschreibung und messbare Erfolgskriterien"></textarea>
+                </div>
+            `;
+            milestonesContainer.appendChild(newMilestone);
+        }
+        
+        function printDocument() {
+            window.print();
+        }
+            function saveDocument() {
+                // 1. Daten sammeln (ähnlich wie für PDF, aber hier für HTML-Generierung)
+                const organisation = document.querySelector('input[placeholder="Firmenname eintragen"]').value;
+                const programmName = document.querySelector('input[placeholder="Programmbezeichnung"]').value;
+                const programmSponsor = document.querySelector('input[placeholder="Name & Position"]').value;
+                const steeringCommittee = document.querySelector('textarea[placeholder="Mitglieder des Lenkungsausschusses"]').value;
+                const programmId = document.querySelector('input[placeholder="Interne Kennung"]').value;
+                const programmManager = document.querySelector('input[placeholder="Name verantwortlich"]').value;
+                const programmLaufzeitStart = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(1)').value;
+                const programmLaufzeitEnde = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(2)').value;
+                const programmVision = document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"]').value;
+                const strategischeZiele = document.querySelector('textarea[placeholder="Messbare strategische Ziele und erwartete Benefits"]').value;
+                const businessCase = document.querySelector('textarea[placeholder="Geschäftlicher Nutzen und ROI-Erwartungen"]').value;
+
+                // ... weitere Daten aus allen Tabs sammeln ...
+                // Dies erfordert, dass Sie alle Formularfelder durchgehen und ihre Werte extrahieren.
+                // Eine robustere Methode wäre, die Daten in einem JavaScript-Objekt zu speichern,
+                // während der Benutzer sie eingibt, und dieses Objekt dann für die Generierung zu verwenden.
+
+                // Beispiel für Projekt-Portfolio (müsste iteriert werden)
+                const projectRows = document.querySelectorAll('#projektTable tr');
+                let projectsHtml = '';
+                projectRows.forEach(row => {
+                    const inputs = row.querySelectorAll('input, select');
+                    projectsHtml += `
+                        <tr>
+                            <td>${inputs[0].value}</td>
+                            <td>${inputs[1].value}</td>
+                            <td>${inputs[2].value}</td>
+                            <td>${inputs[3].value}</td>
+                            <td>${inputs[4].value}</td>
+                            <td>${inputs[5].value}</td>
+                            <td>${inputs[6].value}</td>
+                        </tr>
+                    `;
+                });
+
+                // Beispiel für Meilensteine (müsste iteriert werden)
+                const milestoneItems = document.querySelectorAll('#milestones .milestone-item');
+                let milestonesHtml = '';
+                milestoneItems.forEach(item => {
+                    const milestoneName = item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value;
+                    const milestoneDate = item.querySelector('input[type="date"]').value;
+                    const milestoneDescription = item.querySelector('textarea[placeholder="Detaillierte Beschreibung und messbare Erfolgskriterien"]').value;
+                    milestonesHtml += `
+                        <div class="milestone-item">
+                            <h4>${milestoneName} (Zieldatum: ${milestoneDate})</h4>
+                            <p>${milestoneDescription}</p>
+                        </div>
+                    `;
+                });
+
+
+                // 2. HTML-Struktur für das statische Dokument erstellen
+                // Sie können hier das CSS aus Ihrem <style>-Tag direkt einfügen oder verlinken.
+                // Für eine bessere Kapselung ist es oft sinnvoll, nur das relevante CSS einzubetten.
+                const staticHtmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="de">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Programmmanagement Dokumentation (Statisch)</title>
+                        <style>
+                            /* Kopieren Sie hier das relevante CSS aus Ihrer Originaldatei */
+                            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
+                            .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px; }
+                            .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; margin-bottom: 30px;}
+                            .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+                            .header p { font-size: 1.1rem; opacity: 0.9; }
+                            .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+                            .section h2 { color: #1e293b; font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+                            .section h3 { color: #334155; font-size: 1.3rem; margin-bottom: 15px; margin-top: 25px; }
+                            .form-group { margin-bottom: 20px; }
+                            .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; }
+                            .form-group p { margin-top: 0; margin-bottom: 0; padding: 8px 0; border-bottom: 1px dotted #ccc; } /* Stil für angezeigte Werte */
+                            .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+                            .table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+                            .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+                            .table th { background: #f8fafc; font-weight: 600; color: #374151; }
+                            .milestone-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 10px 0; }
+                            .highlight-box { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid #0ea5e9; padding: 20px; margin: 20px 0; border-radius: 8px; }
+                            /* Media queries für Responsivität können auch übernommen werden */
+                            @media (max-width: 768px) {
+                                .form-row { grid-template-columns: 1fr; }
+                                .container { padding: 20px; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>Programmmanagement Dokumentationssystem</h1>
+                                <p>Umfassende Vorlage für die gesamte Programmlebensdauer</p>
+                            </div>
+
+                            <div class="content">
+                                <div class="section">
+                                    <h2>Programmgrundlagen</h2>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <h3>Organisationsdaten</h3>
+                                            <label>Organisation/Unternehmen:</label>
+                                            <p>${organisation}</p>
+
+                                            <label>Programm-Sponsor:</label>
+                                            <p>${programmSponsor}</p>
+
+                                            <label>Steering Committee:</label>
+                                            <p>${steeringCommittee.replace(/\n/g, '<br>')}</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h3>Programmdaten</h3>
+                                            <label>Programmname:</label>
+                                            <p>${programmName}</p>
+
+                                            <label>Programm-ID:</label>
+                                            <p>${programmId}</p>
+
+                                            <label>Programmmanager:</label>
+                                            <p>${programmManager}</p>
+
+                                            <label>Programmlaufzeit:</label>
+                                            <p>${programmLaufzeitStart} bis ${programmLaufzeitEnde}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h3>Programmvision & Strategische Ziele</h3>
+                                        <label>Programmvision:</label>
+                                        <p>${programmVision.replace(/\n/g, '<br>')}</p>
+
+                                        <label>Strategische Ziele:</label>
+                                        <p>${strategischeZiele.replace(/\n/g, '<br>')}</p>
+
+                                        <label>Business Case:</label>
+                                        <p>${businessCase.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Vorbereitungsphase (müsste hier auch dynamisch befüllt werden) -->
+                                <div class="section">
+                                    <h2>Vorbereitungsphase</h2>
+                                    <h3>1. Programmanalyse & Setup</h3>
+                                    <div class="form-group">
+                                        <label>Strategische Ausgangslage:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Analyse der strategischen Ausgangslage und Treiber"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Programmarchitektur:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Struktur und Abhängigkeiten der Teilprojekte"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Governance-Struktur:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    <h3>2. Stakeholder & Kommunikation</h3>
+                                    <div class="form-group">
+                                        <label>Stakeholder-Mapping:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Identifikation und Kategorisierung aller Stakeholder"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Kommunikationsstrategie:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Kommunikationsplan für verschiedene Stakeholder-Gruppen"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Change Management Ansatz:</label>
+                                        <p>${document.querySelector('#vorbereitung textarea[placeholder="Strategie für organisatorische Veränderungen"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    <h3>3. Ressourcen & Budgetplanung</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Gesamtbudget:</label>
+                                            <p>${document.querySelector('#vorbereitung input[placeholder="Gesamtbudget des Programms"]').value}</p>
+                                            <label>Budgetverteilung:</label>
+                                            <p>${document.querySelector('#vorbereitung textarea[placeholder="Verteilung auf Teilprojekte und Programme"]').value.replace(/\n/g, '<br>')}</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ressourcenplanung:</label>
+                                            <p>${document.querySelector('#vorbereitung textarea[placeholder="Personelle und technische Ressourcen"]').value.replace(/\n/g, '<br>')}</p>
+                                            <label>Kapazitätsplanung:</label>
+                                            <p>${document.querySelector('#vorbereitung textarea[placeholder="Kapazitäten und Verfügbarkeiten"]').value.replace(/\n/g, '<br>')}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Programmsteuerung -->
+                                <div class="section">
+                                    <h2>Programmsteuerung & Koordination</h2>
+                                    <h3>Projekt-Portfolio Übersicht</h3>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Projekt/Initiative</th>
+                                                <th>Projektleiter</th>
+                                                <th>Status</th>
+                                                <th>Budget</th>
+                                                <th>Start</th>
+                                                <th>Ende (Plan)</th>
+                                                <th>Abhängigkeiten</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${projectsHtml}
+                                        </tbody>
+                                    </table>
+
+                                    <h3>Programm-Meilensteine</h3>
+                                    ${milestonesHtml}
+
+                                    <h3>Risiko- & Issue-Management</h3>
+                                    <div class="form-group">
+                                        <label>Aktuelle Programmrisiken:</label>
+                                        <p>${document.querySelector('#steuerung textarea[placeholder="Identifizierte Risiken auf Programmebene"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Eskalierte Issues:</label>
+                                        <p>${document.querySelector('#steuerung textarea[placeholder="Aus Projekten eskalierte Probleme"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Maßnahmenplan:</label>
+                                        <p>${document.querySelector('#steuerung textarea[placeholder="Konkrete Maßnahmen zur Risikominimierung"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Reporting & Monitoring -->
+                                <div class="section">
+                                    <h2>Reporting & Monitoring</h2>
+                                    <h3>1. Executive Dashboard</h3>
+                                    <div class="highlight-box">
+                                        <strong>Programmstatus auf einen Blick</strong> - Übersicht für Steering Committee und Senior Management
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Gesamtstatus Programm:</label>
+                                            <p>${document.querySelector('#reporting select').value}</p>
+                                            <label>Budget-Status:</label>
+                                            <p>${document.querySelector('#reporting input[placeholder="% des Budgets verbraucht"]').value}</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Zeitplan-Status:</label>
+                                            <p>${document.querySelector('#reporting input[placeholder="Abweichung zum Masterplan"]').value}</p>
+                                            <label>Benefit-Realisierung:</label>
+                                            <p>${document.querySelector('#reporting input[placeholder="Realisierte Benefits in %"]').value}</p>
+                                        </div>
+                                    </div>
+                                    <h3>2. Detailliertes Monitoring</h3>
+                                    <div class="form-group">
+                                        <label>KPI-Tracking:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Schlüsselkennzahlen und deren aktuelle Werte"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Projekt-Interdependenzen:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Status kritischer Abhängigkeiten zwischen Projekten"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Resource Utilization:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Auslastung und Verfügbarkeit kritischer Ressourcen"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    <h3>3. Stakeholder Kommunikation</h3>
+                                    <div class="form-group">
+                                        <label>Meeting-Zyklen:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Regelmäßige Meetings (Steering Committee, PMO, etc.)"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Berichtswesen:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Berichte und Dashboards für verschiedene Zielgruppen"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Eskalationsprozesse:</label>
+                                        <p>${document.querySelector('#reporting textarea[placeholder="Definierte Eskalationswege und -kriterien"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Governance -->
+                                <div class="section">
+                                    <h2>Governance & Entscheidungsstrukturen</h2>
+                                    <h3>1. Governance-Framework</h3>
+                                    <div class="form-group">
+                                        <label>Entscheidungskompetenzen:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="RACI-Matrix für Entscheidungen auf Programmebene"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Steering Committee Charter:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Aufgaben, Verantwortlichkeiten und Befugnisse"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>PMO-Rolle:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Programme Management Office Aufgaben und Services"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    <h3>2. Standards & Prozesse</h3>
+                                    <div class="form-group">
+                                        <label>PM-Standards:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Einheitliche Projektmanagement-Standards im Programm"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Quality Gates:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Qualitätssicherungsprozesse und Freigabeverfahren"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Change Control:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Änderungsmanagement-Prozess auf Programmebene"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    <h3>3. Compliance & Dokumentation</h3>
+                                    <div class="form-group">
+                                        <label>Compliance-Anforderungen:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Regulatorische und interne Compliance-Vorgaben"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Dokumentationsstandards:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Vorgaben für Dokumentation und Archivierung"]').value.replace(/\n/g, '<br>')}</p>
+                                        <label>Audit-Bereitschaft:</label>
+                                        <p>${document.querySelector('#governance textarea[placeholder="Vorbereitung auf interne/externe Audits"]').value.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                // 3. HTML-String als Blob speichern und zum Download anbieten
+                const blob = new Blob([staticHtmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Programmmanagement-Dokumentation.html'; // Dateiname
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                alert('Statische HTML-Dokumentation erstellt!');
+            }
+
+            // Ersetzen Sie in Ihrem HTML-Code den Aufruf für saveDocument()
+            // <button class="btn btn-primary" onclick="saveDocument()">💾 Dokument speichern</button>
+            // durch:
+            // <button class="btn btn-primary" onclick="saveAsStaticHtml()">💾 Dokument speichern (HTML)</button>
+            
+                
+        
+        function exportHandover() {
+            alert('Übergabe-Paket Export würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe');
+        }
+    </script>
+    
+</body>
+</html>
