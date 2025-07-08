@@ -45,3 +45,14 @@ Dieses Projekt bietet eine Lösung für genau solche Szenarien, indem es:
 ```bash
 git clone https://github.com/FJReichert/TestWebsite.git
 cd TestWebsite
+```
+
+
+### 2. Anpassen der Formulare
+Navigiere in die entsprechenden Ordner (process-management, project-management, program-management) und öffne die .html-Dateien sowie die zugehörigen .css- und .js-Dateien. Passe die Felder, Labels und das Design an deine spezifischen Bedürfnisse an.
+
+Wichtiger Hinweis: Die enthaltenen JavaScript-Dateien sind als Platzhalter oder Beispiele für Formularlogik gedacht. Um die Daten in OpenProject zu übertragen, musst du JavaScript-Code hinzufügen, der die gesammelten Daten über die OpenProject REST API sendet.
+
+
+### 3. Hosten der Formulare (optional, aber empfohlen)
+Da die Formulare JavaScript enthalten, musst du sie auf einem Webserver hosten, um sie voll funktionsfähig zu machen. Dies kann ein einfacher lokaler Server während der Entwicklung oder ein produktiver Webserver sein.
