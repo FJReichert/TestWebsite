@@ -43,6 +43,9 @@
                             
                             <label>Lenkungsausschuss (falls zutreffend):</label>
                             <textarea placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"></textarea>
+
+                            <label>Stakeholder/Ansprechpartner (Name, Rolle, Abteilung, Kontakt):</label>
+                            <textarea placeholder="Liste der identifizierten Stakeholder und wichtigen Ansprechpartner, deren Rollen, Abteilungen und Kontaktdaten"></textarea>
                         </div>
                         
                         <div class="form-group">
@@ -507,6 +510,7 @@
             const kundenorganisation = document.querySelector('#grundlagen input[placeholder="Name der Kundenorganisation"]').value;
             const projektSponsor = document.querySelector('#grundlagen input[placeholder="Name & Position"]').value;
             const lenkungsausschuss = document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]').value;
+            const stakeholderAnsprechpartner = document.querySelector('#grundlagen textarea[placeholder="Liste der identifizierten Stakeholder und wichtigen Ansprechpartner, deren Rollen, Abteilungen und Kontaktdaten"]').value; // Added this line
             const projektname = document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]').value;
             const projektId = document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]').value;
             const projektManager = document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]').value;
@@ -594,7 +598,7 @@
             const problemeHerausforderungen = document.querySelector('#bearbeitung textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value;
             const teststrategie = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"]').value;
             const durchgefuehrteTests = document.querySelector('#bearbeitung textarea[placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"]').value;
-            const qualitaetssicherung = document.querySelector('#bearbeitung textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"]').value;
+            const qualitaetssicherung = document.querySelector('#bearbeitung textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"></textarea>').value;
 
             // Nachbereitung & Kontrolle
             const projektergebnis = document.querySelector('#nachbereitung textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"]').value;
@@ -669,6 +673,9 @@
                                         
                                         <label>Lenkungsausschuss (falls zutreffend):</label>
                                         <p>${lenkungsausschuss.replace(/\n/g, '<br>')}</p>
+
+                                        <label>Stakeholder/Ansprechpartner (Name, Rolle, Abteilung, Kontakt):</label>
+                                        <p>${stakeholderAnsprechpartner.replace(/\n/g, '<br>')}</p>
                                     </div>
                                     <div class="form-group">
                                         <h3>Projektdaten</h3>
@@ -742,6 +749,7 @@
                                         <label>Cloud-Anbieter(n):</label>
                                         <p>${cloudAnbieter}</p>
                                     </div>
+                                }
                                 </div>
                                 <div class="form-group">
                                     <label>Begründung für die Auswahl des Cloud-Modells & Anbieters:</label>
