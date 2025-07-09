@@ -10,6 +10,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Management Dokumentationssystem</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic Styling for the delete button */
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            line-height: 1;
+            cursor: pointer;
+            position: absolute;
+            top: 5px; /* Adjust as needed */
+            right: 5px; /* Adjust as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 10; /* Ensure it's above other elements */
+        }
+        .stakeholder-item, .milestone-item, .aufgaben-row {
+            position: relative; /* Needed for absolute positioning of delete button */
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .stakeholder-item .form-group {
+            margin-bottom: 10px;
+        }
+        .stakeholder-item .form-group label {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -20,11 +56,11 @@
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('grundlagen')">Projektübersicht</button>
-            <button class="nav-tab" onclick="showTab('vorbereitung')">Vorbereitungsphase</button>
-            <button class="nav-tab" onclick="showTab('bearbeitung')">Bearbeitungsphase</button>
-            <button class="nav-tab" onclick="showTab('nachbereitung')">Nachbereitung & Kontrolle</button>
-            <button class="nav-tab" onclick="showTab('vorlagen')">Vorlagen & Tools</button>
+            <button class="nav-tab active" onclick="showTab('grundlagen', event)">Projektübersicht</button>
+            <button class="nav-tab" onclick="showTab('vorbereitung', event)">Vorbereitungsphase</button>
+            <button class="nav-tab" onclick="showTab('bearbeitung', event)">Bearbeitungsphase</button>
+            <button class="nav-tab" onclick="showTab('nachbereitung', event)">Nachbereitung & Kontrolle</button>
+            <button class="nav-tab" onclick="showTab('vorlagen', event)">Vorlagen & Tools</button>
         </div>
         
         <div class="content">
@@ -44,8 +80,34 @@
                             <label>Lenkungsausschuss (falls zutreffend):</label>
                             <textarea placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"></textarea>
 
-                            <label>Stakeholder/Ansprechpartner (Name, Rolle, Abteilung, Kontakt):</label>
-                            <textarea placeholder="Liste der identifizierten Stakeholder und wichtigen Ansprechpartner, deren Rollen, Abteilungen und Kontaktdaten"></textarea>
+                            <h3>Stakeholder/Ansprechpartner</h3>
+                            <div id="stakeholderContainer">
+                                <div class="stakeholder-item">
+                                    <button type="button" class="delete-button" onclick="deleteStakeholder(this)">X</button>
+                                    <div class="form-group">
+                                        <label>Name:</label>
+                                        <input type="text" placeholder="Name des Stakeholders">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Firma:</label>
+                                        <input type="text" placeholder="Firma des Stakeholders">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>E-Mail:</label>
+                                        <input type="email" placeholder="E-Mail des Stakeholders">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Telefonnummer:</label>
+                                        <input type="tel" placeholder="Telefonnummer des Stakeholders">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Aufgabe:</label>
+                                        <textarea placeholder="Aufgabe/Rolle des Stakeholders"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="addStakeholder()">+ Weiteren Stakeholder hinzufügen</button>
+
                         </div>
                         
                         <div class="form-group">
@@ -190,10 +252,10 @@
                                 <th>Status</th>
                                 <th>Fällig (Datum)</th>
                                 <th>Kommentare</th>
-                            </tr>
+                                <th></th> </tr>
                         </thead>
                         <tbody id="aufgabenTable">
-                            <tr>
+                            <tr class="aufgaben-row">
                                 <td><input type="text" placeholder="Aufgabenbeschreibung"></td>
                                 <td><input type="text" placeholder="Verantwortlich"></td>
                                 <td>
@@ -207,6 +269,7 @@
                                 </td>
                                 <td><input type="date"></td>
                                 <td><input type="text" placeholder="Kommentare"></td>
+                                <td><button type="button" class="delete-button" onclick="deleteTaskRow(this)">X</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -215,6 +278,7 @@
                     <h3>2. Zeitplan und Meilensteine</h3>
                     <div id="milestones">
                         <div class="milestone-item">
+                            <button type="button" class="delete-button" onclick="deleteMilestone(this)">X</button>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Meilenstein:</label>
@@ -407,7 +471,7 @@
     </div>
 
     <script>
-        function showTab(tabName) {
+        function showTab(tabName, event) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(content => content.classList.remove('active'));
@@ -420,12 +484,55 @@
             document.getElementById(tabName).classList.add('active');
 
             // Add active class to clicked tab
-            event.target.classList.add('active');
+            if (event) {
+                event.currentTarget.classList.add('active');
+            }
         }
 
+        // Add Stakeholder
+        function addStakeholder() {
+            const container = document.getElementById('stakeholderContainer');
+            const newStakeholder = document.createElement('div');
+            newStakeholder.className = 'stakeholder-item';
+            newStakeholder.innerHTML = `
+                <button type="button" class="delete-button" onclick="deleteStakeholder(this)">X</button>
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" placeholder="Name des Stakeholders">
+                </div>
+                <div class="form-group">
+                    <label>Firma:</label>
+                    <input type="text" placeholder="Firma des Stakeholders">
+                </div>
+                <div class="form-group">
+                    <label>E-Mail:</label>
+                    <input type="email" placeholder="E-Mail des Stakeholders">
+                </div>
+                <div class="form-group">
+                    <label>Telefonnummer:</label>
+                    <input type="tel" placeholder="Telefonnummer des Stakeholders">
+                </div>
+                <div class="form-group">
+                    <label>Aufgabe:</label>
+                    <textarea placeholder="Aufgabe/Rolle des Stakeholders"></textarea>
+                </div>
+            `;
+            container.appendChild(newStakeholder);
+        }
+
+        // Delete Stakeholder
+        function deleteStakeholder(buttonElement) {
+            const item = buttonElement.closest('.stakeholder-item');
+            if (item) {
+                item.remove();
+            }
+        }
+
+        // Add Task Row
         function addTaskRow() {
             const tableBody = document.getElementById('aufgabenTable');
             const newRow = document.createElement('tr');
+            newRow.className = 'aufgaben-row'; // Add class for easier selection/deletion
             newRow.innerHTML = `
                 <td><input type="text" placeholder="Aufgabenbeschreibung"></td>
                 <td><input type="text" placeholder="Verantwortlich"></td>
@@ -440,8 +547,50 @@
                 </td>
                 <td><input type="date"></td>
                 <td><input type="text" placeholder="Kommentare"></td>
+                <td><button type="button" class="delete-button" onclick="deleteTaskRow(this)">X</button></td>
             `;
             tableBody.appendChild(newRow);
+        }
+
+        // Delete Task Row
+        function deleteTaskRow(buttonElement) {
+            const row = buttonElement.closest('.aufgaben-row');
+            if (row) {
+                row.remove();
+            }
+        }
+
+        // Add Milestone
+        function addMilestone() {
+            const milestonesContainer = document.getElementById('milestones');
+            const newMilestone = document.createElement('div');
+            newMilestone.className = 'milestone-item';
+            newMilestone.innerHTML = `
+                <button type="button" class="delete-button" onclick="deleteMilestone(this)">X</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meilenstein:</label>
+                        <input type="text" placeholder="Meilenstein-Bezeichnung">
+                    </div>
+                    <div class="form-group">
+                        <label>Zieldatum:</label>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Beschreibung & Erfolgskriterien:</label>
+                    <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
+                </div>
+            `;
+            milestonesContainer.appendChild(newMilestone);
+        }
+
+        // Delete Milestone
+        function deleteMilestone(buttonElement) {
+            const item = buttonElement.closest('.milestone-item');
+            if (item) {
+                item.remove();
+            }
         }
 
         function addRiskRow() {
@@ -478,29 +627,6 @@
             tableBody.appendChild(newRow);
         }
 
-        function addMilestone() {
-            const milestonesContainer = document.getElementById('milestones');
-            const newMilestone = document.createElement('div');
-            newMilestone.className = 'milestone-item';
-            newMilestone.innerHTML = `
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Meilenstein:</label>
-                        <input type="text" placeholder="Meilenstein-Bezeichnung">
-                    </div>
-                    <div class="form-group">
-                        <label>Zieldatum:</label>
-                        <input type="date">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Beschreibung & Erfolgskriterien:</label>
-                    <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
-                </div>
-            `;
-            milestonesContainer.appendChild(newMilestone);
-        }
-
         function printDocument() {
             window.print();
         }
@@ -510,12 +636,23 @@
             const kundenorganisation = document.querySelector('#grundlagen input[placeholder="Name der Kundenorganisation"]').value;
             const projektSponsor = document.querySelector('#grundlagen input[placeholder="Name & Position"]').value;
             const lenkungsausschuss = document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]').value;
-            const stakeholderAnsprechpartner = document.querySelector('#grundlagen textarea[placeholder="Liste der identifizierten Stakeholder und wichtigen Ansprechpartner, deren Rollen, Abteilungen und Kontaktdaten"]').value; // Added this line
+            
+            const stakeholders = [];
+            document.querySelectorAll('#stakeholderContainer .stakeholder-item').forEach(item => {
+                stakeholders.push({
+                    name: item.querySelector('input[placeholder="Name des Stakeholders"]').value,
+                    firma: item.querySelector('input[placeholder="Firma des Stakeholders"]').value,
+                    email: item.querySelector('input[placeholder="E-Mail des Stakeholders"]').value,
+                    telefonnummer: item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]').value,
+                    aufgabe: item.querySelector('textarea[placeholder="Aufgabe/Rolle des Stakeholders"]').value
+                });
+            });
+
             const projektname = document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]').value;
             const projektId = document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]').value;
             const projektManager = document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]').value;
-            const projektlaufzeitStart = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(1)').value;
-            const projektlaufzeitEnde = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(2)').value;
+            const projektlaufzeitStart = document.querySelector('div[style*="display: flex;"] input[type="date"]:nth-of-type(1)').value;
+            const projektlaufzeitEnde = document.querySelector('div[style*="display: flex;"] input[type="date"]:nth-of-type(2)').value;
             const projektvision = document.querySelector('#grundlagen textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"]').value;
             const messbareProjektziele = document.querySelector('#grundlagen textarea[placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"]').value;
             const businessCase = document.querySelector('#grundlagen textarea[placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"]').value;
@@ -543,34 +680,26 @@
             const kapazitaetsplanung = document.querySelector('#vorbereitung textarea[placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"]').value;
 
             // Bearbeitungsphase - Aufgabenverteilung
-            const aufgabenRows = document.querySelectorAll('#aufgabenTable tr');
-            let aufgabenHtml = '';
-            aufgabenRows.forEach(row => {
+            const aufgaben = [];
+            document.querySelectorAll('#aufgabenTable tr.aufgaben-row').forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
-                aufgabenHtml += `
-                    <tr>
-                        <td>${inputs[0].value}</td>
-                        <td>${inputs[1].value}</td>
-                        <td>${inputs[2].value}</td>
-                        <td>${inputs[3].value}</td>
-                        <td>${inputs[4].value}</td>
-                    </tr>
-                `;
+                aufgaben.push({
+                    beschreibung: inputs[0].value,
+                    verantwortlich: inputs[1].value,
+                    status: inputs[2].value,
+                    faellig: inputs[3].value,
+                    kommentare: inputs[4].value
+                });
             });
 
             // Bearbeitungsphase - Meilensteine
-            const milestoneItems = document.querySelectorAll('#milestones .milestone-item');
-            let milestonesHtml = '';
-            milestoneItems.forEach(item => {
-                const milestoneName = item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value;
-                const milestoneDate = item.querySelector('input[type="date"]').value;
-                const milestoneDescription = item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value;
-                milestonesHtml += `
-                    <div class="milestone-item">
-                        <h4>${milestoneName} (Zieldatum: ${milestoneDate})</h4>
-                        <p>${milestoneDescription.replace(/\n/g, '<br>')}</p>
-                    </div>
-                `;
+            const milestones = [];
+            document.querySelectorAll('#milestones .milestone-item').forEach(item => {
+                milestones.push({
+                    name: item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value,
+                    zieldatum: item.querySelector('input[type="date"]').value,
+                    beschreibung: item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value
+                });
             });
 
             // Bearbeitungsphase - Risikomanagement
@@ -620,6 +749,41 @@
             const finOpsImplementierung = document.querySelector('#nachbereitung textarea[placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"]').value;
             const automatisierungOrchestrierung = document.querySelector('#nachbereitung textarea[placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"]').value;
 
+            let stakeholdersHtml = '';
+            stakeholders.forEach(s => {
+                stakeholdersHtml += `
+                    <div class="stakeholder-item">
+                        <h4>${s.name}</h4>
+                        <p><strong>Firma:</strong> ${s.firma}</p>
+                        <p><strong>E-Mail:</strong> ${s.email}</p>
+                        <p><strong>Telefonnummer:</strong> ${s.telefonnummer}</p>
+                        <p><strong>Aufgabe:</strong> ${s.aufgabe.replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+            });
+
+            let aufgabenHtml = '';
+            aufgaben.forEach(a => {
+                aufgabenHtml += `
+                    <tr>
+                        <td>${a.beschreibung}</td>
+                        <td>${a.verantwortlich}</td>
+                        <td>${a.status}</td>
+                        <td>${a.faellig}</td>
+                        <td>${a.kommentare}</td>
+                    </tr>
+                `;
+            });
+
+            let milestonesHtml = '';
+            milestones.forEach(m => {
+                milestonesHtml += `
+                    <div class="milestone-item">
+                        <h4>${m.name} (Zieldatum: ${m.zieldatum})</h4>
+                        <p>${m.beschreibung.replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+            });
 
             const staticHtmlContent = `
                 <!DOCTYPE html>
@@ -644,7 +808,7 @@
                         .table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
                         .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
                         .table th { background: #f8fafc; font-weight: 600; color: #374151; }
-                        .milestone-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 10px 0; }
+                        .stakeholder-item, .milestone-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 10px 0; position: relative;}
                         .highlight-box { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid #0ea5e9; padding: 20px; margin: 20px 0; border-radius: 8px; }
                         @media (max-width: 768px) {
                             .form-row { grid-template-columns: 1fr; }
@@ -674,8 +838,8 @@
                                         <label>Lenkungsausschuss (falls zutreffend):</label>
                                         <p>${lenkungsausschuss.replace(/\n/g, '<br>')}</p>
 
-                                        <label>Stakeholder/Ansprechpartner (Name, Rolle, Abteilung, Kontakt):</label>
-                                        <p>${stakeholderAnsprechpartner.replace(/\n/g, '<br>')}</p>
+                                        <h3>Stakeholder/Ansprechpartner</h3>
+                                        ${stakeholdersHtml}
                                     </div>
                                     <div class="form-group">
                                         <h3>Projektdaten</h3>
@@ -705,7 +869,7 @@
                                 <div class="form-group">
                                     <label>Projektbeschreibung (Leistungsbeschreibung):</label>
                                     <p>${projektbeschreibung.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                }
                                 <div class="form-group">
                                     <label>Beauftragter Zeitrahmen:</label>
                                     <p>${zeitrahmen.replace(/\n/g, '<br>')}</p>
@@ -749,7 +913,6 @@
                                         <label>Cloud-Anbieter(n):</label>
                                         <p>${cloudAnbieter}</p>
                                     </div>
-                                }
                                 </div>
                                 <div class="form-group">
                                     <label>Begründung für die Auswahl des Cloud-Modells & Anbieters:</label>
