@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Projektmanagement Hauptmenü</title>
-    <link rel="stylesheet" href="index-styles.css">
+    <link rel="stylesheet" href="index-styles.css" />
 </head>
 <body>
     <div class="container">
@@ -13,36 +13,36 @@
             <p>Bitte wählen Sie eine Vorlage aus:</p>
         </div>
 
-       <div id="formSelectionSection" class="form-selection-section">
+        <div id="formSelectionSection" class="form-selection-section">
             <h2>Formular auswählen</h2>
-            <p id="selectionMessage"></p>
+            <p id="selectionMessage">Hier können Sie Formularvorlagen öffnen.</p>
             <div class="form-selection-buttons">
                 <button class="btn btn-primary" onclick="openProgrammmanagement()">Programmmanagement öffnen</button>
                 <button class="btn btn-secondary" onclick="openCloudManagement()">Cloud Management öffnen</button>
-                <button class="btn btn-secondary" onclick="openPartnerRealtionshipManagement()">Partner Realtionship Management öffnen</button>
+                <button class="btn btn-secondary" onclick="openPartnerRealtionshipManagement()">Partner Relationship Management öffnen</button>
                 <button class="btn btn-secondary" onclick="openContractManagement()">Contract Management Öffnen</button>
                 <button class="btn btn-secondary" onclick="openProjectManagement()">Project Management öffnen</button>
             </div>
         </div>
+    </div>
+
+    <script>
+        // --- Navigation Functions with your specified links ---
+        function openProgrammmanagement() {
+            window.location.href = "programmManagement.html";
+        }
+        function openCloudManagement() {
+            window.location.href = "cloudManagement.html";
+        }
+        function openPartnerRealtionshipManagement() {
+            window.location.href = "partnerRealationshipManagement.html";
+        }
+        function openContractManagement() {
+            window.location.href = "contractManagement.html";
+        }
+        function openProjectManagement() {
+            window.location.href = "projectManagement.html";
+        }
+    </script>
 </body>
-<script>
-  function openProgrammmanagement() {
-      window.location.href = "programmManagement.html";
-  }
-  function openCloudManagement() {
-      window.location.href = "cloudManagement.html";
-  }
-
-  function openPartnerRealtionshipManagement() {
-      window.location.href = "partnerRealationshipManagement.html";
-  }
-  function openContractManagement() {
-      window.location.href = "contractManagement.html";
-  }
-  function openProjectManagement() {
-      window.location.href = "projectManagement.html";
-  }
-
-</script>
-
 </html>
