@@ -270,6 +270,48 @@ body {
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
 }
 
+.stakeholder-item, .milestone-item, .aufgaben-row {
+    position: relative; /* Needed for absolute positioning of delete button */
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.stakeholder-item, .milestone-item, .project-row {
+            position: relative; /* Needed for absolute positioning of delete button */
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+}
+.stakeholder-item .form-group {
+    margin-bottom: 10px;
+}
+.stakeholder-item .form-group label {
+    margin-bottom: 5px;
+}
+.delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            line-height: 1;
+            cursor: pointer;
+            position: absolute;
+            top: 5px; /* Adjust as needed */
+            right: 5px; /* Adjust as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 10; /* Ensure it's above other elements */
+        }
+
 @media (max-width: 768px) {
     .form-row {
         grid-template-columns: 1fr;
