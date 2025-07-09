@@ -13,18 +13,34 @@
             <p>Bitte wählen Sie eine Vorlage aus:</p>
         </div>
 
-        <div class="button-grid">
-            <a href="project_kickoff_template.html" class="menu-button">Project Kickoff</a>
-            <a href="meeting_minutes_template.html" class="menu-button">Meeting Minutes</a>
-            <a href="risk_management_template.html" class="menu-button">Risk Management</a>
-            <a href="lessons_learned_template.html" class="menu-button">Lessons Learned</a>
-            <a href="project_handover_template.html" class="menu-button">Project Handover</a>
-            <a href="programmmanagement.html" class="menu-button">Programmmanagement</a>
-            <a href="cloud_management_system.html" class="menu-button">Cloud Management</a>
-            <a href="B2B Lead Management Tool _ V1.01.html" class="menu-button">B2B Lead Management</a>
-            <a href="ContractFlow - Vertragsmanagement System - V1.01.html" class="menu-button">Vertragsmanagement</a>
-        </div>
+        <div class="form-selection-buttons">
+                <button class="btn btn-primary" onclick="openProgrammmanagement()">Programmmanagement öffnen</button>
+                <button class="btn btn-secondary" onclick="openCloudManagement()">Cloud Management öffnen</button>
+                <button class="btn btn-secondary" onclick="openPartnerRealtionshipManagement()">Partner Realtionship Management öffnen</button>
+                <button class="btn btn-secondary" onclick="openContractManagement()">Contract Management Öffnen</button>
+                <button class="btn btn-secondary" onclick="openProjectManagement()">Project Management öffnen</button>
+            </div>
 
         </div>
 </body>
+<script>
+  function openProgrammmanagement() {
+      window.location.href = "programmManagement.html";
+  }
+  function openCloudManagement() {
+      window.location.href = "cloudManagement.html";
+  }
+
+  function openPartnerRealtionshipManagement() {
+      window.location.href = "partnerRealationshipManagement.html";
+  }
+  function openContractManagement() {
+      window.location.href = "contractManagement.html";
+  }
+  function openProjectManagement() {
+      window.location.href = "projectManagement.html";
+  }
+
+</script>
+
 </html>
