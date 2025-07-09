@@ -310,6 +310,9 @@
             <div class="form-selection-buttons">
                 <button class="btn btn-primary" onclick="openProgrammmanagement()">Programmmanagement öffnen</button>
                 <button class="btn btn-secondary" onclick="openCloudManagement()">Cloud Management öffnen</button>
+                <button class="btn btn-secondary" onclick="openPartnerRealtionshipManagement()">Partner Realtionship Management öffnen</button>
+                <button class="btn btn-secondary" onclick="openContractManagement()">Contract Management Öffnen</button>
+                <button class="btn btn-secondary" onclick="openProjectManagement()">Project Management öffnen</button>
             </div>
         </div>
       </div>
@@ -323,7 +326,15 @@
       window.addEventListener("load", function () {
         checkTokenStatus();
       });
-
+      function openPartnerRealtionshipManagement() {
+          window.location.href = "partnerRealationshipManagement.html";
+      }
+      function openContractManagement() {
+          window.location.href = "contractManagement.html";
+      }
+      function openProjectManagement() {
+          window.location.href = "projectManagement.html";
+      }
       function checkTokenStatus() {
         fetch("/token")
           .then((res) => res.json())

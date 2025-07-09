@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContractFlow - Vertragsmanagement System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* Tab Navigation Styles */
+        .tab-nav {
+            display: flex;
+            background: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto; /* Enable horizontal scrolling for many tabs */
+        }
+
+        .tab-button {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            color: #555;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .tab-button:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            font-weight: 600;
+        }
+
+        .tab-content-wrapper {
+            padding: 20px 40px 40px 40px; /* Adjusted padding for content */
+        }
+
+        .tab-pane {
+            display: none; /* Hidden by default */
+        }
+
+        .tab-pane.active {
+            display: block; /* Show active tab content */
+        }
+
+        .content {
+            padding: 0; /* Removed padding as it's now in tab-content-wrapper */
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: '▶';
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .section h3 {
+            color: #34495e;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-row-quad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .textarea-large {
+            min-height: 150px;
+        }
+
+        .contract-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .contract-table th,
+        .contract-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .contract-table th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+
+        .contract-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .add-button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .add-button:hover {
+            background: #219a52;
+        }
+
+        .status-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .status-card.warning {
+            border-left-color: #f39c12;
+        }
+
+        .status-card.danger {
+            border-left-color: #e74c3c;
+        }
+
+        .status-card.success {
+            border-left-color: #27ae60;
+        }
+
+        .document-upload {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .document-upload:hover {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .document-upload i {
+            font-size: 3em;
+            color: #bdc3c7;
+            margin-bottom: 15px;
+        }
+
+        .notification-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .notification-badge.warning {
+            background: #f39c12;
+        }
+
+        .notification-badge.success {
+            background: #27ae60;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .contract-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .contract-type-card {
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contract-type-card:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .contract-type-card.selected {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .contract-type-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .contract-type-card p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .form-row,
+            .form-row-triple,
+            .form-row-quad {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .tab-nav {
+                flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+            }
+
+            .tab-button {
+                flex: 1 1 auto; /* Allow tabs to grow and shrink */
+                text-align: center;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ContractFlow</h1>
+            <p>Professionelles Vertragsmanagement System</p>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="openTab(event, 'vertragsgrundlagen')">Vertragsgrundlagen</button>
+            <button class="tab-button" onclick="openTab(event, 'partner-kontakte')">Vertragspartner & Kontakte</button>
+            <button class="tab-button" onclick="openTab(event, 'dokumente')">Vertragsdokumente</button>
+            <button class="tab-button" onclick="openTab(event, 'compliance-monitoring')">Compliance & Monitoring</button>
+            <button class="tab-button" onclick="openTab(event, 'leistungs-zahlung')">Leistungs- & Zahlungsmonitoring</button>
+        </div>
+
+        <div class="tab-content-wrapper">
+            <div id="vertragsgrundlagen" class="tab-pane active">
+                <div class="section">
+                    <h2>Vertragsgrundlagen</h2>
+                    
+                    <h3>Vertragstyp auswählen</h3>
+                    <div class="contract-type-selector">
+                        <div class="contract-type-card" onclick="selectContractType(this, 'service')">
+                            <h4>Dienstleistungsvertrag</h4>
+                            <p>Beratung, IT-Services, Wartung</p>
+                        </div>
+                        <div class="contract-type-card" onclick="selectContractType(this, 'purchase')">
+                            <h4>Kaufvertrag</h4>
+                            <p>Waren, Produkte, Materialien</p>
+                        </div>
+                        <div class="contract-type-card" onclick="selectContractType(this, 'rental')">
+                            <h4>Mietvertrag</h4>
+                            <p>Räumlichkeiten, Fahrzeuge, Equipment</p>
+                        </div>
+                        <div class="contract-type-card" onclick="selectContractType(this, 'license')">
+                            <h4>Lizenzvertrag</h4>
+                            <p>Software, Patente, Nutzungsrechte</p>
+                        </div>
+                    </div>
+
+                    <h3>Vertragsidentifikation</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vertragsnummer">Vertragsnummer:</label>
+                            <input type="text" id="vertragsnummer" name="vertragsnummer" placeholder="Eindeutige Vertragskennung">
+                        </div>
+                        <div class="form-group">
+                            <label for="vertragsbezeichnung">Vertragsbezeichnung:</label>
+                            <input type="text" id="vertragsbezeichnung" name="vertragsbezeichnung" placeholder="Kurze Beschreibung des Vertrags">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vertragspartner">Vertragspartner:</label>
+                            <input type="text" id="vertragspartner" name="vertragspartner" placeholder="Name der Vertragspartei">
+                        </div>
+                        <div class="form-group">
+                            <label for="vertragsstatus">Vertragsstatus:</label>
+                            <select id="vertragsstatus" name="vertragsstatus">
+                                <option value="">Status auswählen</option>
+                                <option value="entwurf">Entwurf</option>
+                                <option value="verhandlung">In Verhandlung</option>
+                                <option value="genehmigung">Zur Genehmigung</option>
+                                <option value="aktiv">Aktiv</option>
+                                <option value="pausiert">Pausiert</option>
+                                <option value="gekuendigt">Gekündigt</option>
+                                <option value="abgelaufen">Abgelaufen</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Vertragslaufzeit & Termine</h3>
+                    <div class="form-row-triple">
+                        <div class="form-group">
+                            <label for="vertragsbeginn">Vertragsbeginn:</label>
+                            <input type="date" id="vertragsbeginn" name="vertragsbeginn">
+                        </div>
+                        <div class="form-group">
+                            <label for="vertragsende">Vertragsende:</label>
+                            <input type="date" id="vertragsende" name="vertragsende">
+                        </div>
+                        <div class="form-group">
+                            <label for="kuendigungsfrist">Kündigungsfrist (Tage):</label>
+                            <input type="number" id="kuendigungsfrist" name="kuendigungsfrist" placeholder="30">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="automatische-verlaengerung">Automatische Verlängerung:</label>
+                            <select id="automatische-verlaengerung" name="automatische-verlaengerung">
+                                <option value="nein">Nein</option>
+                                <option value="monatlich">Monatlich</option>
+                                <option value="quartalsweise">Quartalsweise</option>
+                                <option value="jaehrlich">Jährlich</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="naechste-pruefung">Nächste Prüfung:</label>
+                            <input type="date" id="naechste-pruefung" name="naechste-pruefung">
+                        </div>
+                    </div>
+
+                    <h3>Vertragsinhalt & Leistungen</h3>
+                    <div class="form-group">
+                        <label for="vertragsgegenstand">Vertragsgegenstand:</label>
+                        <textarea id="vertragsgegenstand" name="vertragsgegenstand" placeholder="Detaillierte Beschreibung der vereinbarten Leistungen, Produkte oder Dienstleistungen..." class="textarea-large"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lieferbedingungen">Lieferbedingungen / SLAs:</label>
+                        <textarea id="lieferbedingungen" name="lieferbedingungen" placeholder="Lieferzeiten, Service Level Agreements, Qualitätsstandards..."></textarea>
+                    </div>
+
+                    <h3>Finanzielle Vereinbarungen</h3>
+                    <div class="form-row-quad">
+                        <div class="form-group">
+                            <label for="vertragswert">Vertragswert (€):</label>
+                            <input type="number" id="vertragswert" name="vertragswert" placeholder="0,00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="waehrung">Währung:</label>
+                            <select id="waehrung" name="waehrung">
+                                <option value="EUR">EUR</option>
+                                <option value="USD">USD</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CHF">CHF</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zahlungsweise">Zahlungsweise:</label>
+                            <select id="zahlungsweise" name="zahlungsweise">
+                                <option value="einmalig">Einmalig</option>
+                                <option value="monatlich">Monatlich</option>
+                                <option value="quartalsweise">Quartalsweise</option>
+                                <option value="halbjährlich">Halbjährlich</option>
+                                <option value="jährlich">Jährlich</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zahlungsziel">Zahlungsziel (Tage):</label>
+                            <input type="number" id="zahlungsziel" name="zahlungsziel" placeholder="30">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="skonto">Skonto (%):</label>
+                            <input type="number" id="skonto" name="skonto" placeholder="0,00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="skonto-frist">Skonto-Frist (Tage):</label>
+                            <input type="number" id="skonto-frist" name="skonto-frist" placeholder="14">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="partner-kontakte" class="tab-pane">
+                <div class="section">
+                    <h2>Vertragspartner & Kontakte</h2>
+                    
+                    <h3>Hauptvertragspartner</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firma">Firmenname:</label>
+                            <input type="text" id="firma" name="firma" placeholder="Vollständiger Firmenname">
+                        </div>
+                        <div class="form-group">
+                            <label for="rechtsform">Rechtsform:</label>
+                            <select id="rechtsform" name="rechtsform">
+                                <option value="">Auswählen</option>
+                                <option value="gmbh">GmbH</option>
+                                <option value="ag">AG</option>
+                                <option value="kg">KG</option>
+                                <option value="ohg">OHG</option>
+                                <option value="einzelunternehmen">Einzelunternehmen</option>
+                                <option value="sonstige">Sonstige</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adresse">Adresse:</label>
+                            <input type="text" id="adresse" name="adresse" placeholder="Straße, Hausnummer">
+                        </div>
+                        <div class="form-group">
+                            <label for="plz-ort">PLZ / Ort:</label>
+                            <input type="text" id="plz-ort" name="plz-ort" placeholder="12345 Musterstadt">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="umsatzsteuer-id">Umsatzsteuer-ID:</label>
+                            <input type="text" id="umsatzsteuer-id" name="umsatzsteuer-id" placeholder="DE123456789">
+                        </div>
+                        <div class="form-group">
+                            <label for="handelsregister">Handelsregisternummer:</label>
+                            <input type="text" id="handelsregister" name="handelsregister" placeholder="HRB 12345">
+                        </div>
+                    </div>
+
+                    <h3>Ansprechpartner</h3>
+                    <table class="contract-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>E-Mail</th>
+                                <th>Telefon</th>
+                                <th>Rolle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kontakte-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Vor- und Nachname" style="border: none; background: transparent;"></td>
+                                <td><input type="text" placeholder="Position/Abteilung" style="border: none; background: transparent;"></td>
+                                <td><input type="email" placeholder="email@beispiel.de" style="border: none; background: transparent;"></td>
+                                <td><input type="tel" placeholder="+49 123 456789" style="border: none; background: transparent;"></td>
+                                <td>
+                                    <select style="border: none; background: transparent;">
+                                        <option value="hauptkontakt">Hauptkontakt</option>
+                                        <option value="fachlich">Fachlicher Kontakt</option>
+                                        <option value="kaufmaennisch">Kaufmännischer Kontakt</option>
+                                        <option value="technisch">Technischer Kontakt</option>
+                                        <option value="rechtlich">Rechtlicher Kontakt</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addKontakt()">+ Ansprechpartner hinzufügen</button>
+                </div>
+            </div>
+
+            <div id="dokumente" class="tab-pane">
+                <div class="section">
+                    <h2>Vertragsdokumente</h2>
+                    
+                    <h3>Dokumente hochladen</h3>
+                    <div class="document-upload">
+                        <i>📄</i>
+                        <h4>Vertragsdokumente hochladen</h4>
+                        <p>Hauptvertrag, Anhänge, Nachträge, Korrespondenz</p>
+                        <input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="margin-top: 15px;">
+                    </div>
+
+                    <h3>Dokument-Versionen</h3>
+                    <table class="contract-table">
+                        <thead>
+                            <tr>
+                                <th>Dokumentname</th>
+                                <th>Version</th>
+                                <th>Datum</th>
+                                <th>Typ</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dokumente-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Dokumentname" style="border: none; background: transparent;"></td>
+                                <td><input type="text" placeholder="v1.0" style="border: none; background: transparent;"></td>
+                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td>
+                                    <select style="border: none; background: transparent;">
+                                        <option value="hauptvertrag">Hauptvertrag</option>
+                                        <option value="anhang">Anhang</option>
+                                        <option value="nachtrag">Nachtrag</option>
+                                        <option value="kuendigung">Kündigung</option>
+                                        <option value="korrespondenz">Korrespondenz</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="border: none; background: transparent;">
+                                        <option value="entwurf">Entwurf</option>
+                                        <option value="geprueft">Geprüft</option>
+                                        <option value="genehmigt">Genehmigt</option>
+                                        <option value="unterzeichnet">Unterzeichnet</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addDokument()">+ Dokument hinzufügen</button>
+                </div>
+            </div>
+
+            <div id="compliance-monitoring" class="tab-pane">
+                <div class="section">
+                    <h2>Compliance & Monitoring</h2>
+                    
+                    <div class="status-indicators">
+                        <div class="status-card">
+                            <h4>Vertragsstatus <span class="notification-badge success">Aktiv</span></h4>
+                            <p>Vertrag läuft planmäßig</p>
+                            <div class="form-group">
+                                <label for="naechste-zahlung">Nächste Zahlung:</label>
+                                <input type="date" id="naechste-zahlung" name="naechste-zahlung">
+                            </div>
+                        </div>
+                        
+                        <div class="status-card warning">
+                            <h4>Kündigungsfristen <span class="notification-badge warning">Beachten</span></h4>
+                            <p>Kündigung bis <span id="kuendigungsdatum">01.12.2024</span></p>
+                            <div class="form-group">
+                                <label for="kuendigungsabsicht">Kündigungsabsicht:</label>
+                                <select id="kuendigungsabsicht" name="kuendigungsabsicht">
+                                    <option value="verlaengern">Verlängern</option>
+                                    <option value="kuendigen">Kündigen</option>
+                                    <option value="neuverhandeln">Neuverhandeln</option>
+                                    <option value="unentschieden">Unentschieden</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="status-card">
+                            <h4>Leistungserfüllung</h4>
+                            <div class="form-group">
+                                <label for="leistungsstand">Leistungsstand (%):</label>
+                                <input type="range" min="0" max="100" value="75" id="leistungsstand" oninput="updateLeistungsstand(this.value)">
+                                <p id="leistungsstand-text">75% erfüllt</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Compliance-Prüfungen</h3>
+                    <div class="form-group">
+                        <label for="datenschutz-pruefung">Datenschutz-Konformität:</label>
+                        <select id="datenschutz-pruefung" name="datenschutz-pruefung">
+                            <option value="geprueft">Geprüft & konform</option>
+                            <option value="in-pruefung">In Prüfung</option>
+                            <option value="nachbesserung">Nachbesserung erforderlich</option>
+                            <option value="nicht-geprueft">Nicht geprüft</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rechtliche-pruefung">Rechtliche Prüfung:</label>
+                        <select id="rechtliche-pruefung" name="rechtliche-pruefung">
+                            <option value="abgeschlossen">Abgeschlossen</option>
+                            <option value="laufend">Laufend</option>
+                            <option value="ausstehend">Ausstehend</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="compliance-notizen">Compliance-Notizen:</label>
+                        <textarea id="compliance-notizen" name="compliance-notizen" placeholder="Wichtige Hinweise zu Compliance, Datenschutz, rechtlichen Aspekten..."></textarea>
+                    </div>
+
+                    <h3>Risikobewertung</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="finanzrisiko">Finanzrisiko:</label>
+                            <select id="finanzrisiko" name="finanzrisiko">
+                                <option value="niedrig">Niedrig</option>
+                                <option value="mittel">Mittel</option>
+                                <option value="hoch">Hoch</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="operationelles-risiko">Operationelles Risiko:</label>
+                            <select id="operationelles-risiko" name="operationelles-risiko">
+                                <option value="niedrig">Niedrig</option>
+                                <option value="mittel">Mittel</option>
+                                <option value="hoch">Hoch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="risiko-beschreibung">Risikobeschreibung:</label>
+                        <textarea id="risiko-beschreibung" name="risiko-beschreibung" placeholder="Identifizierte Risiken und Gegenmaßnahmen..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="leistungs-zahlung" class="tab-pane">
+                <div class="section">
+                    <h2>Leistungs- & Zahlungsmonitoring</h2>
+                    
+                    <h3>Zahlungshistorie</h3>
+                    <table class="contract-table">
+                        <thead>
+                            <tr>
+                                <th>Rechnungsdatum</th>
+                                <th>Betrag (€)</th>
+                                <th>Fälligkeitsdatum</th>
+                                <th>Zahlungsdatum</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="zahlungen-tbody">
+                            <tr>
+                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td><input type="number" placeholder="0,00" step="0.01" style="border: none; background: transparent;"></td>
+                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td>
+                                    <select style="border: none; background: transparent;">
+                                        <option value="offen">Offen</option>
+                                        <option value="bezahlt">Bezahlt</option>
+                                        <option value="teilweise">Teilweise bezahlt</option>
+                                        <option value="ueberfaellig">Überfällig</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addZahlung()">+ Zahlung hinzufügen</button>
+
+                    <h3>Leistungsübersicht</h3>
+                    <div class="form-group">
+                        <label for="leistungsbeschreibung-detail">Detaillierte Leistungsbeschreibung:</label>
+                        <textarea id="leistungsbeschreibung-detail" name="leistungsbeschreibung-detail" placeholder="Umfassende Beschreibung der erbrachten/erwarteten Leistungen..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="leistungsbewertung">Leistungsbewertung:</label>
+                            <select id="leistungsbewertung" name="leistungsbewertung">
+                                <option value="sehr-gut">Sehr gut</option>
+                                <option value="gut">Gut</option>
+                                <option value="befriedigend">Befriedigend</option>
+                                <option value="ausreichend">Ausreichend</option>
+                                <option value="mangelhaft">Mangelhaft</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="letzte-ueberpruefung">Letzte Überprüfung:</label>
+                            <input type="date" id="letzte-ueberpruefung" name="letzte-ueberpruefung">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="save-button">Vertrag speichern</button>
+    </div>
+
+    <script>
+        function selectContractType(card, type) {
+            const cards = document.querySelectorAll('.contract-type-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            // Here you might update a hidden input or global variable with the selected type
+            console.log("Selected contract type:", type);
+        }
+
+        function addKontakt() {
+            const tbody = document.getElementById('kontakte-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Vor- und Nachname" style="border: none; background: transparent;"></td>
+                    <td><input type="text" placeholder="Position/Abteilung" style="border: none; background: transparent;"></td>
+                    <td><input type="email" placeholder="email@beispiel.de" style="border: none; background: transparent;"></td>
+                    <td><input type="tel" placeholder="+49 123 456789" style="border: none; background: transparent;"></td>
+                    <td>
+                        <select style="border: none; background: transparent;">
+                            <option value="hauptkontakt">Hauptkontakt</option>
+                            <option value="fachlich">Fachlicher Kontakt</option>
+                            <option value="kaufmaennisch">Kaufmännischer Kontakt</option>
+                            <option value="technisch">Technischer Kontakt</option>
+                            <option value="rechtlich">Rechtlicher Kontakt</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addDokument() {
+            const tbody = document.getElementById('dokumente-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Dokumentname" style="border: none; background: transparent;"></td>
+                    <td><input type="text" placeholder="v1.0" style="border: none; background: transparent;"></td>
+                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td>
+                        <select style="border: none; background: transparent;">
+                            <option value="hauptvertrag">Hauptvertrag</option>
+                            <option value="anhang">Anhang</option>
+                            <option value="nachtrag">Nachtrag</option>
+                            <option value="kuendigung">Kündigung</option>
+                            <option value="korrespondenz">Korrespondenz</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select style="border: none; background: transparent;">
+                            <option value="entwurf">Entwurf</option>
+                            <option value="geprueft">Geprüft</option>
+                            <option value="genehmigt">Genehmigt</option>
+                            <option value="unterzeichnet">Unterzeichnet</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addZahlung() {
+            const tbody = document.getElementById('zahlungen-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td><input type="number" placeholder="0,00" step="0.01" style="border: none; background: transparent;"></td>
+                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td>
+                        <select style="border: none; background: transparent;">
+                            <option value="offen">Offen</option>
+                            <option value="bezahlt">Bezahlt</option>
+                            <option value="teilweise">Teilweise bezahlt</option>
+                            <option value="ueberfaellig">Überfällig</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function updateLeistungsstand(value) {
+            document.getElementById('leistungsstand-text').textContent = value + '% erfüllt';
+        }
+
+        // Tab functionality
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tab-pane");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Set default open tab on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the first tab button and trigger its click event
+            const firstTabButton = document.querySelector(".tab-button");
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+        });
+
+    </script>
+</body>
+</html>
