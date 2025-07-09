@@ -28,75 +28,97 @@
         </div>
         
         <div class="content">
-            <!-- Projektübersicht -->
             <div id="grundlagen" class="tab-content active">
                 <div class="section">
                     <h2>Projektübersicht</h2>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Kundenname:</label>
-                            <input type="text" placeholder="Name des Kunden">
+                            <h3>Organisationsdaten</h3>
+                            <label>Kundenorganisation/Unternehmen:</label>
+                            <input type="text" placeholder="Name der Kundenorganisation">
+                            
+                            <label>Cloud Projekt-Sponsor:</label>
+                            <input type="text" placeholder="Name & Position">
+                            
+                            <label>Lenkungsausschuss (falls zutreffend):</label>
+                            <textarea placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"></textarea>
                         </div>
+                        
                         <div class="form-group">
+                            <h3>Projektdaten</h3>
                             <label>Projektname:</label>
-                            <input type="text" placeholder="Name des Projekts">
+                            <input type="text" placeholder="Bezeichnung des Cloud-Projekts">
+                            
+                            <label>Projekt-ID:</label>
+                            <input type="text" placeholder="Interne Projektkennung">
+                            
+                            <label>Projektmanager:</label>
+                            <input type="text" placeholder="Name des verantwortlichen Projektmanagers">
+                            
+                            <label>Projektlaufzeit:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date" placeholder="Start">
+                                <input type="date" placeholder="Ende">
+                            </div>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>Projektbeschreibung (Leistungsbeschreibung):</label>
-                        <textarea placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen"></textarea>
+                        <label>Projektvision & Strategische Ziele:</label>
+                        <textarea placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"></textarea>
+                        
+                        <label>Messbare Projektziele:</label>
+                        <textarea placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"></textarea>
+                        
+                        <label>Business Case & ROI-Erwartungen:</label>
+                        <textarea placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"></textarea>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Projektstart:</label>
-                            <input type="date">
-                        </div>
-                        <div class="form-group">
-                            <label>Projektende:</label>
-                            <input type="date">
-                        </div>
+
+                    <div class="form-group">
+                        <label>Projektbeschreibung (Leistungsbeschreibung):</label>
+                        <textarea placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen und des Projektumfangs"></textarea>
                     </div>
                     
                     <div class="form-group">
                         <label>Beauftragter Zeitrahmen:</label>
-                        <textarea placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes"></textarea>
+                        <textarea placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes sowie kritische Termine"></textarea>
                     </div>
                 </div>
             </div>
             
-            <!-- Vorbereitungsphase -->
             <div id="vorbereitung" class="tab-content">
                 <div class="section">
                     <h2>Vorbereitungsphase</h2>
                     
-                    <h3>1. Projektinitialisierungsdokument</h3>
+                    <h3>1. Projektinitialisierung & Setup</h3>
                     <div class="form-group">
-                        <label>Projektziele:</label>
-                        <textarea placeholder="Messbare Ziele des Projekts"></textarea>
+                        <label>Strategische Ausgangslage & Treiber:</label>
+                        <textarea placeholder="Analyse der aktuellen IT-Landschaft, Geschäftsstrategie und Motivation für die Cloud-Adoption"></textarea>
                         
-                        <label>Beteiligte Stakeholder:</label>
-                        <textarea placeholder="Liste aller beteiligten Parteien mit Kontaktdaten"></textarea>
+                        <label>Projektarchitektur & Abhängigkeiten:</label>
+                        <textarea placeholder="Struktur und technische Abhängigkeiten innerhalb des Cloud-Projekts und zu bestehenden Systemen"></textarea>
                         
-                        <label>Erfolgskriterien:</label>
-                        <textarea placeholder="Kriterien für den Projekterfolg"></textarea>
+                        <label>Governance-Struktur im Cloud-Projekt:</label>
+                        <textarea placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten (z.B. Cloud Center of Excellence - CCoE)"></textarea>
                     </div>
                     
-                    <h3>2. Anforderungsdokument</h3>
+                    <h3>2. Anforderungsmanagement</h3>
                     <div class="form-group">
-                        <label>Geschäftsanforderungen:</label>
-                        <textarea placeholder="Beschreibung der Geschäftsanforderungen"></textarea>
+                        <label>Geschäftsanforderungen (Business Requirements):</label>
+                        <textarea placeholder="Beschreibung der übergeordneten Geschäftsanforderungen, die durch die Cloud-Lösung erfüllt werden sollen"></textarea>
                         
-                        <label>Technische Anforderungen:</label>
-                        <textarea placeholder="Detaillierte technische Anforderungen"></textarea>
+                        <label>Technische Anforderungen (Technical Requirements):</label>
+                        <textarea placeholder="Detaillierte technische Spezifikationen, Infrastrukturanforderungen und Integrationspunkte"></textarea>
                         
-                        <label>Sicherheitsanforderungen:</label>
-                        <textarea placeholder="Compliance- und Sicherheitsanforderungen"></textarea>
+                        <label>Sicherheits- & Compliance-Anforderungen:</label>
+                        <textarea placeholder="Spezifische Anforderungen bezüglich Datensicherheit, Datenschutz (DSGVO), Compliance (ISO 27001, BSI C5 etc.) und Zugriffskontrolle"></textarea>
+
+                        <label>Nicht-funktionale Anforderungen (Non-Functional Requirements):</label>
+                        <textarea placeholder="Anforderungen an Performance, Skalierbarkeit, Verfügbarkeit, Wartbarkeit, Resilienz und Disaster Recovery"></textarea>
                     </div>
                     
-                    <h3>3. Cloud-Strategie-Dokument</h3>
+                    <h3>3. Cloud-Strategie & Design</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Cloud-Modell:</label>
@@ -104,52 +126,66 @@
                                 <option>Public Cloud</option>
                                 <option>Private Cloud</option>
                                 <option>Hybrid Cloud</option>
+                                <option>Multi-Cloud</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Cloud-Anbieter:</label>
-                            <input type="text" placeholder="Ausgewählte Cloud-Anbieter">
+                            <label>Cloud-Anbieter(n):</label>
+                            <input type="text" placeholder="Ausgewählte Cloud-Anbieter (z.B. AWS, Azure, Google Cloud)">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>Begründung für Cloud-Anbieter:</label>
-                        <textarea placeholder="Begründung für die Auswahl des Cloud-Anbieters"></textarea>
+                        <label>Begründung für die Auswahl des Cloud-Modells & Anbieters:</label>
+                        <textarea placeholder="Detaillierte Begründung basierend auf Analyse, Anforderungen und Business Case"></textarea>
                         
-                        <label>Migrationsplan:</label>
-                        <textarea placeholder="Schritte für die Migration bestehender Systeme"></textarea>
+                        <label>Migrationsstrategie & -plan:</label>
+                        <textarea placeholder="Schritte, Phasen und Methoden (Lift & Shift, Replatform, Refactor, Repurchase, Retain, Retire) für die Migration bestehender Systeme und Anwendungen"></textarea>
+
+                        <label>Cloud-Architektur Design (High-Level):</label>
+                        <textarea placeholder="Beschreibung der beabsichtigten High-Level Cloud-Architektur, inkl. Netzwerk, Compute, Storage, Datenbanken, etc."></textarea>
                     </div>
                     
-                    <h3>4. Kostenanalyse</h3>
+                    <h3>4. Kostenanalyse & Ressourcenplanung</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Anfangsinvestition:</label>
-                            <textarea placeholder="Details zu Anfangsinvestitionen"></textarea>
+                            <label>Anfangsinvestition (CAPEX):</label>
+                            <textarea placeholder="Details zu einmaligen Investitionen (z.B. Lizenzen, Beratungskosten, initiale Hardware)"></textarea>
                             
-                            <label>Laufende Kosten:</label>
-                            <textarea placeholder="Details zu laufenden Betriebskosten"></textarea>
+                            <label>Laufende Betriebskosten (OPEX):</label>
+                            <textarea placeholder="Details zu monatlichen/jährlichen Kosten (z.B. Cloud-Nutzung, Support, Management)"></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Kosteneinsparungen:</label>
-                            <textarea placeholder="Mögliche Kosteneinsparungen durch Cloud-Lösung"></textarea>
+                            <label>Erwartete Kosteneinsparungen & Vorteile:</label>
+                            <textarea placeholder="Quantifizierbare und qualitative Kosteneinsparungen oder Effizienzvorteile durch die Cloud-Lösung"></textarea>
+
+                            <label>Budgetverteilung:</label>
+                            <textarea placeholder="Aufteilung des Gesamtbudgets auf verschiedene Projektphasen, Cloud-Services und Teams"></textarea>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ressourcenplanung (Personal & Technik):</label>
+                        <textarea placeholder="Benötigte personelle Ressourcen (Cloud-Architekten, Entwickler, Operations) und technische Ressourcen (Tools, Lizenzen)"></textarea>
+                        
+                        <label>Kapazitätsplanung:</label>
+                        <textarea placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"></textarea>
                     </div>
                 </div>
             </div>
             
-            <!-- Bearbeitungsphase -->
             <div id="bearbeitung" class="tab-content">
                 <div class="section">
-                    <h2>Bearbeitungsphase</h2>
+                    <h2>Bearbeitungsphase (Implementierung & Migration)</h2>
                     
-                    <h3>1. Aufgabenverteilung</h3>
+                    <h3>1. Aufgabenverteilung & Projektfortschritt</h3>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Aufgabe</th>
+                                <th>Aufgabe/Arbeitspaket</th>
                                 <th>Verantwortlich</th>
                                 <th>Status</th>
-                                <th>Fällig</th>
+                                <th>Fällig (Datum)</th>
                                 <th>Kommentare</th>
                             </tr>
                         </thead>
@@ -163,6 +199,7 @@
                                         <option>In Bearbeitung</option>
                                         <option>Abgeschlossen</option>
                                         <option>Verzögert</option>
+                                        <option>Blockiert</option>
                                     </select>
                                 </td>
                                 <td><input type="date"></td>
@@ -178,22 +215,22 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Meilenstein:</label>
-                                    <input type="text" placeholder="Meilensteinbeschreibung">
+                                    <input type="text" placeholder="Meilenstein-Bezeichnung">
                                 </div>
                                 <div class="form-group">
-                                    <label>Datum:</label>
+                                    <label>Zieldatum:</label>
                                     <input type="date">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Beschreibung:</label>
-                                <textarea placeholder="Detaillierte Beschreibung des Meilensteins"></textarea>
+                                <label>Beschreibung & Erfolgskriterien:</label>
+                                <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
                             </div>
                         </div>
                     </div>
                     <button class="btn btn-secondary" onclick="addMilestone()">+ Weiteren Meilenstein hinzufügen</button>
                     
-                    <h3>3. Risikomanagement</h3>
+                    <h3>3. Risikomanagement & Issue-Tracking</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -201,7 +238,7 @@
                                 <th>Kategorie</th>
                                 <th>Eintrittswahrscheinlichkeit</th>
                                 <th>Auswirkung</th>
-                                <th>Maßnahme</th>
+                                <th>Maßnahme & Verantwortlicher</th>
                             </tr>
                         </thead>
                         <tbody id="risikoTable">
@@ -213,6 +250,8 @@
                                         <option>Organisatorisch</option>
                                         <option>Finanziell</option>
                                         <option>Zeitlich</option>
+                                        <option>Sicherheit/Compliance</option>
+                                        <option>Ressourcen</option>
                                     </select>
                                 </td>
                                 <td>
@@ -229,94 +268,131 @@
                                         <option>Hoch</option>
                                     </select>
                                 </td>
-                                <td><input type="text" placeholder="Maßnahmen"></td>
+                                <td><input type="text" placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"></td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-secondary" onclick="addRiskRow()">+ Weiteres Risiko hinzufügen</button>
                     
-                    <h3>4. Fortschrittsbericht</h3>
                     <div class="form-group">
-                        <label>Aktueller Status:</label>
+                        <label>Aktuelle Issues/Probleme:</label>
+                        <textarea placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte"></textarea>
+                        <label>Eskalationsprozesse:</label>
+                        <textarea placeholder="Beschreibung der Eskalationswege für kritische Probleme"></textarea>
+                    </div>
+
+                    <h3>4. Fortschrittsbericht & Statusaktualisierung</h3>
+                    <div class="form-group">
+                        <label>Aktueller Gesamtstatus Projekt:</label>
                         <select>
-                            <option>Planmäßig</option>
-                            <option>Geringfügige Verzögerung</option>
-                            <option>Erhebliche Verzögerung</option>
-                            <option>Kritisch</option>
+                            <option>🟢 Grün - Im Plan</option>
+                            <option>🟡 Gelb - Achtung</option>
+                            <option>🔴 Rot - Kritisch</option>
                         </select>
                         
-                        <label>Abgeschlossene Arbeiten:</label>
-                        <textarea placeholder="Beschreibung der abgeschlossenen Arbeiten"></textarea>
+                        <label>Abgeschlossene Arbeiten im Berichtszeitraum:</label>
+                        <textarea placeholder="Detaillierte Beschreibung der fertiggestellten Aufgaben und erreichten Ziele"></textarea>
                         
-                        <label>Nächste Schritte:</label>
-                        <textarea placeholder="Geplante nächste Schritte"></textarea>
+                        <label>Nächste geplante Schritte:</label>
+                        <textarea placeholder="Übersicht der unmittelbar bevorstehenden Aufgaben und Ziele für den nächsten Berichtszeitraum"></textarea>
                         
-                        <label>Probleme/Herausforderungen:</label>
-                        <textarea placeholder="Aktuelle Probleme und Lösungsansätze"></textarea>
+                        <label>Herausforderungen & Lösungsansätze:</label>
+                        <textarea placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"></textarea>
+                    </div>
+
+                    <h3>5. Testmanagement & Qualitätssicherung</h3>
+                    <div class="form-group">
+                        <label>Teststrategie & -pläne:</label>
+                        <textarea placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"></textarea>
+                        
+                        <label>Durchgeführte Tests & Ergebnisse:</label>
+                        <textarea placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"></textarea>
+                        
+                        <label>Qualitätssicherungsmaßnahmen:</label>
+                        <textarea placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"></textarea>
                     </div>
                 </div>
             </div>
             
-            <!-- Nachbereitung & Kontrolle -->
             <div id="nachbereitung" class="tab-content">
                 <div class="section">
-                    <h2>Nachbereitung und Kontrolle</h2>
+                    <h2>Nachbereitung und Kontrolle (Abschluss & Übergabe)</h2>
                     
-                    <h3>1. Abschlussbericht</h3>
+                    <h3>1. Abschlussbericht des Cloud-Projekts</h3>
                     <div class="form-group">
-                        <label>Projektergebnis:</label>
-                        <textarea placeholder="Zusammenfassung der Projektergebnisse"></textarea>
+                        <label>Zusammenfassung der Projektergebnisse:</label>
+                        <textarea placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"></textarea>
                         
-                        <label>Erreichte Ziele:</label>
-                        <textarea placeholder="Auflistung der erreichten Ziele"></textarea>
+                        <label>Erreichte Ziele & Benefits:</label>
+                        <textarea placeholder="Auflistung aller ursprünglich definierten Ziele, die erreicht wurden, inklusive realisierter Vorteile (Benefits)"></textarea>
                         
-                        <label>Nicht erreichte Ziele:</label>
-                        <textarea placeholder="Auflistung der nicht erreichten Ziele mit Begründung"></textarea>
+                        <label>Nicht erreichte Ziele & Begründung:</label>
+                        <textarea placeholder="Auflistung der Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung und Lessons Learned"></textarea>
+
+                        <label>Abweichungen von Plan (Zeit, Budget, Scope):</label>
+                        <textarea placeholder="Analyse von Abweichungen vom ursprünglichen Zeitplan, Budget und Projektumfang mit Ursachenanalyse"></textarea>
                     </div>
                     
-                    <h3>2. Leistungsprüfung</h3>
+                    <h3>2. Leistungsprüfung & Monitoring</h3>
                     <div class="form-group">
-                        <label>Leistungskennzahlen:</label>
-                        <textarea placeholder="Quantitative und qualitative Leistungskennzahlen"></textarea>
+                        <label>Leistungskennzahlen (KPIs) & Metriken:</label>
+                        <textarea placeholder="Übersicht über die gemessenen quantitativen und qualitativen Leistungskennzahlen (z.B. Performance, Verfügbarkeit, Kostenoptimierung) der Cloud-Lösung"></textarea>
                         
-                        <label>Abgleich mit Plan:</label>
-                        <textarea placeholder="Vergleich der Ergebnisse mit dem ursprünglichen Plan"></textarea>
+                        <label>Abgleich der Ergebnisse mit dem ursprünglichen Plan:</label>
+                        <textarea placeholder="Vergleich der tatsächlich erreichten Ergebnisse (technisch, finanziell, operativ) mit den initialen Erwartungen und Zielen"></textarea>
                         
-                        <label>Kundenfeedback:</label>
-                        <textarea placeholder="Feedback des Kunden zum Projekt"></textarea>
+                        <label>Kundenfeedback & Zufriedenheit:</label>
+                        <textarea placeholder="Zusammenfassung des gesammelten Kundenfeedbacks, inkl. Zufriedenheitsbewertungen und Anmerkungen"></textarea>
+
+                        <label>Monitoring-Strategie & -Tools:</label>
+                        <textarea placeholder="Beschreibung der implementierten Monitoring-Strategie für die Cloud-Ressourcen und -Anwendungen sowie der verwendeten Tools"></textarea>
                     </div>
                     
-                    <h3>3. Lessons Learned</h3>
+                    <h3>3. Lessons Learned & Best Practices</h3>
                     <div class="form-group">
-                        <label>Erfolgsfaktoren:</label>
-                        <textarea placeholder="Was hat besonders gut funktioniert?"></textarea>
+                        <label>Erfolgsfaktoren & Was gut funktioniert hat:</label>
+                        <textarea placeholder="Identifizierung der Schlüsselfaktoren, die zum Projekterfolg beigetragen haben, und welche Prozesse oder Praktiken besonders effektiv waren"></textarea>
                         
-                        <label>Verbesserungspotentiale:</label>
-                        <textarea placeholder="Was sollte beim nächsten Mal besser gemacht werden?"></textarea>
+                        <label>Verbesserungspotenziale & Was hätte besser gemacht werden können:</label>
+                        <textarea placeholder="Analyse von Bereichen, in denen das Projektteam, die Prozesse oder die Technologie verbessert werden könnten"></textarea>
                         
-                        <label>Empfehlungen:</label>
-                        <textarea placeholder="Empfehlungen für zukünftige Projekte"></textarea>
+                        <label>Empfehlungen für zukünftige Cloud-Projekte:</label>
+                        <textarea placeholder="Konkrete Empfehlungen, die aus den Lessons Learned abgeleitet wurden, um zukünftige Projekte effizienter und erfolgreicher zu gestalten"></textarea>
                     </div>
                     
-                    <h3>4. Übergabe und Abschluss</h3>
+                    <h3>4. Übergabe und formeller Abschluss</h3>
                     <div class="form-group">
-                        <label>Übergabedokumente:</label>
-                        <textarea placeholder="Liste der übergebenen Dokumente und Systeme"></textarea>
+                        <label>Übergabedokumente & Verantwortlichkeiten:</label>
+                        <textarea placeholder="Liste aller übergebenen Dokumente (Architektur, Betriebshandbücher, Konfigurationen), Systeme und die neuen Verantwortlichkeiten im Betrieb"></textarea>
                         
-                        <label>Schulungen durchgeführt:</label>
-                        <textarea placeholder="Durchgeführte Schulungen und Schulungsmaterialien"></textarea>
+                        <label>Durchgeführte Schulungen & Materialien:</label>
+                        <textarea placeholder="Details zu allen durchgeführten Schulungen für das Betriebsteam und die bereitgestellten Schulungsmaterialien"></textarea>
                         
-                        <label>Gewährleistung/Support:</label>
-                        <textarea placeholder="Details zu Gewährleistung und Support"></textarea>
+                        <label>Details zu Gewährleistung & Support:</label>
+                        <textarea placeholder="Informationen zu Gewährleistungsfristen, Support-Verträgen und Kontaktpersonen nach Projektende"></textarea>
+
+                        <label>Formelle Projektabnahme:</label>
+                        <textarea placeholder="Datum und Details zur formellen Abnahme des Projekts durch den Kunden/Auftraggeber"></textarea>
+                    </div>
+
+                    <h3>5. Kontinuierliche Optimierung & FinOps</h3>
+                    <div class="form-group">
+                        <label>Kostenoptimierungsstrategien:</label>
+                        <textarea placeholder="Beschreibung der Strategien für die kontinuierliche Optimierung der Cloud-Kosten (z.B. Reserved Instances, Spot Instances, Rightsizing)"></textarea>
+                        
+                        <label>FinOps-Implementierung (falls zutreffend):</label>
+                        <textarea placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"></textarea>
+                        
+                        <label>Automatisierung & Orchestrierung:</label>
+                        <textarea placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"></textarea>
                     </div>
                 </div>
             </div>
             
-            <!-- Vorlagen & Tools -->
             <div id="vorlagen" class="tab-content">
                 <div class="section">
                     <h2>Vorlagen & Tools</h2>
-                </div>
+                    </div>
             </div>
         </div>
         
@@ -356,6 +432,7 @@
                         <option>In Bearbeitung</option>
                         <option>Abgeschlossen</option>
                         <option>Verzögert</option>
+                        <option>Blockiert</option>
                     </select>
                 </td>
                 <td><input type="date"></td>
@@ -375,6 +452,8 @@
                         <option>Organisatorisch</option>
                         <option>Finanziell</option>
                         <option>Zeitlich</option>
+                        <option>Sicherheit/Compliance</option>
+                        <option>Ressourcen</option>
                     </select>
                 </td>
                 <td>
@@ -391,7 +470,7 @@
                         <option>Hoch</option>
                     </select>
                 </td>
-                <td><input type="text" placeholder="Maßnahmen"></td>
+                <td><input type="text" placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"></td>
             `;
             tableBody.appendChild(newRow);
         }
@@ -404,16 +483,16 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Meilenstein:</label>
-                        <input type="text" placeholder="Meilensteinbeschreibung">
+                        <input type="text" placeholder="Meilenstein-Bezeichnung">
                     </div>
                     <div class="form-group">
-                        <label>Datum:</label>
+                        <label>Zieldatum:</label>
                         <input type="date">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Beschreibung:</label>
-                    <textarea placeholder="Detaillierte Beschreibung des Meilensteins"></textarea>
+                    <label>Beschreibung & Erfolgskriterien:</label>
+                    <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
                 </div>
             `;
             milestonesContainer.appendChild(newMilestone);
@@ -425,27 +504,39 @@
 
         function saveDocument() {
             // Daten aus allen Feldern sammeln - Projektübersicht
-            const kundenname = document.querySelector('#grundlagen input[placeholder="Name des Kunden"]').value;
-            const projektname = document.querySelector('#grundlagen input[placeholder="Name des Projekts"]').value;
-            const projektbeschreibung = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen"]').value;
-            const projektstart = document.querySelector('#grundlagen input[type="date"]').value;
-            const projektende = document.querySelectorAll('#grundlagen input[type="date"]')[1].value;
-            const zeitrahmen = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes"]').value;
+            const kundenorganisation = document.querySelector('#grundlagen input[placeholder="Name der Kundenorganisation"]').value;
+            const projektSponsor = document.querySelector('#grundlagen input[placeholder="Name & Position"]').value;
+            const lenkungsausschuss = document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]').value;
+            const projektname = document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]').value;
+            const projektId = document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]').value;
+            const projektManager = document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]').value;
+            const projektlaufzeitStart = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(1)').value;
+            const projektlaufzeitEnde = document.querySelector('div[style="display: flex; gap: 10px;"] input[type="date"]:nth-of-type(2)').value;
+            const projektvision = document.querySelector('#grundlagen textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"]').value;
+            const messbareProjektziele = document.querySelector('#grundlagen textarea[placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"]').value;
+            const businessCase = document.querySelector('#grundlagen textarea[placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"]').value;
+            const projektbeschreibung = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen und des Projektumfangs"]').value;
+            const zeitrahmen = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes sowie kritische Termine"]').value;
 
             // Vorbereitungsphase
-            const projektziele = document.querySelector('#vorbereitung textarea[placeholder="Messbare Ziele des Projekts"]').value;
-            const stakeholder = document.querySelector('#vorbereitung textarea[placeholder="Liste aller beteiligten Parteien mit Kontaktdaten"]').value;
-            const erfolgskriterien = document.querySelector('#vorbereitung textarea[placeholder="Kriterien für den Projekterfolg"]').value;
-            const geschaeftsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Beschreibung der Geschäftsanforderungen"]').value;
-            const technischeAnforderungen = document.querySelector('#vorbereitung textarea[placeholder="Detaillierte technische Anforderungen"]').value;
-            const sicherheitsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Compliance- und Sicherheitsanforderungen"]').value;
+            const strategischeAusgangslage = document.querySelector('#vorbereitung textarea[placeholder="Analyse der aktuellen IT-Landschaft, Geschäftsstrategie und Motivation für die Cloud-Adoption"]').value;
+            const projektarchitektur = document.querySelector('#vorbereitung textarea[placeholder="Struktur und technische Abhängigkeiten innerhalb des Cloud-Projekts und zu bestehenden Systemen"]').value;
+            const governanceStruktur = document.querySelector('#vorbereitung textarea[placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten (z.B. Cloud Center of Excellence - CCoE)"]').value;
+            const geschaeftsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Beschreibung der übergeordneten Geschäftsanforderungen, die durch die Cloud-Lösung erfüllt werden sollen"]').value;
+            const technischeAnforderungen = document.querySelector('#vorbereitung textarea[placeholder="Detaillierte technische Spezifikationen, Infrastrukturanforderungen und Integrationspunkte"]').value;
+            const sicherheitsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Spezifische Anforderungen bezüglich Datensicherheit, Datenschutz (DSGVO), Compliance (ISO 27001, BSI C5 etc.) und Zugriffskontrolle"]').value;
+            const nichtFunktionaleAnforderungen = document.querySelector('#vorbereitung textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Verfügbarkeit, Wartbarkeit, Resilienz und Disaster Recovery"]').value;
             const cloudModell = document.querySelector('#vorbereitung select').value;
-            const cloudAnbieter = document.querySelector('#vorbereitung input[placeholder="Ausgewählte Cloud-Anbieter"]').value;
-            const begruendungCloud = document.querySelector('#vorbereitung textarea[placeholder="Begründung für die Auswahl des Cloud-Anbieters"]').value;
-            const migrationsplan = document.querySelector('#vorbereitung textarea[placeholder="Schritte für die Migration bestehender Systeme"]').value;
-            const anfangsInves = document.querySelector('#vorbereitung textarea[placeholder="Details zu Anfangsinvestitionen"]').value;
-            const laufendeKosten = document.querySelector('#vorbereitung textarea[placeholder="Details zu laufenden Betriebskosten"]').value;
-            const kostenEinsparungen = document.querySelector('#vorbereitung textarea[placeholder="Mögliche Kosteneinsparungen durch Cloud-Lösung"]').value;
+            const cloudAnbieter = document.querySelector('#vorbereitung input[placeholder="Ausgewählte Cloud-Anbieter (z.B. AWS, Azure, Google Cloud)"]').value;
+            const begruendungCloud = document.querySelector('#vorbereitung textarea[placeholder="Detaillierte Begründung basierend auf Analyse, Anforderungen und Business Case"]').value;
+            const migrationsplan = document.querySelector('#vorbereitung textarea[placeholder="Schritte, Phasen und Methoden (Lift & Shift, Replatform, Refactor, Repurchase, Retain, Retire) für die Migration bestehender Systeme und Anwendungen"]').value;
+            const cloudArchitekturDesign = document.querySelector('#vorbereitung textarea[placeholder="Beschreibung der beabsichtigten High-Level Cloud-Architektur, inkl. Netzwerk, Compute, Storage, Datenbanken, etc."]').value;
+            const anfangsInves = document.querySelector('#vorbereitung textarea[placeholder="Details zu einmaligen Investitionen (z.B. Lizenzen, Beratungskosten, initiale Hardware)"]').value;
+            const laufendeKosten = document.querySelector('#vorbereitung textarea[placeholder="Details zu monatlichen/jährlichen Kosten (z.B. Cloud-Nutzung, Support, Management)"]').value;
+            const kostenEinsparungen = document.querySelector('#vorbereitung textarea[placeholder="Quantifizierbare und qualitative Kosteneinsparungen oder Effizienzvorteile durch die Cloud-Lösung"]').value;
+            const budgetverteilung = document.querySelector('#vorbereitung textarea[placeholder="Aufteilung des Gesamtbudgets auf verschiedene Projektphasen, Cloud-Services und Teams"]').value;
+            const ressourcenplanung = document.querySelector('#vorbereitung textarea[placeholder="Benötigte personelle Ressourcen (Cloud-Architekten, Entwickler, Operations) und technische Ressourcen (Tools, Lizenzen)"]').value;
+            const kapazitaetsplanung = document.querySelector('#vorbereitung textarea[placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"]').value;
 
             // Bearbeitungsphase - Aufgabenverteilung
             const aufgabenRows = document.querySelectorAll('#aufgabenTable tr');
@@ -467,12 +558,12 @@
             const milestoneItems = document.querySelectorAll('#milestones .milestone-item');
             let milestonesHtml = '';
             milestoneItems.forEach(item => {
-                const milestoneName = item.querySelector('input[placeholder="Meilensteinbeschreibung"]').value;
+                const milestoneName = item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value;
                 const milestoneDate = item.querySelector('input[type="date"]').value;
-                const milestoneDescription = item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins"]').value;
+                const milestoneDescription = item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value;
                 milestonesHtml += `
                     <div class="milestone-item">
-                        <h4>${milestoneName} (Datum: ${milestoneDate})</h4>
+                        <h4>${milestoneName} (Zieldatum: ${milestoneDate})</h4>
                         <p>${milestoneDescription.replace(/\n/g, '<br>')}</p>
                     </div>
                 `;
@@ -495,35 +586,36 @@
             });
 
             // Bearbeitungsphase - Fortschrittsbericht
+            const aktuelleIssues = document.querySelector('#bearbeitung textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte"]').value;
+            const eskalationsprozesse = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme"]').value;
             const aktuellerStatus = document.querySelector('#bearbeitung select').value;
-            const abgeschlosseneArbeiten = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der abgeschlossenen Arbeiten"]').value;
-            const naechsteSchritte = document.querySelector('#bearbeitung textarea[placeholder="Geplante nächste Schritte"]').value;
-            const problemeHerausforderungen = document.querySelector('#bearbeitung textarea[placeholder="Aktuelle Probleme und Lösungsansätze"]').value;
+            const abgeschlosseneArbeiten = document.querySelector('#bearbeitung textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Aufgaben und erreichten Ziele"]').value;
+            const naechsteSchritte = document.querySelector('#bearbeitung textarea[placeholder="Übersicht der unmittelbar bevorstehenden Aufgaben und Ziele für den nächsten Berichtszeitraum"]').value;
+            const problemeHerausforderungen = document.querySelector('#bearbeitung textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value;
+            const teststrategie = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"]').value;
+            const durchgefuehrteTests = document.querySelector('#bearbeitung textarea[placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"]').value;
+            const qualitaetssicherung = document.querySelector('#bearbeitung textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"]').value;
 
             // Nachbereitung & Kontrolle
-            const projektergebnis = document.querySelector('#nachbereitung textarea[placeholder="Zusammenfassung der Projektergebnisse"]').value;
-            const erreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung der erreichten Ziele"]').value;
-            const nichtErreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung der nicht erreichten Ziele mit Begründung"]').value;
-            const leistungskennzahlen = document.querySelector('#nachbereitung textarea[placeholder="Quantitative und qualitative Leistungskennzahlen"]').value;
-            const abgleichPlan = document.querySelector('#nachbereitung textarea[placeholder="Vergleich der Ergebnisse mit dem ursprünglichen Plan"]').value;
-            const kundenfeedback = document.querySelector('#nachbereitung textarea[placeholder="Feedback des Kunden zum Projekt"]').value;
-            const erfolgsfaktoren = document.querySelector('#nachbereitung textarea[placeholder="Was hat besonders gut funktioniert?"]').value;
-            const verbesserungspotentiale = document.querySelector('#nachbereitung textarea[placeholder="Was sollte beim nächsten Mal besser gemacht werden?"]').value;
-            const empfehlungen = document.querySelector('#nachbereitung textarea[placeholder="Empfehlungen für zukünftige Projekte"]').value;
-            const uebergabedokumente = document.querySelector('#nachbereitung textarea[placeholder="Liste der übergebenen Dokumente und Systeme"]').value;
-            const schulungenDurchgefuehrt = document.querySelector('#nachbereitung textarea[placeholder="Durchgeführte Schulungen und Schulungsmaterialien"]').value;
-            const gewaehrleistungSupport = document.querySelector('#nachbereitung textarea[placeholder="Details zu Gewährleistung und Support"]').value;
+            const projektergebnis = document.querySelector('#nachbereitung textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"]').value;
+            const erreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung aller ursprünglich definierten Ziele, die erreicht wurden, inklusive realisierter Vorteile (Benefits)"]').value;
+            const nichtErreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung der Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung und Lessons Learned"]').value;
+            const abweichungenPlan = document.querySelector('#nachbereitung textarea[placeholder="Analyse von Abweichungen vom ursprünglichen Zeitplan, Budget und Projektumfang mit Ursachenanalyse"]').value;
+            const leistungskennzahlen = document.querySelector('#nachbereitung textarea[placeholder="Übersicht über die gemessenen quantitativen und qualitativen Leistungskennzahlen (z.B. Performance, Verfügbarkeit, Kostenoptimierung) der Cloud-Lösung"]').value;
+            const abgleichPlan = document.querySelector('#nachbereitung textarea[placeholder="Vergleich der tatsächlich erreichten Ergebnisse (technisch, finanziell, operativ) mit den initialen Erwartungen und Zielen"]').value;
+            const kundenfeedback = document.querySelector('#nachbereitung textarea[placeholder="Zusammenfassung des gesammelten Kundenfeedbacks, inkl. Zufriedenheitsbewertungen und Anmerkungen"]').value;
+            const monitoringStrategie = document.querySelector('#nachbereitung textarea[placeholder="Beschreibung der implementierten Monitoring-Strategie für die Cloud-Ressourcen und -Anwendungen sowie der verwendeten Tools"]').value;
+            const erfolgsfaktoren = document.querySelector('#nachbereitung textarea[placeholder="Identifizierung der Schlüsselfaktoren, die zum Projekterfolg beigetragen haben, und welche Prozesse oder Praktiken besonders effektiv waren"]').value;
+            const verbesserungspotentiale = document.querySelector('#nachbereitung textarea[placeholder="Analyse von Bereichen, in denen das Projektteam, die Prozesse oder die Technologie verbessert werden könnten"]').value;
+            const empfehlungen = document.querySelector('#nachbereitung textarea[placeholder="Konkrete Empfehlungen, die aus den Lessons Learned abgeleitet wurden, um zukünftige Projekte effizienter und erfolgreicher zu gestalten"]').value;
+            const uebergabedokumente = document.querySelector('#nachbereitung textarea[placeholder="Liste aller übergebenen Dokumente (Architektur, Betriebshandbücher, Konfigurationen), Systeme und die neuen Verantwortlichkeiten im Betrieb"]').value;
+            const schulungenDurchgefuehrt = document.querySelector('#nachbereitung textarea[placeholder="Details zu allen durchgeführten Schulungen für das Betriebsteam und die bereitgestellten Schulungsmaterialien"]').value;
+            const gewaehrleistungSupport = document.querySelector('#nachbereitung textarea[placeholder="Informationen zu Gewährleistungsfristen, Support-Verträgen und Kontaktpersonen nach Projektende"]').value;
+            const formelleProjektabnahme = document.querySelector('#nachbereitung textarea[placeholder="Datum und Details zur formellen Abnahme des Projekts durch den Kunden/Auftraggeber"]').value;
+            const kostenoptimierungsstrategien = document.querySelector('#nachbereitung textarea[placeholder="Beschreibung der Strategien für die kontinuierliche Optimierung der Cloud-Kosten (z.B. Reserved Instances, Spot Instances, Rightsizing)"]').value;
+            const finOpsImplementierung = document.querySelector('#nachbereitung textarea[placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"]').value;
+            const automatisierungOrchestrierung = document.querySelector('#nachbereitung textarea[placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"]').value;
 
-            // Vorlagen & Tools (nur Textareas, falls gefüllt)
-            /*
-            const cloudArchitekturDok = document.querySelector('#vorlagen textarea[placeholder="Vorlage für die Dokumentation der Cloud-Architektur"]').value;
-            const sicherheitskonzeptVorlage = document.querySelector('#vorlagen textarea[placeholder="Vorlage für Cloud-Sicherheitskonzepte"]').value;
-            const migrationCheckliste = document.querySelector('#vorlagen textarea[placeholder="Checkliste für Cloud-Migration"]').value;
-            const monitoringSetup = document.querySelector('#vorlagen textarea[placeholder="Vorlage für Monitoring-Konfiguration"]').value;
-            const datenschutzDok = document.querySelector('#vorlagen textarea[placeholder="DSGVO-konforme Dokumentation"]').value;
-            const auditBereitschaft = document.querySelector('#vorlagen textarea[placeholder="Checkliste für Cloud-Audits"]').value;
-            const incidentResponsePlan = document.querySelector('#vorlagen textarea[placeholder="Vorlage für Incident Response"]').value;
-            */
 
             const staticHtmlContent = `
                 <!DOCTYPE html>
@@ -568,27 +660,44 @@
                                 <h2>Projektübersicht</h2>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label>Kundenname:</label>
-                                        <p>${kundenname}</p>
+                                        <h3>Organisationsdaten</h3>
+                                        <label>Kundenorganisation/Unternehmen:</label>
+                                        <p>${kundenorganisation}</p>
+                                        
+                                        <label>Cloud Projekt-Sponsor:</label>
+                                        <p>${projektSponsor}</p>
+                                        
+                                        <label>Lenkungsausschuss (falls zutreffend):</label>
+                                        <p>${lenkungsausschuss.replace(/\n/g, '<br>')}</p>
                                     </div>
                                     <div class="form-group">
+                                        <h3>Projektdaten</h3>
                                         <label>Projektname:</label>
                                         <p>${projektname}</p>
+                                        
+                                        <label>Projekt-ID:</label>
+                                        <p>${projektId}</p>
+                                        
+                                        <label>Projektmanager:</label>
+                                        <p>${projektManager}</p>
+                                        
+                                        <label>Projektlaufzeit:</label>
+                                        <p>${projektlaufzeitStart} bis ${projektlaufzeitEnde}</p>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Projektvision & Strategische Ziele:</label>
+                                    <p>${projektvision.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Messbare Projektziele:</label>
+                                    <p>${messbareProjektziele.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Business Case & ROI-Erwartungen:</label>
+                                    <p>${businessCase.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Projektbeschreibung (Leistungsbeschreibung):</label>
                                     <p>${projektbeschreibung.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Projektstart:</label>
-                                        <p>${projektstart}</p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Projektende:</label>
-                                        <p>${projektende}</p>
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Beauftragter Zeitrahmen:</label>
@@ -598,66 +707,88 @@
 
                             <div class="section">
                                 <h2>Vorbereitungsphase</h2>
-                                <h3>1. Projektinitialisierungsdokument</h3>
+                                <h3>1. Projektinitialisierung & Setup</h3>
                                 <div class="form-group">
-                                    <label>Projektziele:</label>
-                                    <p>${projektziele.replace(/\n/g, '<br>')}</p>
-                                    <label>Beteiligte Stakeholder:</label>
-                                    <p>${stakeholder.replace(/\n/g, '<br>')}</p>
-                                    <label>Erfolgskriterien:</label>
-                                    <p>${erfolgskriterien.replace(/\n/g, '<br>')}</p>
+                                    <label>Strategische Ausgangslage & Treiber:</label>
+                                    <p>${strategischeAusgangslage.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Projektarchitektur & Abhängigkeiten:</label>
+                                    <p>${projektarchitektur.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Governance-Struktur im Cloud-Projekt:</label>
+                                    <p>${governanceStruktur.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>2. Anforderungsdokument</h3>
+                                <h3>2. Anforderungsmanagement</h3>
                                 <div class="form-group">
-                                    <label>Geschäftsanforderungen:</label>
+                                    <label>Geschäftsanforderungen (Business Requirements):</label>
                                     <p>${geschaeftsanforderungen.replace(/\n/g, '<br>')}</p>
-                                    <label>Technische Anforderungen:</label>
+                                    
+                                    <label>Technische Anforderungen (Technical Requirements):</label>
                                     <p>${technischeAnforderungen.replace(/\n/g, '<br>')}</p>
-                                    <label>Sicherheitsanforderungen:</label>
+                                    
+                                    <label>Sicherheits- & Compliance-Anforderungen:</label>
                                     <p>${sicherheitsanforderungen.replace(/\n/g, '<br>')}</p>
+
+                                    <label>Nicht-funktionale Anforderungen (Non-Functional Requirements):</label>
+                                    <p>${nichtFunktionaleAnforderungen.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>3. Cloud-Strategie-Dokument</h3>
+                                <h3>3. Cloud-Strategie & Design</h3>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Cloud-Modell:</label>
                                         <p>${cloudModell}</p>
                                     </div>
                                     <div class="form-group">
-                                        <label>Cloud-Anbieter:</label>
+                                        <label>Cloud-Anbieter(n):</label>
                                         <p>${cloudAnbieter}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Begründung für Cloud-Anbieter:</label>
+                                    <label>Begründung für die Auswahl des Cloud-Modells & Anbieters:</label>
                                     <p>${begruendungCloud.replace(/\n/g, '<br>')}</p>
-                                    <label>Migrationsplan:</label>
+                                    
+                                    <label>Migrationsstrategie & -plan:</label>
                                     <p>${migrationsplan.replace(/\n/g, '<br>')}</p>
+
+                                    <label>Cloud-Architektur Design (High-Level):</label>
+                                    <p>${cloudArchitekturDesign.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>4. Kostenanalyse</h3>
+                                <h3>4. Kostenanalyse & Ressourcenplanung</h3>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label>Anfangsinvestition:</label>
+                                        <label>Anfangsinvestition (CAPEX):</label>
                                         <p>${anfangsInves.replace(/\n/g, '<br>')}</p>
-                                        <label>Laufende Kosten:</label>
+                                        
+                                        <label>Laufende Betriebskosten (OPEX):</label>
                                         <p>${laufendeKosten.replace(/\n/g, '<br>')}</p>
                                     </div>
                                     <div class="form-group">
-                                        <label>Kosteneinsparungen:</label>
+                                        <label>Erwartete Kosteneinsparungen & Vorteile:</label>
                                         <p>${kostenEinsparungen.replace(/\n/g, '<br>')}</p>
+
+                                        <label>Budgetverteilung:</label>
+                                        <p>${budgetverteilung.replace(/\n/g, '<br>')}</p>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ressourcenplanung (Personal & Technik):</label>
+                                    <p>${ressourcenplanung.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Kapazitätsplanung:</label>
+                                    <p>${kapazitaetsplanung.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
-                                <h2>Bearbeitungsphase</h2>
-                                <h3>1. Aufgabenverteilung</h3>
+                                <h2>Bearbeitungsphase (Implementierung & Migration)</h2>
+                                <h3>1. Aufgabenverteilung & Projektfortschritt</h3>
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Aufgabe</th>
+                                            <th>Aufgabe/Arbeitspaket</th>
                                             <th>Verantwortlich</th>
                                             <th>Status</th>
-                                            <th>Fällig</th>
+                                            <th>Fällig (Datum)</th>
                                             <th>Kommentare</th>
                                         </tr>
                                     </thead>
@@ -669,7 +800,7 @@
                                 <div id="milestones">
                                     ${milestonesHtml}
                                 </div>
-                                <h3>3. Risikomanagement</h3>
+                                <h3>3. Risikomanagement & Issue-Tracking</h3>
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -677,63 +808,111 @@
                                             <th>Kategorie</th>
                                             <th>Eintrittswahrscheinlichkeit</th>
                                             <th>Auswirkung</th>
-                                            <th>Maßnahme</th>
+                                            <th>Maßnahme & Verantwortlicher</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${risikoHtml}
                                     </tbody>
                                 </table>
-                                <h3>4. Fortschrittsbericht</h3>
                                 <div class="form-group">
-                                    <label>Aktueller Status:</label>
+                                    <label>Aktuelle Issues/Probleme:</label>
+                                    <p>${aktuelleIssues.replace(/\n/g, '<br>')}</p>
+                                    <label>Eskalationsprozesse:</label>
+                                    <p>${eskalationsprozesse.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <h3>4. Fortschrittsbericht & Statusaktualisierung</h3>
+                                <div class="form-group">
+                                    <label>Aktueller Gesamtstatus Projekt:</label>
                                     <p>${aktuellerStatus}</p>
-                                    <label>Abgeschlossene Arbeiten:</label>
+                                    
+                                    <label>Abgeschlossene Arbeiten im Berichtszeitraum:</label>
                                     <p>${abgeschlosseneArbeiten.replace(/\n/g, '<br>')}</p>
-                                    <label>Nächste Schritte:</label>
+                                    
+                                    <label>Nächste geplante Schritte:</label>
                                     <p>${naechsteSchritte.replace(/\n/g, '<br>')}</p>
-                                    <label>Probleme/Herausforderungen:</label>
+                                    
+                                    <label>Herausforderungen & Lösungsansätze:</label>
                                     <p>${problemeHerausforderungen.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <h3>5. Testmanagement & Qualitätssicherung</h3>
+                                <div class="form-group">
+                                    <label>Teststrategie & -pläne:</label>
+                                    <p>${teststrategie.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Durchgeführte Tests & Ergebnisse:</label>
+                                    <p>${durchgefuehrteTests.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Qualitätssicherungsmaßnahmen:</label>
+                                    <p>${qualitaetssicherung.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
-                                <h2>Nachbereitung und Kontrolle</h2>
-                                <h3>1. Abschlussbericht</h3>
+                                <h2>Nachbereitung und Kontrolle (Abschluss & Übergabe)</h2>
+                                <h3>1. Abschlussbericht des Cloud-Projekts</h3>
                                 <div class="form-group">
-                                    <label>Projektergebnis:</label>
+                                    <label>Zusammenfassung der Projektergebnisse:</label>
                                     <p>${projektergebnis.replace(/\n/g, '<br>')}</p>
-                                    <label>Erreichte Ziele:</label>
+                                    
+                                    <label>Erreichte Ziele & Benefits:</label>
                                     <p>${erreichteZiele.replace(/\n/g, '<br>')}</p>
-                                    <label>Nicht erreichte Ziele:</label>
+                                    
+                                    <label>Nicht erreichte Ziele & Begründung:</label>
                                     <p>${nichtErreichteZiele.replace(/\n/g, '<br>')}</p>
+
+                                    <label>Abweichungen von Plan (Zeit, Budget, Scope):</label>
+                                    <p>${abweichungenPlan.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>2. Leistungsprüfung</h3>
+                                <h3>2. Leistungsprüfung & Monitoring</h3>
                                 <div class="form-group">
-                                    <label>Leistungskennzahlen:</label>
+                                    <label>Leistungskennzahlen (KPIs) & Metriken:</label>
                                     <p>${leistungskennzahlen.replace(/\n/g, '<br>')}</p>
-                                    <label>Abgleich mit Plan:</label>
+                                    
+                                    <label>Abgleich der Ergebnisse mit dem ursprünglichen Plan:</label>
                                     <p>${abgleichPlan.replace(/\n/g, '<br>')}</p>
-                                    <label>Kundenfeedback:</label>
+                                    
+                                    <label>Kundenfeedback & Zufriedenheit:</label>
                                     <p>${kundenfeedback.replace(/\n/g, '<br>')}</p>
+
+                                    <label>Monitoring-Strategie & -Tools:</label>
+                                    <p>${monitoringStrategie.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>3. Lessons Learned</h3>
+                                <h3>3. Lessons Learned & Best Practices</h3>
                                 <div class="form-group">
-                                    <label>Erfolgsfaktoren:</label>
+                                    <label>Erfolgsfaktoren & Was gut funktioniert hat:</label>
                                     <p>${erfolgsfaktoren.replace(/\n/g, '<br>')}</p>
-                                    <label>Verbesserungspotentiale:</label>
+                                    
+                                    <label>Verbesserungspotenziale & Was hätte besser gemacht werden können:</label>
                                     <p>${verbesserungspotentiale.replace(/\n/g, '<br>')}</p>
-                                    <label>Empfehlungen:</label>
+                                    
+                                    <label>Empfehlungen für zukünftige Cloud-Projekte:</label>
                                     <p>${empfehlungen.replace(/\n/g, '<br>')}</p>
                                 </div>
-                                <h3>4. Übergabe und Abschluss</h3>
+                                <h3>4. Übergabe und formeller Abschluss</h3>
                                 <div class="form-group">
-                                    <label>Übergabedokumente:</label>
+                                    <label>Übergabedokumente & Verantwortlichkeiten:</label>
                                     <p>${uebergabedokumente.replace(/\n/g, '<br>')}</p>
-                                    <label>Schulungen durchgeführt:</label>
+                                    
+                                    <label>Durchgeführte Schulungen & Materialien:</label>
                                     <p>${schulungenDurchgefuehrt.replace(/\n/g, '<br>')}</p>
-                                    <label>Gewährleistung/Support:</label>
+                                    
+                                    <label>Details zu Gewährleistung & Support:</label>
                                     <p>${gewaehrleistungSupport.replace(/\n/g, '<br>')}</p>
+
+                                    <label>Formelle Projektabnahme:</label>
+                                    <p>${formelleProjektabnahme.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <h3>5. Kontinuierliche Optimierung & FinOps</h3>
+                                <div class="form-group">
+                                    <label>Kostenoptimierungsstrategien:</label>
+                                    <p>${kostenoptimierungsstrategien.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>FinOps-Implementierung (falls zutreffend):</label>
+                                    <p>${finOpsImplementierung.replace(/\n/g, '<br>')}</p>
+                                    
+                                    <label>Automatisierung & Orchestrierung:</label>
+                                    <p>${automatisierungOrchestrierung.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
