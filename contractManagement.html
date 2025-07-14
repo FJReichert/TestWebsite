@@ -367,7 +367,7 @@
         }
 
         function deleteItem(buttonElement) {
-            buttonElement.closest('.stakeholder-item, .obligation-row, .audit-item, .payment-row, .version-item, .risk-row').remove();
+            buttonElement.closest('.stakeholder-item, .obligation-row, .audit-item, .payment-row, .version-item, .risk-row, li').remove();
         }
 
 
@@ -533,13 +533,13 @@
             const ansprechpartnerPosition = document.getElementById('ansprechpartner-position').value || 'Nicht angegeben';
 
             // Collect additional contacts
-            let additionalContactsHtml = '';
+            let additionalContactsContent = '';
             document.querySelectorAll('#additionalContacts .stakeholder-item').forEach((contactItem, index) => {
                 const name = contactItem.querySelector('.contact-name').value || 'Nicht angegeben';
                 const email = contactItem.querySelector('.contact-email').value || 'Nicht angegeben';
                 const phone = contactItem.querySelector('.contact-phone').value || 'Nicht angegeben';
                 const position = contactItem.querySelector('.contact-position').value || 'Nicht angegeben';
-                additionalContactsHtml += `
+                additionalContactsContent += `
                     <h4>Weiterer Kontakt ${index + 1}</h4>
                     <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${name}</span></div>
                     <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${email}</span></div>
@@ -547,32 +547,29 @@
                     <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${position}</span></div>
                 `;
             });
+            const additionalContactsHtml = additionalContactsContent || '<p>Keine weiteren Kontakte erfasst.</p>';
+
 
             // Collect uploaded documents
-            let uploadedDocumentsHtml = '';
+            let uploadedDocumentsContent = '';
             document.querySelectorAll('#uploadedDocuments li').forEach(docItem => {
-                const docName = docItem.textContent.trim().replace('X', ''); // Remove the 'X' from delete button
+                // Get the text content, remove the 'X' from delete button
+                const docName = docItem.childNodes[0] ? docItem.childNodes[0].textContent.trim() : ''; // Get text node directly
                 if (docName) {
-                    uploadedDocumentsHtml += `<li>${docName}</li>`;
+                    uploadedDocumentsContent += `<li>${docName}</li>`;
                 }
             });
-            if (uploadedDocumentsHtml) {
-                uploadedDocumentsHtml = `
-                    <h3>Hochgeladene Dokumente</h3>
-                    <ul>${uploadedDocumentsHtml}</ul>
-                `;
-            } else {
-                uploadedDocumentsHtml = `<h3>Hochgeladene Dokumente</h3><p>Keine Dokumente hochgeladen.</p>`;
-            }
+            const uploadedDocumentsHtml = uploadedDocumentsContent ? `<ul>${uploadedDocumentsContent}</ul>` : '<p>Keine Dokumente hochgeladen.</p>';
+
 
             // Collect obligations
-            let obligationsHtml = '';
+            let obligationsContent = '';
             document.querySelectorAll('#obligationsTableBody tr').forEach((row, index) => {
                 const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
                 const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
                 const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
                 const status = row.querySelector('.obligation-status').value || 'Nicht angegeben';
-                obligationsHtml += `
+                obligationsContent += `
                     <tr>
                         <td>${description}</td>
                         <td>${date}</td>
@@ -581,32 +578,27 @@
                     </tr>
                 `;
             });
-            if (obligationsHtml) {
-                obligationsHtml = `
-                    <h3>Wichtige Verpflichtungen & Fristen</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Beschreibung</th>
-                                <th>Frist</th>
-                                <th>Verantwortlicher</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>${obligationsHtml}</tbody>
-                    </table>
-                `;
-            } else {
-                obligationsHtml = `<h3>Wichtige Verpflichtungen & Fristen</h3><p>Keine Verpflichtungen erfasst.</p>`;
-            }
+            const obligationsHtml = obligationsContent ? `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Beschreibung</th>
+                            <th>Frist</th>
+                            <th>Verantwortlicher</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>${obligationsContent}</tbody>
+                </table>
+            ` : '<p>Keine Verpflichtungen erfasst.</p>';
 
             // Collect audit entries
-            let auditHistoryHtml = '';
+            let auditHistoryContent = '';
             document.querySelectorAll('#auditHistory .audit-item').forEach((auditItem, index) => {
                 const date = auditItem.querySelector('.audit-date').value || 'Nicht angegeben';
                 const auditor = auditItem.querySelector('.audit-auditor').value || 'Nicht angegeben';
                 const results = auditItem.querySelector('.audit-results').value || 'Nicht angegeben';
-                auditHistoryHtml += `
+                auditHistoryContent += `
                     <h4>Audit Eintrag ${index + 1}</h4>
                     <div class="data-row"><span class="data-label">Datum des Audits:</span> <span class="data-value">${date}</span></div>
                     <div class="data-row"><span class="data-label">Auditor:</span> <span class="data-value">${auditor}</span></div>
@@ -614,24 +606,18 @@
                     <p>${results.replace(/\n/g, '<br>')}</p>
                 `;
             });
-            if (auditHistoryHtml) {
-                auditHistoryHtml = `
-                    <h3>Audit-Historie</h3>
-                    ${auditHistoryHtml}
-                `;
-            } else {
-                auditHistoryHtml = `<h3>Audit-Historie</h3><p>Keine Audit-Einträge erfasst.</p>`;
-            }
+            const auditHistoryHtml = auditHistoryContent || '<p>Keine Audit-Einträge erfasst.</p>';
+
 
             // Collect payment history
             const leistungsstand = document.getElementById('leistungsstand').value || 'Nicht angegeben';
-            let paymentHistoryHtml = '';
+            let paymentHistoryContent = '';
             document.querySelectorAll('#paymentTableBody tr').forEach((row, index) => {
                 const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
                 const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
                 const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
                 const status = row.querySelector('.payment-status').value || 'Nicht angegeben';
-                paymentHistoryHtml += `
+                paymentHistoryContent += `
                     <tr>
                         <td>${invoice}</td>
                         <td>${date}</td>
@@ -640,33 +626,28 @@
                     </tr>
                 `;
             });
-            if (paymentHistoryHtml) {
-                paymentHistoryHtml = `
-                    <h3>Zahlungshistorie</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Rechnungsnummer</th>
-                                <th>Datum</th>
-                                <th>Betrag</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>${paymentHistoryHtml}</tbody>
-                    </table>
-                `;
-            } else {
-                paymentHistoryHtml = `<h3>Zahlungshistorie</h3><p>Keine Zahlungseinträge erfasst.</p>`;
-            }
+            const paymentHistoryHtml = paymentHistoryContent ? `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rechnungsnummer</th>
+                            <th>Datum</th>
+                            <th>Betrag</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>${paymentHistoryContent}</tbody>
+                </table>
+            ` : '<p>Keine Zahlungseinträge erfasst.</p>';
 
             // Collect version history
-            let versionHistoryHtml = '';
+            let versionHistoryContent = '';
             document.querySelectorAll('#versionHistory .version-item').forEach((versionItem, index) => {
                 const version = versionItem.querySelector('.version-number').value || 'Nicht angegeben';
                 const date = versionItem.querySelector('.version-date').value || 'Nicht angegeben';
                 const changes = versionItem.querySelector('.version-changes').value || 'Nicht angegeben';
                 const author = versionItem.querySelector('.version-author').value || 'Nicht angegeben';
-                versionHistoryHtml += `
+                versionHistoryContent += `
                     <h4>Version ${version}</h4>
                     <div class="data-row"><span class="data-label">Datum:</span> <span class="data-value">${date}</span></div>
                     <div class="data-row"><span class="data-label">Autor:</span> <span class="data-value">${author}</span></div>
@@ -674,19 +655,12 @@
                     <p>${changes.replace(/\n/g, '<br>')}</p>
                 `;
             });
-            if (versionHistoryHtml) {
-                versionHistoryHtml = `
-                    <h3>Versionshistorie</h3>
-                    ${versionHistoryHtml}
-                `;
-            } else {
-                versionHistoryHtml = `<h3>Versionshistorie</h3><p>Keine Versionseinträge erfasst.</p>`;
-            }
+            const versionHistoryHtml = versionHistoryContent || '<p>Keine Versionseinträge erfasst.</p>';
 
             const internalNotes = document.getElementById('internalNotes').value || 'Nicht angegeben';
 
             // Collect risk entries
-            let riskHtml = '';
+            let riskContent = '';
             document.querySelectorAll('#riskTableBody tr').forEach((row, index) => {
                 const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
                 const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
@@ -695,7 +669,7 @@
                 const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
                 const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
                 const status = row.querySelector('.risk-status').value || 'Nicht angegeben';
-                riskHtml += `
+                riskContent += `
                     <tr>
                         <td>${description}</td>
                         <td>${category}</td>
@@ -707,27 +681,22 @@
                     </tr>
                 `;
             });
-            if (riskHtml) {
-                riskHtml = `
-                    <h3>Vertragliche Risiken</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Beschreibung</th>
-                                <th>Kategorie</th>
-                                <th>Wahrscheinlichkeit</th>
-                                <th>Auswirkung</th>
-                                <th>Maßnahme</th>
-                                <th>Verantwortlicher</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>${riskHtml}</tbody>
-                    </table>
-                `;
-            } else {
-                riskHtml = `<h3>Vertragliche Risiken</h3><p>Keine Risikoeinträge erfasst.</p>`;
-            }
+            const riskHtml = riskContent ? `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Beschreibung</th>
+                            <th>Kategorie</th>
+                            <th>Wahrscheinlichkeit</th>
+                            <th>Auswirkung</th>
+                            <th>Maßnahme</th>
+                            <th>Verantwortlicher</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>${riskContent}</tbody>
+                </table>
+            ` : '<p>Keine Risikoeinträge erfasst.</p>';
 
 
             const staticHtmlContent = `
@@ -790,25 +759,32 @@
                         <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${ansprechpartnerEmail}</span></div>
                         <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${ansprechpartnerTelefon}</span></div>
                         <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${ansprechpartnerPosition}</span></div>
-                        ${additionalContactsHtml ? `<h3>Weitere Kontakte</h3>${additionalContactsHtml}` : ''}
+                        <h3>Weitere Kontakte</h3>
+                        ${additionalContactsHtml}
                         
                         <h2>Vertragsdokumente</h2>
                         ${uploadedDocumentsHtml}
 
                         <h2>Compliance & Monitoring</h2>
+                        <h3>Wichtige Verpflichtungen & Fristen</h3>
                         ${obligationsHtml}
+                        <h3>Audit-Historie</h3>
                         ${auditHistoryHtml}
 
                         <h2>Leistungs- & Zahlungsmonitoring</h2>
+                        <h3>Aktueller Leistungsstand</h3>
                         <div class="data-row"><span class="data-label">Aktueller Leistungsstand:</span> <span class="data-value">${leistungsstand}% erfüllt</span></div>
+                        <h3>Zahlungshistorie</h3>
                         ${paymentHistoryHtml}
 
                         <h2>Historie & Notizen</h2>
+                        <h3>Versionshistorie</h3>
                         ${versionHistoryHtml}
                         <h3>Interne Notizen</h3>
                         <p>${internalNotes.replace(/\n/g, '<br>')}</p>
 
                         <h2>Risikomanagement</h2>
+                        <h3>Vertragliche Risiken</h3>
                         ${riskHtml}
 
                     </div>
