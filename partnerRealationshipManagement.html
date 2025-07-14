@@ -1,385 +1,33 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenProject - Partner Relationship Management</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: #34495e;
-            overflow-x: auto;
-        }
-
-        .nav-tab {
-            padding: 15px 25px;
-            color: white;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 1em;
-        }
-
-        .nav-tab:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .nav-tab.active {
-            background: #3498db;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-            padding: 40px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .section {
-            margin-bottom: 40px;
-            padding: 30px;
-            border-radius: 10px;
-            background: #f8f9fa;
-            border-left: 5px solid #3498db;
-        }
-
-        .section h2 {
-            color: #2c3e50;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section h2::before {
-            content: '▶';
-            margin-right: 10px;
-            color: #3498db;
-        }
-
-        .section h3 {
-            color: #34495e;
-            font-size: 1.3em;
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row-triple {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-row-quad {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 0.95em;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="date"],
-        input[type="number"],
-        input[type="url"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .textarea-large {
-            min-height: 150px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .data-table th {
-            background: #34495e;
-            color: white;
-            font-weight: 600;
-        }
-
-        .data-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .add-button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-top: 10px;
-            transition: background 0.3s ease;
-        }
-
-        .add-button:hover {
-            background: #219a52;
-        }
-
-        .status-indicators {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .status-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .status-card h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #ecf0f1;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .document-upload {
-            border: 2px dashed #bdc3c7;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            background: #fafafa;
-            transition: all 0.3s ease;
-        }
-
-        .document-upload:hover {
-            border-color: #3498db;
-            background: #f0f8ff;
-        }
-
-        .document-upload i {
-            font-size: 3em;
-            color: #bdc3c7;
-            margin-bottom: 15px;
-        }
-
-        .save-button {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            font-size: 1.1em;
-            cursor: pointer;
-            display: block;
-            margin: 40px auto 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .save-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-        }
-
-        .partner-tier {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 15px;
-            color: white;
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-
-        .tier-gold { background: #f39c12; }
-        .tier-silver { background: #95a5a6; }
-        .tier-bronze { background: #e67e22; }
-        .tier-standard { background: #3498db; }
-
-        .metric-card {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .metric-card h4 {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        .metric-card p {
-            opacity: 0.9;
-        }
-
-        .integration-box {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .integration-box h4 {
-            color: #495057;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .integration-box h4::before {
-            content: '🔗';
-            margin-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .form-row,
-            .form-row-triple,
-            .form-row-quad {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                margin: 10px;
-            }
-            
-            .tab-content {
-                padding: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <a href="index.html" class="home-button">Zur Startseite</a>
             <h1>OpenProject PRM</h1>
             <p>Partner Relationship Management System</p>
         </div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('project')">📋 Projekt</button>
-            <button class="nav-tab" onclick="showTab('partner')">🤝 Partner</button>
-            <button class="nav-tab" onclick="showTab('service')">⚙️ Service</button>
-            <button class="nav-tab" onclick="showTab('sales')">💼 Vertrieb</button>
-            <button class="nav-tab" onclick="showTab('marketing')">📢 Marketing</button>
-            <button class="nav-tab" onclick="showTab('reporting')">📊 Reporting</button>
+            <button class="nav-tab active" onclick="showTab('project', event)">📋 Projekt</button>
+            <button class="nav-tab" onclick="showTab('partner', event)">🤝 Partner</button>
+            <button class="nav-tab" onclick="showTab('service', event)">⚙️ Service</button>
+            <button class="nav-tab" onclick="showTab('sales', event)">💼 Vertrieb</button>
+            <button class="nav-tab" onclick="showTab('marketing', event)">📢 Marketing</button>
+            <button class="nav-tab" onclick="showTab('reporting', event)">📊 Reporting</button>
         </div>
 
-        <!-- Projekt Tab -->
         <div id="project" class="tab-content active">
             <div class="section">
                 <h2>Projektinitiierung</h2>
@@ -442,7 +90,6 @@
             </div>
         </div>
 
-        <!-- Partner Tab -->
         <div id="partner" class="tab-content">
             <div class="section">
                 <h2>Partner Management</h2>
@@ -543,26 +190,28 @@
                             <th>Level</th>
                             <th>Gültig bis</th>
                             <th>Status</th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody id="zertifizierungen-tbody">
-                        <tr>
-                            <td><input type="text" placeholder="Zertifizierung eingeben" style="border: none; background: transparent;"></td>
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Zertifizierung eingeben"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="basic">Basic</option>
                                     <option value="advanced">Advanced</option>
                                     <option value="expert">Expert</option>
                                 </select>
                             </td>
-                            <td><input type="date" style="border: none; background: transparent;"></td>
+                            <td><input type="date"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="aktiv">Aktiv</option>
                                     <option value="abgelaufen">Abgelaufen</option>
                                     <option value="in-erneuerung">In Erneuerung</option>
                                 </select>
                             </td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -570,7 +219,6 @@
             </div>
         </div>
 
-        <!-- Service Tab -->
         <div id="service" class="tab-content">
             <div class="section">
                 <h2>Service Management</h2>
@@ -584,13 +232,14 @@
                             <th>SLA Level</th>
                             <th>Preis</th>
                             <th>Status</th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody id="services-tbody">
-                        <tr>
-                            <td><input type="text" placeholder="Service-Name" style="border: none; background: transparent;"></td>
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Service-Name"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="support">Support</option>
                                     <option value="implementation">Implementation</option>
                                     <option value="consulting">Consulting</option>
@@ -599,21 +248,22 @@
                                 </select>
                             </td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="bronze">Bronze</option>
                                     <option value="silver">Silver</option>
                                     <option value="gold">Gold</option>
                                     <option value="platinum">Platinum</option>
                                 </select>
                             </td>
-                            <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
+                            <td><input type="number" placeholder="€"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="aktiv">Aktiv</option>
                                     <option value="inaktiv">Inaktiv</option>
                                     <option value="entwicklung">In Entwicklung</option>
                                 </select>
                             </td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -677,7 +327,6 @@
             </div>
         </div>
 
-        <!-- Sales Tab -->
         <div id="sales" class="tab-content">
             <div class="section">
                 <h2>Vertrieb & Sales</h2>
@@ -692,15 +341,16 @@
                             <th>Stage</th>
                             <th>Wahrscheinlichkeit</th>
                             <th>Abschluss erwartet</th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody id="opportunities-tbody">
-                        <tr>
-                            <td><input type="text" placeholder="Opportunity Name" style="border: none; background: transparent;"></td>
-                            <td><input type="text" placeholder="Kunde" style="border: none; background: transparent;"></td>
-                            <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Opportunity Name"></td>
+                            <td><input type="text" placeholder="Kunde"></td>
+                            <td><input type="number" placeholder="€"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="lead">Lead</option>
                                     <option value="qualified">Qualified</option>
                                     <option value="proposal">Proposal</option>
@@ -709,8 +359,9 @@
                                     <option value="closed-lost">Closed Lost</option>
                                 </select>
                             </td>
-                            <td><input type="number" min="0" max="100" placeholder="%" style="border: none; background: transparent;"></td>
-                            <td><input type="date" style="border: none; background: transparent;"></td>
+                            <td><input type="number" min="0" max="100" placeholder="%"></td>
+                            <td><input type="date"></td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -781,7 +432,6 @@
             </div>
         </div>
 
-        <!-- Marketing Tab -->
         <div id="marketing" class="tab-content">
             <div class="section">
                 <h2>Marketing & Kampagnen</h2>
@@ -797,13 +447,14 @@
                             <th>Start</th>
                             <th>Ende</th>
                             <th>Status</th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody id="campaigns-tbody">
-                        <tr>
-                            <td><input type="text" placeholder="Kampagnen-Name" style="border: none; background: transparent;"></td>
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Kampagnen-Name"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="email">E-Mail</option>
                                     <option value="social">Social Media</option>
                                     <option value="webinar">Webinar</option>
@@ -812,18 +463,19 @@
                                     <option value="ppc">PPC/Ads</option>
                                 </select>
                             </td>
-                            <td><input type="text" placeholder="Zielgruppe" style="border: none; background: transparent;"></td>
-                            <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
-                            <td><input type="date" style="border: none; background: transparent;"></td>
-                            <td><input type="date" style="border: none; background: transparent;"></td>
+                            <td><input type="text" placeholder="Zielgruppe"></td>
+                            <td><input type="number" placeholder="€"></td>
+                            <td><input type="date"></td>
+                            <td><input type="date"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="geplant">Geplant</option>
                                     <option value="aktiv">Aktiv</option>
                                     <option value="pausiert">Pausiert</option>
                                     <option value="abgeschlossen">Abgeschlossen</option>
                                 </select>
                             </td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -886,7 +538,6 @@
             </div>
         </div>
 
-        <!-- Reporting Tab -->
         <div id="reporting" class="tab-content">
             <div class="section">
                 <h2>Reporting & Analytics</h2>
@@ -937,21 +588,23 @@
                             <th>Verantwortlich</th>
                             <th>Geplantes Ende</th>
                             <th>Status</th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody id="meilensteine-tbody">
-                        <tr>
-                            <td><input type="text" placeholder="Arbeitspaket eingeben" style="border: none; background: transparent;"></td>
-                            <td><input type="text" placeholder="Name" style="border: none; background: transparent;"></td>
-                            <td><input type="date" style="border: none; background: transparent;"></td>
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Arbeitspaket eingeben"></td>
+                            <td><input type="text" placeholder="Name"></td>
+                            <td><input type="date"></td>
                             <td>
-                                <select style="border: none; background: transparent;">
+                                <select>
                                     <option value="geplant">Geplant</option>
                                     <option value="laufend">Laufend</option>
                                     <option value="abgeschlossen">Abgeschlossen</option>
                                     <option value="verzoegert">Verzögert</option>
                                 </select>
                             </td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -961,9 +614,8 @@
                 <div class="integration-box">
                     <h4>Datenexport</h4>
                     <div class="form-row">
-                        <button class="add-button" onclick="exportData('pdf')">📄 PDF Export</button>
-                        <button class="add-button" onclick="exportData('excel')">📊 Excel Export</button>
-                        <button class="add-button" onclick="exportData('csv')">📋 CSV Export</button>
+                        <button class="add-button" onclick="exportStaticHtml()">📄 Dokumentation Export (HTML)</button>
+                        <button class="add-button" onclick="exportHandover()">📦 Übergabe-Paket Export</button>
                     </div>
                 </div>
             </div>
@@ -973,146 +625,172 @@
     </div>
 
     <script>
-        function showTab(tabName) {
-            // Hide all tab contents
+        function showTab(tabName, event) {
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(tab => tab.classList.remove('active'));
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const firstTabButton = document.querySelector(".nav-tab");
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+        });
+
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            if (row) {
+                row.remove();
+            }
         }
 
         function addZertifizierung() {
             const tbody = document.getElementById('zertifizierungen-tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Zertifizierung eingeben" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="basic">Basic</option>
-                        <option value="advanced">Advanced</option>
-                        <option value="expert">Expert</option>
-                    </select>
-                </td>
-                <td><input type="date" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="aktiv">Aktiv</option>
-                        <option value="abgelaufen">Abgelaufen</option>
-                        <option value="in-erneuerung">In Erneuerung</option>
-                    </select>
-                </td>
+            const newRow = `
+                <tr class="data-row">
+                    <td><input type="text" placeholder="Zertifizierung eingeben"></td>
+                    <td>
+                        <select>
+                            <option value="basic">Basic</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="expert">Expert</option>
+                        </select>
+                    </td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="abgelaufen">Abgelaufen</option>
+                            <option value="in-erneuerung">In Erneuerung</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addService() {
             const tbody = document.getElementById('services-tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Service-Name" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="support">Support</option>
-                        <option value="implementation">Implementation</option>
-                        <option value="consulting">Consulting</option>
-                        <option value="training">Training</option>
-                        <option value="maintenance">Maintenance</option>
-                    </select>
-                </td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="bronze">Bronze</option>
-                        <option value="silver">Silver</option>
-                        <option value="gold">Gold</option>
-                        <option value="platinum">Platinum</option>
-                    </select>
-                </td>
-                <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="aktiv">Aktiv</option>
-                        <option value="inaktiv">Inaktiv</option>
-                        <option value="entwicklung">In Entwicklung</option>
-                    </select>
-                </td>
+            const newRow = `
+                <tr class="data-row">
+                    <td><input type="text" placeholder="Service-Name"></td>
+                    <td>
+                        <select>
+                            <option value="support">Support</option>
+                            <option value="implementation">Implementation</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="training">Training</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="bronze">Bronze</option>
+                            <option value="silver">Silver</option>
+                            <option value="gold">Gold</option>
+                            <option value="platinum">Platinum</option>
+                        </select>
+                    </td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td>
+                        <select>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="inaktiv">Inaktiv</option>
+                            <option value="entwicklung">In Entwicklung</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addOpportunity() {
             const tbody = document.getElementById('opportunities-tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Opportunity Name" style="border: none; background: transparent;"></td>
-                <td><input type="text" placeholder="Kunde" style="border: none; background: transparent;"></td>
-                <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="lead">Lead</option>
-                        <option value="qualified">Qualified</option>
-                        <option value="proposal">Proposal</option>
-                        <option value="negotiation">Negotiation</option>
-                        <option value="closed-won">Closed Won</option>
-                        <option value="closed-lost">Closed Lost</option>
-                    </select>
-                </td>
-                <td><input type="number" min="0" max="100" placeholder="%" style="border: none; background: transparent;"></td>
-                <td><input type="date" style="border: none; background: transparent;"></td>
+            const newRow = `
+                <tr class="data-row">
+                    <td><input type="text" placeholder="Opportunity Name"></td>
+                    <td><input type="text" placeholder="Kunde"></td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td>
+                        <select>
+                            <option value="lead">Lead</option>
+                            <option value="qualified">Qualified</option>
+                            <option value="proposal">Proposal</option>
+                            <option value="negotiation">Negotiation</option>
+                            <option value="closed-won">Closed Won</option>
+                            <option value="closed-lost">Closed Lost</option>
+                        </select>
+                    </td>
+                    <td><input type="number" min="0" max="100" placeholder="%"></td>
+                    <td><input type="date"></td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addCampaign() {
             const tbody = document.getElementById('campaigns-tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Kampagnen-Name" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="email">E-Mail</option>
-                        <option value="social">Social Media</option>
-                        <option value="webinar">Webinar</option>
-                        <option value="event">Event</option>
-                        <option value="content">Content Marketing</option>
-                        <option value="ppc">PPC/Ads</option>
-                    </select>
-                </td>
-                <td><input type="text" placeholder="Zielgruppe" style="border: none; background: transparent;"></td>
-                <td><input type="number" placeholder="€" style="border: none; background: transparent;"></td>
-                <td><input type="date" style="border: none; background: transparent;"></td>
-                <td><input type="date" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="geplant">Geplant</option>
-                        <option value="aktiv">Aktiv</option>
-                        <option value="pausiert">Pausiert</option>
-                        <option value="abgeschlossen">Abgeschlossen</option>
-                    </select>
-                </td>
+            const newRow = `
+                <tr class="data-row">
+                    <td><input type="text" placeholder="Kampagnen-Name"></td>
+                    <td>
+                        <select>
+                            <option value="email">E-Mail</option>
+                            <option value="social">Social Media</option>
+                            <option value="webinar">Webinar</option>
+                            <option value="event">Event</option>
+                            <option value="content">Content Marketing</option>
+                            <option value="ppc">PPC/Ads</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Zielgruppe"></td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td><input type="date"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="geplant">Geplant</option>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="pausiert">Pausiert</option>
+                            <option value="abgeschlossen">Abgeschlossen</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addMeilenstein() {
             const tbody = document.getElementById('meilensteine-tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Arbeitspaket eingeben" style="border: none; background: transparent;"></td>
-                <td><input type="text" placeholder="Name" style="border: none; background: transparent;"></td>
-                <td><input type="date" style="border: none; background: transparent;"></td>
-                <td>
-                    <select style="border: none; background: transparent;">
-                        <option value="geplant">Geplant</option>
-                        <option value="laufend">Laufend</option>
-                        <option value="abgeschlossen">Abgeschlossen</option>
-                        <option value="verzoegert">Verzögert</option>
-                    </select>
-                </td>
+            const newRow = `
+                <tr class="data-row">
+                    <td><input type="text" placeholder="Arbeitspaket eingeben"></td>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="geplant">Geplant</option>
+                            <option value="laufend">Laufend</option>
+                            <option value="abgeschlossen">Abgeschlossen</option>
+                            <option value="verzoegert">Verzögert</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                </tr>
             `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function updateProgress(value) {
@@ -1120,12 +798,308 @@
             document.getElementById('progress-text').textContent = value + '% abgeschlossen';
         }
 
-        function exportData(format) {
-            alert(`Datenexport im ${format.toUpperCase()} Format wird vorbereitet...`);
+        // --- Export Functions (adapted from programmManagement.html) ---
+        function exportStaticHtml() {
+            const projectName = document.getElementById('projektname').value || 'Unbenanntes Projekt';
+            const projectID = document.getElementById('projekt-id').value || 'N/A';
+            const projectLeader = document.getElementById('projektleiter').value || 'N/A';
+            const projectStatus = document.getElementById('projektstatus').value || 'N/A';
+            const startDate = document.getElementById('start-datum').value || 'N/A';
+            const endDate = document.getElementById('end-datum').value || 'N/A';
+            const budget = document.getElementById('budget').value || 'N/A';
+            const projectObjective = document.getElementById('projektziel').value || 'N/A';
+            const projectDescription = document.getElementById('projektbeschreibung').value || 'N/A';
+            
+            // Partner Management
+            const partnerName = document.getElementById('partner-name').value || 'N/A';
+            const partnerType = document.getElementById('partner-typ').value || 'N/A';
+            const partnerTier = document.getElementById('partner-tier').value || 'N/A';
+            const partnerStatus = document.getElementById('partner-status').value || 'N/A';
+            const contactPerson = document.getElementById('partner-ansprechpartner').value || 'N/A';
+            const partnerEmail = document.getElementById('partner-email').value || 'N/A';
+            const partnerPhone = document.getElementById('partner-telefon').value || 'N/A';
+            const partnerWebsite = document.getElementById('partner-website').value || 'N/A';
+            const contractStart = document.getElementById('vertragsstart').value || 'N/A';
+            const contractEnd = document.getElementById('vertragsende').value || 'N/A';
+            const commission = document.getElementById('provision').value || 'N/A';
+            const discount = document.getElementById('rabatt').value || 'N/A';
+
+            let certificationsTable = '';
+            const zertifizierungenRows = document.querySelectorAll('#zertifizierungen-tbody tr');
+            zertifizierungenRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                certificationsTable += `
+                    <tr>
+                        <td>${inputs[0].value || 'N/A'}</td>
+                        <td>${inputs[1].value || 'N/A'}</td>
+                        <td>${inputs[2].value || 'N/A'}</td>
+                        <td>${inputs[3].value || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+
+            // Service Management
+            let servicesTable = '';
+            const servicesRows = document.querySelectorAll('#services-tbody tr');
+            servicesRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                servicesTable += `
+                    <tr>
+                        <td>${inputs[0].value || 'N/A'}</td>
+                        <td>${inputs[1].value || 'N/A'}</td>
+                        <td>${inputs[2].value || 'N/A'}</td>
+                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${inputs[4].value || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            const responseTime = document.getElementById('response-time').value || 'N/A';
+            const resolutionTime = document.getElementById('resolution-time').value || 'N/A';
+            const availability = document.getElementById('availability').value || 'N/A';
+            const supportHours = document.getElementById('support-hours').value || 'N/A';
+            const openTickets = document.getElementById('open-tickets').textContent || 'N/A';
+            const avgResponse = document.getElementById('avg-response').textContent || 'N/A';
+            const satisfaction = document.getElementById('satisfaction').textContent || 'N/A';
+            const selectedIntegrations = Array.from(document.querySelectorAll('input[name="integrations"]:checked')).map(cb => cb.value).join(', ') || 'Keine';
+
+            // Sales & Vertrieb
+            let opportunitiesTable = '';
+            const opportunitiesRows = document.querySelectorAll('#opportunities-tbody tr');
+            opportunitiesRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                opportunitiesTable += `
+                    <tr>
+                        <td>${inputs[0].value || 'N/A'}</td>
+                        <td>${inputs[1].value || 'N/A'}</td>
+                        <td>${inputs[2].value || 'N/A'}</td>
+                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${inputs[4].value || 'N/A'}</td>
+                        <td>${inputs[5].value || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            const pipelineValue = document.getElementById('pipeline-value').value || 'N/A';
+            const conversionRate = document.getElementById('conversion-rate').value || 'N/A';
+            const avgDeal = document.getElementById('avg-deal').value || 'N/A';
+            const leadSource = document.getElementById('lead-source').value || 'N/A';
+            const leadScoring = document.getElementById('lead-scoring').value || 'N/A';
+            const crmSystem = document.getElementById('crm-system').value || 'N/A';
+            const syncFrequency = document.getElementById('sync-frequency').value || 'N/A';
+
+            // Marketing & Kampagnen
+            let campaignsTable = '';
+            const campaignsRows = document.querySelectorAll('#campaigns-tbody tr');
+            campaignsRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                campaignsTable += `
+                    <tr>
+                        <td>${inputs[0].value || 'N/A'}</td>
+                        <td>${inputs[1].value || 'N/A'}</td>
+                        <td>${inputs[2].value || 'N/A'}</td>
+                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${inputs[4].value || 'N/A'}</td>
+                        <td>${inputs[5].value || 'N/A'}</td>
+                        <td>${inputs[6].value || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            const leadsGenerated = document.getElementById('leads-generated').value || 'N/A';
+            const costPerLead = document.getElementById('cost-per-lead').value || 'N/A';
+            const marketingROI = document.getElementById('marketing-roi').value || 'N/A';
+            const contentType = document.getElementById('content-type').value || 'N/A';
+            const contentStatus = document.getElementById('content-status').value || 'N/A';
+            const selectedPartnerPrograms = Array.from(document.querySelectorAll('input[name="partner-programs"]:checked')).map(cb => cb.value).join(', ') || 'Keine';
+
+            // Reporting & Analytics
+            const partnerRevenue = document.getElementById('partner-revenue').textContent || 'N/A';
+            const partnerGrowth = document.getElementById('partner-growth').textContent || 'N/A';
+            const partnerSatisfaction = document.getElementById('partner-satisfaction').textContent || 'N/A';
+            const overallProgress = document.getElementById('progress-range').value || 'N/A';
+            const currentCosts = document.getElementById('aktuelle-kosten').value || 'N/A';
+            const costDeviation = document.getElementById('kostenabweichung').value || 'N/A';
+
+            let milestonesTable = '';
+            const meilensteineRows = document.querySelectorAll('#meilensteine-tbody tr');
+            meilensteineRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                milestonesTable += `
+                    <tr>
+                        <td>${inputs[0].value || 'N/A'}</td>
+                        <td>${inputs[1].value || 'N/A'}</td>
+                        <td>${inputs[2].value || 'N/A'}</td>
+                        <td>${inputs[3].value || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+
+
+            const staticHtmlContent = `
+                <!DOCTYPE html>
+                <html lang="de">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Partner Relationship Management - Dokumentation</title>
+                    <link rel="stylesheet" href="styles.css">
+                    <style>
+                        body { background: #f0f2f5; color: #333; line-height: 1.6; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                        .report-container { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+                        h1, h2, h3 { color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+                        h1 { text-align: center; font-size: 2.5em; margin-bottom: 30px; }
+                        h2 { font-size: 1.8em; margin-top: 30px; }
+                        h3 { font-size: 1.4em; margin-top: 20px; border-bottom: 1px dashed #eee; }
+                        .form-group p, .data-item p { margin-bottom: 10px; padding-left: 10px; }
+                        .form-group label, .data-item label { font-weight: bold; margin-bottom: 5px; display: block; color: #555; }
+                        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        .data-table th { background-color: #f2f2f2; font-weight: bold; }
+                        .metric-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 10px; text-align: center; }
+                        .metric-card h4 { font-size: 1.5em; color: #3498db; }
+                        .metric-card p { font-size: 0.9em; color: #666; }
+                        .section-divider { border-top: 1px solid #ccc; margin: 40px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-container">
+                        <h1>Partner Relationship Management Dokumentation</h1>
+                        
+                        <div class="section">
+                            <h2>Projektinitiierung</h2>
+                            <h3>Projektgrundlagen</h3>
+                            <div class="form-group"><label>Projektname:</label><p>${projectName.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Projekt-ID:</label><p>${projectID.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Projektleiter:</label><p>${projectLeader.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Projektstatus:</label><p>${projectStatus.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Zeitplan & Budget</h3>
+                            <div class="form-group"><label>Startdatum:</label><p>${startDate.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Enddatum:</label><p>${endDate.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Budget (€):</label><p>${budget.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Projektziel & Beschreibung</h3>
+                            <div class="form-group"><label>Projektziel:</label><p>${projectObjective.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Detaillierte Projektbeschreibung:</label><p>${projectDescription.replace(/\n/g, '<br>')}</p></div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Partner Management</h2>
+                            <h3>Partner-Stammdaten</h3>
+                            <div class="form-group"><label>Partner Name:</label><p>${partnerName.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Partner-Typ:</label><p>${partnerType.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Partner-Tier:</label><p>${partnerTier.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Partner-Status:</label><p>${partnerStatus.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Kontaktdaten</h3>
+                            <div class="form-group"><label>Hauptansprechpartner:</label><p>${contactPerson.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>E-Mail:</label><p>${partnerEmail.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Telefon:</label><p>${partnerPhone.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Website:</label><p>${partnerWebsite.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Vertragsdaten</h3>
+                            <div class="form-group"><label>Vertragsbeginn:</label><p>${contractStart.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Vertragsende:</label><p>${contractEnd.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Provision (%):</label><p>${commission.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Rabatt (%):</label><p>${discount.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Zertifizierungen & Kompetenzen</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Zertifizierung</th><th>Level</th><th>Gültig bis</th><th>Status</th></tr></thead>
+                                <tbody>${certificationsTable}</tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <h2>Service Management</h2>
+                            <h3>Service-Portfolio</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Service</th><th>Kategorie</th><th>SLA Level</th><th>Preis</th><th>Status</th></tr></thead>
+                                <tbody>${servicesTable}</tbody>
+                            </table>
+                            <h3>Service Level Agreements (SLA)</h3>
+                            <div class="form-group"><label>Reaktionszeit (Std):</label><p>${responseTime.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Lösungszeit (Std):</label><p>${resolutionTime.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Verfügbarkeit (%):</label><p>${availability.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Support-Zeiten:</label><p>${supportHours.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Ticket Management</h3>
+                            <div class="form-group"><label>Offene Tickets:</label><p>${openTickets.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Ø Reaktionszeit:</label><p>${avgResponse.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Kundenzufriedenheit:</label><p>${satisfaction.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Ticket-System Integration:</label><p>${selectedIntegrations.replace(/\n/g, '<br>')}</p></div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Vertrieb & Sales</h2>
+                            <h3>Sales Pipeline</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Opportunity</th><th>Kunde</th><th>Wert (€)</th><th>Stage</th><th>Wahrscheinlichkeit</th><th>Abschluss erwartet</th></tr></thead>
+                                <tbody>${opportunitiesTable}</tbody>
+                            </table>
+                            <h3>Sales Metriken</h3>
+                            <div class="form-group"><label>Pipeline Wert:</label><p>€ ${pipelineValue.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Conversion Rate:</label><p>${conversionRate.replace(/\n/g, '<br>')}%</p></div>
+                            <div class="form-group"><label>Durchschnittlicher Deal:</label><p>€ ${avgDeal.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Lead Management</h3>
+                            <div class="form-group"><label>Lead-Quelle:</label><p>${leadSource.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Lead Score:</label><p>${leadScoring.replace(/\n/g, '<br>')}</p></div>
+                            <h3>CRM Integration</h3>
+                            <div class="form-group"><label>CRM System:</label><p>${crmSystem.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Sync Frequenz:</label><p>${syncFrequency.replace(/\n/g, '<br>')}</p></div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Marketing & Kampagnen</h2>
+                            <h3>Kampagnen-Management</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Kampagne</th><th>Typ</th><th>Zielgruppe</th><th>Budget (€)</th><th>Start</th><th>Ende</th><th>Status</th></tr></thead>
+                                <tbody>${campaignsTable}</tbody>
+                            </table>
+                            <h3>Marketing Metriken</h3>
+                            <div class="form-group"><label>Leads generiert:</label><p>${leadsGenerated.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Cost per Lead:</label><p>€ ${costPerLead.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>ROI (%):</label><p>${marketingROI.replace(/\n/g, '<br>')}%</p></div>
+                            <h3>Content Management</h3>
+                            <div class="form-group"><label>Content-Typ:</label><p>${contentType.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Status:</label><p>${contentStatus.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Partner Marketing</h3>
+                            <div class="form-group"><label>Partner Marketing Programme:</label><p>${selectedPartnerPrograms.replace(/\n/g, '<br>')}</p></div>
+                        </div>
+
+                        <div class="section">
+                            <h2>Reporting & Analytics</h2>
+                            <h3>Partner Performance</h3>
+                            <div class="form-group"><label>Partner Revenue (YTD):</label><p>${partnerRevenue.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Wachstum (YoY):</label><p>${partnerGrowth.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Partner Zufriedenheit:</label><p>${partnerSatisfaction.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Projektfortschritt</h3>
+                            <div class="form-group"><label>Gesamtfortschritt:</label><p>${overallProgress.replace(/\n/g, '<br>')}% abgeschlossen</p></div>
+                            <h3>Finanzberichte</h3>
+                            <div class="form-group"><label>Aktuelle Kosten (€):</label><p>€ ${currentCosts.replace(/\n/g, '<br>')}</p></div>
+                            <div class="form-group"><label>Kostenabweichung (€):</label><p>€ ${costDeviation.replace(/\n/g, '<br>')}</p></div>
+                            <h3>Meilensteine & Arbeitspakete</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Arbeitspaket/Meilenstein</th><th>Verantwortlich</th><th>Geplantes Ende</th><th>Status</th></tr></thead>
+                                <tbody>${milestonesTable}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([staticHtmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PartnerRelationshipManagement-Dokumentation.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('Statische HTML-Dokumentation für Partner Relationship Management erstellt!');
+        }
+
+        function exportHandover() {
+            alert('Übergabe-Paket Export für Partner Relationship Management würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe.');
         }
 
         function saveProject() {
-            alert('Alle Projektdaten wurden erfolgreich gespeichert!\n\nHinweis: In einer echten Implementierung würden die Daten an OpenProject oder eine Datenbank übertragen.');
+            alert('Alle Daten für Partner Relationship Management wurden erfolgreich gespeichert!\n\nHinweis: In einer echten Implementierung würden die Daten an OpenProject oder eine Datenbank übertragen.');
         }
     </script>
 </body>
