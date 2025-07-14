@@ -609,19 +609,9 @@
                     </tbody>
                 </table>
                 <button class="add-button" onclick="addMeilenstein()">+ Arbeitspaket hinzufügen</button>
-
-                <h3>Export & Integration</h3>
-                <div class="integration-box">
-                    <h4>Datenexport</h4>
-                    <div class="form-row">
-                        <button class="add-button" onclick="exportStaticHtml()">📄 Dokumentation Export (HTML)</button>
-                        <button class="add-button" onclick="exportHandover()">📦 Übergabe-Paket Export</button>
-                    </div>
-                </div>
             </div>
         </div>
-
-        <button class="save-button" onclick="saveProject()">Alle Daten speichern</button>
+        <button class="save-button" onclick="exportStaticHtml()">📄 Dokument Export (HTML)</button>
     </div>
 
     <script>
@@ -1094,13 +1084,6 @@
             alert('Statische HTML-Dokumentation für Partner Relationship Management erstellt!');
         }
 
-        function exportHandover() {
-            alert('Übergabe-Paket Export für Partner Relationship Management würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe.');
-        }
-
-        function saveProject() {
-            alert('Alle Daten für Partner Relationship Management wurden erfolgreich gespeichert!\n\nHinweis: In einer echten Implementierung würden die Daten an OpenProject oder eine Datenbank übertragen.');
-        }
     </script>
 </body>
 </html>
