@@ -288,8 +288,12 @@
                     </div>
                 </div>
             </div>
-
         </div>
+    </div>
+
+    <div class="footer-buttons" style="text-align: center; margin-top: 30px; padding-bottom: 20px;">
+        <button type="button" class="btn btn-primary" onclick="exportStaticHtml()">Statische HTML-Dokumentation erstellen</button>
+        <button type="button" class="btn btn-secondary" onclick="exportHandover()">Übergabe-Paket exportieren</button>
     </div>
 
     <script>
@@ -456,7 +460,7 @@
                     </div>
                     <div class="form-group">
                         <label>Autor:</label>
-                        <input type="text" placeholder="Name des Autors">
+                            <input type="text" placeholder="Name des Autors">
                     </div>
                 </div>
             `;
@@ -503,6 +507,103 @@
                 </tr>
             `;
             tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Export functionality for Contract Management
+        function exportStaticHtml() {
+            const vertragsnummer = document.getElementById('vertragsnummer').value || 'Nicht angegeben';
+            const vertragsbezeichnung = document.getElementById('vertragsbezeichnung').value || 'Nicht angegeben';
+            const vertragspartner = document.getElementById('vertragspartner').value || 'Nicht angegeben';
+            const vertragsstatus = document.getElementById('vertragsstatus').value || 'Nicht angegeben';
+            const vertragsbeginn = document.getElementById('vertragsbeginn').value || 'Nicht angegeben';
+            const vertragsende = document.getElementById('vertragsende').value || 'Nicht angegeben';
+            const kuendigungsfrist = document.getElementById('kuendigungsfrist').value || 'Nicht angegeben';
+            const automatischeVerlaengerung = document.getElementById('automatische-verlaengerung').value || 'Nicht angegeben';
+            const naechstePruefung = document.getElementById('naechste-pruefung').value || 'Nicht angegeben';
+            const vertragsgegenstand = document.getElementById('vertragsgegenstand').value || 'Nicht angegeben';
+            const lieferbedingungen = document.getElementById('lieferbedingungen').value || 'Nicht angegeben';
+            const gesamtwert = document.getElementById('gesamtwert').value || 'Nicht angegeben';
+            const zahlungsbedingungen = document.getElementById('zahlungsbedingungen').value || 'Nicht angegeben';
+            const waehrung = document.getElementById('waehrung').value || 'Nicht angegeben';
+            const zahlungshaeufigkeit = document.getElementById('zahlungshaeufigkeit').value || 'Nicht angegeben';
+
+            const ansprechpartnerName = document.getElementById('ansprechpartner-name').value || 'Nicht angegeben';
+            const ansprechpartnerEmail = document.getElementById('ansprechpartner-email').value || 'Nicht angegeben';
+            const ansprechpartnerTelefon = document.getElementById('ansprechpartner-telefon').value || 'Nicht angegeben';
+            const ansprechpartnerPosition = document.getElementById('ansprechpartner-position').value || 'Nicht angegeben';
+
+
+            const staticHtmlContent = `
+                <!DOCTYPE html>
+                <html lang="de">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Vertragsdokumentation - ${vertragsbezeichnung}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+                        .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+                        h1, h2, h3 { color: #333; }
+                        .section-title { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 20px; margin-bottom: 15px; }
+                        .data-row { display: flex; margin-bottom: 10px; }
+                        .data-label { font-weight: bold; width: 200px; color: #555; }
+                        .data-value { flex-grow: 1; }
+                        p { margin: 0 0 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Vertragsdokumentation: ${vertragsbezeichnung}</h1>
+                        <hr>
+
+                        <h2 class="section-title">Vertragsgrundlagen</h2>
+                        <div class="data-row"><span class="data-label">Vertragsnummer:</span> <span class="data-value">${vertragsnummer}</span></div>
+                        <div class="data-row"><span class="data-label">Vertragsbezeichnung:</span> <span class="data-value">${vertragsbezeichnung}</span></div>
+                        <div class="data-row"><span class="data-label">Vertragspartner:</span> <span class="data-value">${vertragspartner}</span></div>
+                        <div class="data-row"><span class="data-label">Vertragsstatus:</span> <span class="data-value">${vertragsstatus}</span></div>
+                        <div class="data-row"><span class="data-label">Vertragsbeginn:</span> <span class="data-value">${vertragsbeginn}</span></div>
+                        <div class="data-row"><span class="data-label">Vertragsende:</span> <span class="data-value">${vertragsende}</span></div>
+                        <div class="data-row"><span class="data-label">Kündigungsfrist:</span> <span class="data-value">${kuendigungsfrist} Tage</span></div>
+                        <div class="data-row"><span class="data-label">Automatische Verlängerung:</span> <span class="data-value">${automatischeVerlaengerung}</span></div>
+                        <div class="data-row"><span class="data-label">Nächste Prüfung:</span> <span class="data-value">${naechstePruefung}</span></div>
+                        
+                        <h3 class="section-title">Vertragsinhalt & Leistungen</h3>
+                        <div class="data-row"><span class="data-label">Vertragsgegenstand:</span></div>
+                        <p>${vertragsgegenstand.replace(/\n/g, '<br>')}</p>
+                        <div class="data-row"><span class="data-label">Lieferbedingungen / SLAs:</span></div>
+                        <p>${lieferbedingungen.replace(/\n/g, '<br>')}</p>
+
+                        <h3 class="section-title">Finanzielle Vereinbarungen</h3>
+                        <div class="data-row"><span class="data-label">Gesamtwert:</span> <span class="data-value">${gesamtwert} ${waehrung}</span></div>
+                        <div class="data-row"><span class="data-label">Zahlungsbedingungen:</span> <span class="data-value">${zahlungsbedingungen}</span></div>
+                        <div class="data-row"><span class="data-label">Zahlungshäufigkeit:</span> <span class="data-value">${zahlungshaeufigkeit}</span></div>
+
+                        <h2 class="section-title">Hauptansprechpartner</h2>
+                        <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${ansprechpartnerName}</span></div>
+                        <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${ansprechpartnerEmail}</span></div>
+                        <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${ansprechpartnerTelefon}</span></div>
+                        <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${ansprechpartnerPosition}</span></div>
+
+                        </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([staticHtmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Vertragsdokumentation_${vertragsbezeichnung.replace(/[^a-z0-9]/gi, '_')}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('Statische HTML-Dokumentation erstellt!');
+        }
+
+        function exportHandover() {
+            alert('Übergabe-Paket Export würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe');
         }
 
     </script>
