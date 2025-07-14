@@ -28,395 +28,423 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1200px; /* Adjusted to 1200px for consistency */
     margin: 0 auto;
     background: white;
     border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    overflow: hidden;
+    overflow: hidden; /* This is generally fine, content inside should wrap */
 }
 
 .header {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     color: white;
-    padding: 30px;
+    padding: 40px;
     text-align: center;
-    position: relative;
-}
-
-.home-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #4f46e5;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-.home-button:hover {
-    background-color: #6056e8;
 }
 
 .header h1 {
-    font-size: 2.8em;
-    margin-bottom: 5px;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .header p {
-    font-size: 1.1em;
+    font-size: 1.2rem;
     opacity: 0.9;
 }
 
 .nav-tabs {
     display: flex;
-    justify-content: flex-start; /* Align tabs to the start */
-    background-color: #e0e5e9;
-    padding: 0 20px; /* Padding to align with content */
-    border-bottom: 1px solid #c0c8d0;
-    overflow-x: auto; /* Allow horizontal scrolling if many tabs */
-    white-space: nowrap; /* Prevent tabs from wrapping */
+    background: #f8fafc;
+    padding: 0 20px;
+    overflow-x: auto;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .nav-tab {
-    background-color: transparent;
+    background: none;
     border: none;
     padding: 15px 25px;
     cursor: pointer;
-    font-size: 1em;
-    color: #555;
-    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #64748b;
     border-bottom: 3px solid transparent;
-    margin-right: 5px; /* Spacing between tabs */
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .nav-tab:hover {
     color: #4f46e5;
-    background-color: #f0f4f8;
+    background: rgba(79, 70, 229, 0.05);
 }
 
 .nav-tab.active {
     color: #4f46e5;
-    border-bottom: 3px solid #4f46e5;
-    background-color: #ffffff; /* Active tab background */
+    border-bottom-color: #4f46e5;
+    background: white;
 }
 
 .content {
-    padding: 30px;
-    background-color: #ffffff;
+    padding: 40px;
 }
 
 .tab-content {
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .tab-content.active {
-    display: block; /* Show active tab content */
+    display: block;
 }
 
 .section {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    margin-bottom: 40px;
 }
 
 .section h2 {
-    color: #2c3e50;
-    font-size: 1.8em;
+    color: #1e293b;
+    font-size: 1.8rem;
     margin-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .section h3 {
-    color: #34495e;
-    font-size: 1.4em;
-    margin-top: 25px;
+    color: #334155;
+    font-size: 1.3rem;
     margin-bottom: 15px;
+    margin-top: 25px;
 }
 
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
+    font-weight: 600;
+    color: #374151;
     margin-bottom: 8px;
-    color: #34495e;
-    font-weight: 600;
-    font-size: 0.95em;
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="date"],
-.form-group input[type="number"],
-.form-group select,
-.form-group textarea {
-    width: 100%;
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%; /* Ensure inputs fill container */
     padding: 12px;
-    border: 1px solid #c8d4e0;
-    border-radius: 6px;
-    font-size: 1em;
-    color: #333;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group input[type="tel"]:focus,
-.form-group input[type="date"]:focus,
-.form-group input[type="number"]:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .form-group textarea {
+    min-height: 120px;
     resize: vertical;
-    min-height: 80px;
 }
 
-.textarea-large {
-    min-height: 120px !important;
-}
-
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 18px;
-}
-
-.form-row .form-group {
-    flex: 1;
-    margin-bottom: 0; /* Remove bottom margin as gap handles spacing */
-}
-
-.form-row-triple {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 18px;
-}
-
-.form-row-triple .form-group {
-    flex: 1;
-    margin-bottom: 0;
-}
-
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    text-align: center;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none;
-}
-
-.btn-primary {
-    background-color: #4f46e5;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #6056e8;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    margin-top: 15px; /* Added margin for spacing */
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-1px);
+/* New: Ensure text in paragraphs (especially in static output) wraps correctly */
+.form-group p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.table th, .table td {
-    border: 1px solid #e0e0e0;
+.table th,
+.table td {
     padding: 12px;
     text-align: left;
-    font-size: 0.95em;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .table th {
-    background-color: #f0f4f8;
-    color: #34495e;
+    background: #334155;
+    color: white;
     font-weight: 600;
 }
 
-.table tbody tr:nth-child(even) {
-    background-color: #fcfdff;
+.table tr:hover {
+    background: #f1f5f9;
 }
 
-/* Specific styles for Contract Type Selector */
-.contract-type-selector {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-    justify-content: center; /* Center the cards */
-}
-
-.contract-type-card {
-    background-color: #f0f4f8;
-    border: 2px solid #e0e6ed;
-    border-radius: 10px;
-    padding: 20px;
-    width: 22%; /* Adjust as needed for responsiveness */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    cursor: pointer;
-    transition: all 0.3s ease;
+.btn {
+    display: inline-block;
+    font-weight: 600;
     text-align: center;
-    display: flex; /* Use flexbox for internal alignment */
-    flex-direction: column;
-    justify-content: space-between; /* Push h4 and p apart if needed */
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.5rem; /* More rounded */
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
 }
 
-@media (max-width: 992px) {
-    .contract-type-card {
-        width: 48%; /* Two cards per row on medium screens */
-    }
-}
-
-@media (max-width: 576px) {
-    .contract-type-card {
-        width: 100%; /* One card per row on small screens */
-    }
-}
-
-
-.contract-type-card:hover {
-    border-color: #a7b7c7;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-}
-
-.contract-type-card.selected {
+.btn-primary {
+    color: #fff;
+    background-color: #4f46e5; /* Primary brand color */
     border-color: #4f46e5;
-    background-color: #e0e5ff;
-    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
 }
 
-.contract-type-card h4 {
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-size: 1.1em;
+.btn-primary:hover {
+    background-color: #4338ca; /* Darker shade on hover */
+    border-color: #4338ca;
 }
 
-.contract-type-card p {
-    color: #607d8b;
-    font-size: 0.9em;
+.btn-secondary {
+    color: #374151; /* Dark gray text */
+    background-color: #e5e7eb; /* Light gray background */
+    border-color: #e5e7eb;
 }
 
-/* Existing styles - re-verified for correct application */
-.stakeholder-item, .obligation-row, .audit-item, .payment-row, .version-item, .risk-row {
-    position: relative;
-    border: 1px solid #e0e0e0;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+.btn-secondary:hover {
+    color: #1f2937;
+    background-color: #d1d5db;
+    border-color: #d1d5db;
 }
 
-.stakeholder-item .form-group {
-    margin-bottom: 10px;
+.btn-success {
+    color: #fff;
+    background-color: #22c55e;
+    border-color: #22c55e;
 }
 
-.stakeholder-item .form-group label {
-    margin-bottom: 5px;
+.btn-success:hover {
+    background-color: #16a34a;
+    border-color: #16a34a;
 }
 
 .delete-button {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red for delete */
     color: white;
     border: none;
     border-radius: 50%;
-    width: 24px; /* Increased size */
-    height: 24px; /* Increased size */
-    font-size: 0.9rem; /* Adjusted font size */
+    width: 24px; /* Slightly larger */
+    height: 24px; /* Slightly larger */
+    font-size: 0.8rem;
     line-height: 1;
     cursor: pointer;
     position: absolute;
-    top: 8px; /* Adjusted position */
-    right: 8px; /* Adjusted position */
+    top: 8px; /* Adjust as needed */
+    right: 8px; /* Adjust as needed */
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
 }
 
 .delete-button:hover {
     background-color: #c82333;
 }
 
-/* Document Upload */
+.stakeholder-item,
+.milestone-item,
+.project-row {
+    position: relative; /* Needed for absolute positioning of delete button */
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.stakeholder-item .form-group {
+    margin-bottom: 10px;
+}
+.stakeholder-item .form-group label {
+    margin-bottom: 5px;
+}
+
+/* Specific additions for contractManagement.html styling */
+.form-row-triple {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-row-quad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.textarea-large {
+    min-height: 150px;
+}
+
+.status-indicators {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.status-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #4f46e5; /* Primary theme color */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.status-card h4 {
+    color: #1e293b; /* Dark text */
+    margin-bottom: 10px;
+}
+
+.status-card.warning {
+    border-left-color: #f59e0b; /* Tailwind yellow-500 */
+}
+
+.status-card.danger {
+    border-left-color: #ef4444; /* Tailwind red-500 */
+}
+
+.status-card.success {
+    border-left-color: #22c55e; /* Tailwind green-500 */
+}
+
 .document-upload {
-    border: 2px dashed #a7b7c7;
-    border-radius: 10px;
-    padding: 40px 20px;
+    border: 2px dashed #94a3b8; /* Slate-400 */
+    border-radius: 8px;
+    padding: 30px;
     text-align: center;
-    color: #607d8b;
-    cursor: pointer;
+    background: #f8fafc; /* Slate-50 */
     transition: all 0.3s ease;
 }
 
 .document-upload:hover {
     border-color: #4f46e5;
-    color: #4f46e5;
-    background-color: #f0f4f8;
+    background: #eef2ff; /* Indigo-50 */
 }
 
 .document-upload i {
     font-size: 3em;
+    color: #94a3b8;
     margin-bottom: 15px;
-    color: #90a4ae;
 }
 
-.document-upload p {
-    font-size: 1.1em;
-    margin: 0;
-}
-
-#uploadedDocuments ul {
-    list-style: none;
-    padding: 0;
-}
-
-#uploadedDocuments li {
-    background-color: #e8f0f5;
-    border: 1px solid #c0d0e0;
-    border-radius: 8px;
-    padding: 10px 15px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.95em;
-    color: #34495e;
-}
-
-#uploadedDocuments li .delete-button {
-    position: static; /* Override absolute positioning */
+.notification-badge {
+    display: inline-block;
+    background: #ef4444; /* Red-500 */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
     margin-left: 10px;
+}
+
+.notification-badge.warning {
+    background: #f59e0b;
+}
+
+.notification-badge.success {
+    background: #22c55e;
+}
+
+.save-button {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed); /* Consistent with header */
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: block;
+    margin: 40px auto 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.contract-type-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.contract-type-card {
+    background: white;
+    border: 2px solid #e2e8f0; /* Slate-200 */
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contract-type-card:hover {
+    border-color: #4f46e5;
+    background: #f8fafc;
+}
+
+.contract-type-card.selected {
+    border-color: #4f46e5;
+    background: #eef2ff; /* Indigo-50 */
+}
+
+.contract-type-card h4 {
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.contract-type-card p {
+    color: #64748b;
+    font-size: 0.9em;
+}
+
+/* Media Queries (adjusted for consistency) */
+@media (max-width: 768px) {
+    .form-row,
+    .form-row-triple,
+    .form-row-quad {
+        grid-template-columns: 1fr;
+    }
+    .container {
+        margin: 10px;
+    }
+    .nav-tabs { /* Changed from .tab-nav */
+        flex-wrap: wrap;
+    }
+
+    .nav-tab { /* Changed from .tab-button */
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 10px 15px;
+    }
 }
