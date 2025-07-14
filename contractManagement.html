@@ -289,16 +289,14 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="footer-buttons" style="text-align: center; margin-top: 30px; padding-bottom: 20px;">
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
+            <button class="btn btn-primary" onclick="exportStaticHtml()">💾 Dokument speichern</button>
+            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
         
     </div>
-    <div class="actions">
-            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
-            <button type="button" class="btn btn-primary" onclick="exportStaticHtml()">Statische HTML-Dokumentation erstellen</button>
-        <button type="button" class="btn btn-secondary" onclick="exportHandover()">Übergabe-Paket exportieren</button>
-    </div>
+
+    
 
     <script>
         // Function to show/hide tabs - adjusted to use 'nav-tab' and 'tab-content'
