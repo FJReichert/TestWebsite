@@ -509,294 +509,342 @@
             tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
-        // Export functionality for Contract Management
+        // Helper function to create a data row div
+        function createDataRow(label, value) {
+            const div = document.createElement('div');
+            div.classList.add('data-row');
+            const labelSpan = document.createElement('span');
+            labelSpan.classList.add('data-label');
+            labelSpan.textContent = label;
+            const valueSpan = document.createElement('span');
+            valueSpan.classList.add('data-value');
+            // Using innerHTML here for potential <br> tags from newlines
+            valueSpan.innerHTML = (value || 'Nicht angegeben').replace(/\n/g, '<br>');
+            div.appendChild(labelSpan);
+            div.appendChild(valueSpan);
+            return div;
+        }
+
+        // Helper function to create a paragraph
+        function createParagraph(text) {
+            const p = document.createElement('p');
+            p.innerHTML = (text || 'Nicht angegeben').replace(/\n/g, '<br>'); // Use innerHTML to preserve line breaks
+            return p;
+        }
+
+        // Export functionality for Contract Management (New Approach: DOM Manipulation)
         function exportStaticHtml() {
-            const vertragsnummer = document.getElementById('vertragsnummer').value || 'Nicht angegeben';
-            const vertragsbezeichnung = document.getElementById('vertragsbezeichnung').value || 'Nicht angegeben';
-            const vertragspartner = document.getElementById('vertragspartner').value || 'Nicht angegeben';
-            const vertragsstatus = document.getElementById('vertragsstatus').value || 'Nicht angegeben';
-            const vertragsbeginn = document.getElementById('vertragsbeginn').value || 'Nicht angegeben';
-            const vertragsende = document.getElementById('vertragsende').value || 'Nicht angegeben';
-            const kuendigungsfrist = document.getElementById('kuendigungsfrist').value || 'Nicht angegeben';
-            const automatischeVerlaengerung = document.getElementById('automatische-verlaengerung').value || 'Nicht angegeben';
-            const naechstePruefung = document.getElementById('naechste-pruefung').value || 'Nicht angegeben';
-            const vertragsgegenstand = document.getElementById('vertragsgegenstand').value || 'Nicht angegeben';
-            const lieferbedingungen = document.getElementById('lieferbedingungen').value || 'Nicht angegeben';
-            const gesamtwert = document.getElementById('gesamtwert').value || 'Nicht angegeben';
-            const zahlungsbedingungen = document.getElementById('zahlungsbedingungen').value || 'Nicht angegeben';
-            const waehrung = document.getElementById('waehrung').value || 'Nicht angegeben';
-            const zahlungshaeufigkeit = document.getElementById('zahlungshaeufigkeit').value || 'Nicht angegeben';
+            // Create a new document to build the static HTML
+            const doc = document.implementation.createHTMLDocument();
+            const head = doc.head;
+            const body = doc.body;
 
-            const ansprechpartnerName = document.getElementById('ansprechpartner-name').value || 'Nicht angegeben';
-            const ansprechpartnerEmail = document.getElementById('ansprechpartner-email').value || 'Nicht angegeben';
-            const ansprechpartnerTelefon = document.getElementById('ansprechpartner-telefon').value || 'Nicht angegeben';
-            const ansprechpartnerPosition = document.getElementById('ansprechpartner-position').value || 'Nicht angegeben';
-
-            // Collect additional contacts
-            let additionalContactsContent = '';
-            document.querySelectorAll('#additionalContacts .stakeholder-item').forEach((contactItem, index) => {
-                const name = contactItem.querySelector('.contact-name').value || 'Nicht angegeben';
-                const email = contactItem.querySelector('.contact-email').value || 'Nicht angegeben';
-                const phone = contactItem.querySelector('.contact-phone').value || 'Nicht angegeben';
-                const position = contactItem.querySelector('.contact-position').value || 'Nicht angegeben';
-                additionalContactsContent += `
-                    <h4>Weiterer Kontakt ${index + 1}</h4>
-                    <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${name}</span></div>
-                    <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${email}</span></div>
-                    <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${phone}</span></div>
-                    <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${position}</span></div>
-                `;
-            });
-            const additionalContactsHtml = additionalContactsContent || '<p>Keine weiteren Kontakte erfasst.</p>';
-
-
-            // Collect uploaded documents
-            let uploadedDocumentsContent = '';
-            document.querySelectorAll('#uploadedDocuments li').forEach(docItem => {
-                // Get the text content, remove the 'X' from delete button
-                const docName = docItem.childNodes[0] ? docItem.childNodes[0].textContent.trim() : ''; // Get text node directly
-                if (docName) {
-                    uploadedDocumentsContent += `<li>${docName}</li>`;
-                }
-            });
-            const uploadedDocumentsHtml = uploadedDocumentsContent ? `<ul>${uploadedDocumentsContent}</ul>` : '<p>Keine Dokumente hochgeladen.</p>';
-
-
-            // Collect obligations
-            let obligationsContent = '';
-            document.querySelectorAll('#obligationsTableBody tr').forEach((row, index) => {
-                const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
-                const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
-                const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
-                const status = row.querySelector('.obligation-status').value || 'Nicht angegeben';
-                obligationsContent += `
-                    <tr>
-                        <td>${description}</td>
-                        <td>${date}</td>
-                        <td>${responsible}</td>
-                        <td>${status}</td>
-                    </tr>
-                `;
-            });
-            const obligationsHtml = obligationsContent ? `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Beschreibung</th>
-                            <th>Frist</th>
-                            <th>Verantwortlicher</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>${obligationsContent}</tbody>
-                </table>
-            ` : '<p>Keine Verpflichtungen erfasst.</p>';
-
-            // Collect audit entries
-            let auditHistoryContent = '';
-            document.querySelectorAll('#auditHistory .audit-item').forEach((auditItem, index) => {
-                const date = auditItem.querySelector('.audit-date').value || 'Nicht angegeben';
-                const auditor = auditItem.querySelector('.audit-auditor').value || 'Nicht angegeben';
-                const results = auditItem.querySelector('.audit-results').value || 'Nicht angegeben';
-                auditHistoryContent += `
-                    <h4>Audit Eintrag ${index + 1}</h4>
-                    <div class="data-row"><span class="data-label">Datum des Audits:</span> <span class="data-value">${date}</span></div>
-                    <div class="data-row"><span class="data-label">Auditor:</span> <span class="data-value">${auditor}</span></div>
-                    <div class="data-row"><span class="data-label">Ergebnisse & Empfehlungen:</span></div>
-                    <p>${results.replace(/\n/g, '<br>')}</p>
-                `;
-            });
-            const auditHistoryHtml = auditHistoryContent || '<p>Keine Audit-Einträge erfasst.</p>';
-
-
-            // Collect payment history
-            const leistungsstand = document.getElementById('leistungsstand').value || 'Nicht angegeben';
-            let paymentHistoryContent = '';
-            document.querySelectorAll('#paymentTableBody tr').forEach((row, index) => {
-                const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
-                const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
-                const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
-                const status = row.querySelector('.payment-status').value || 'Nicht angegeben';
-                paymentHistoryContent += `
-                    <tr>
-                        <td>${invoice}</td>
-                        <td>${date}</td>
-                        <td>${amount}</td>
-                        <td>${status}</td>
-                    </tr>
-                `;
-            });
-            const paymentHistoryHtml = paymentHistoryContent ? `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rechnungsnummer</th>
-                            <th>Datum</th>
-                            <th>Betrag</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>${paymentHistoryContent}</tbody>
-                </table>
-            ` : '<p>Keine Zahlungseinträge erfasst.</p>';
-
-            // Collect version history
-            let versionHistoryContent = '';
-            document.querySelectorAll('#versionHistory .version-item').forEach((versionItem, index) => {
-                const version = versionItem.querySelector('.version-number').value || 'Nicht angegeben';
-                const date = versionItem.querySelector('.version-date').value || 'Nicht angegeben';
-                const changes = versionItem.querySelector('.version-changes').value || 'Nicht angegeben';
-                const author = versionItem.querySelector('.version-author').value || 'Nicht angegeben';
-                versionHistoryContent += `
-                    <h4>Version ${version}</h4>
-                    <div class="data-row"><span class="data-label">Datum:</span> <span class="data-value">${date}</span></div>
-                    <div class="data-row"><span class="data-label">Autor:</span> <span class="data-value">${author}</span></div>
-                    <div class="data-row"><span class="data-label">Änderungen:</span></div>
-                    <p>${changes.replace(/\n/g, '<br>')}</p>
-                `;
-            });
-            const versionHistoryHtml = versionHistoryContent || '<p>Keine Versionseinträge erfasst.</p>';
-
-            const internalNotes = document.getElementById('internalNotes').value || 'Nicht angegeben';
-
-            // Collect risk entries
-            let riskContent = '';
-            document.querySelectorAll('#riskTableBody tr').forEach((row, index) => {
-                const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
-                const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
-                const probability = row.querySelector('.risk-probability').value || 'Nicht angegeben';
-                const impact = row.querySelector('.risk-impact').value || 'Nicht angegeben';
-                const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
-                const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
-                const status = row.querySelector('.risk-status').value || 'Nicht angegeben';
-                riskContent += `
-                    <tr>
-                        <td>${description}</td>
-                        <td>${category}</td>
-                        <td>${probability}</td>
-                        <td>${impact}</td>
-                        <td>${measure}</td>
-                        <td>${responsible}</td>
-                        <td>${status}</td>
-                    </tr>
-                `;
-            });
-            const riskHtml = riskContent ? `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Beschreibung</th>
-                            <th>Kategorie</th>
-                            <th>Wahrscheinlichkeit</th>
-                            <th>Auswirkung</th>
-                            <th>Maßnahme</th>
-                            <th>Verantwortlicher</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>${riskContent}</tbody>
-                </table>
-            ` : '<p>Keine Risikoeinträge erfasst.</p>';
-
-
-            const staticHtmlContent = `
-                <!DOCTYPE html>
-                <html lang="de">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Vertragsdokumentation - ${vertragsbezeichnung}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
-                        .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
-                        h1, h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
-                        h1 { font-size: 2em; border-bottom: 3px solid #4f46e5; padding-bottom: 10px; }
-                        h2 { font-size: 1.6em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
-                        h3 { font-size: 1.3em; margin-bottom: 15px; }
-                        h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
-                        .data-row { display: flex; margin-bottom: 8px; }
-                        .data-label { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
-                        .data-value { flex-grow: 1; word-wrap: break-word; }
-                        p { margin: 0 0 10px 0; }
-                        ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
-                        ul li { margin-bottom: 5px; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
-                        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-                        th { background-color: #f0f4f8; font-weight: bold; }
-                        tr:nth-child(even) { background-color: #fcfdff; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h1>Vertragsdokumentation: ${vertragsbezeichnung}</h1>
-                        <hr>
-
-                        <h2>Vertragsgrundlagen</h2>
-                        <div class="data-row"><span class="data-label">Vertragsnummer:</span> <span class="data-value">${vertragsnummer}</span></div>
-                        <div class="data-row"><span class="data-label">Vertragsbezeichnung:</span> <span class="data-value">${vertragsbezeichnung}</span></div>
-                        <div class="data-row"><span class="data-label">Vertragspartner:</span> <span class="data-value">${vertragspartner}</span></div>
-                        <div class="data-row"><span class="data-label">Vertragsstatus:</span> <span class="data-value">${vertragsstatus}</span></div>
-                        <div class="data-row"><span class="data-label">Vertragsbeginn:</span> <span class="data-value">${vertragsbeginn}</span></div>
-                        <div class="data-row"><span class="data-label">Vertragsende:</span> <span class="data-value">${vertragsende}</span></div>
-                        <div class="data-row"><span class="data-label">Kündigungsfrist:</span> <span class="data-value">${kuendigungsfrist} Tage</span></div>
-                        <div class="data-row"><span class="data-label">Automatische Verlängerung:</span> <span class="data-value">${automatischeVerlaengerung}</span></div>
-                        <div class="data-row"><span class="data-label">Nächste Prüfung:</span> <span class="data-value">${naechstePruefung}</span></div>
-                        
-                        <h3>Vertragsinhalt & Leistungen</h3>
-                        <div class="data-row"><span class="data-label">Vertragsgegenstand:</span></div>
-                        <p>${vertragsgegenstand.replace(/\n/g, '<br>')}</p>
-                        <div class="data-row"><span class="data-label">Lieferbedingungen / SLAs:</span></div>
-                        <p>${lieferbedingungen.replace(/\n/g, '<br>')}</p>
-
-                        <h3>Finanzielle Vereinbarungen</h3>
-                        <div class="data-row"><span class="data-label">Gesamtwert:</span> <span class="data-value">${gesamtwert} ${waehrung}</span></div>
-                        <div class="data-row"><span class="data-label">Zahlungsbedingungen:</span> <span class="data-value">${zahlungsbedingungen}</span></div>
-                        <div class="data-row"><span class="data-label">Zahlungshäufigkeit:</span> <span class="data-value">${zahlungshaeufigkeit}</span></div>
-
-                        <h2>Vertragspartner & Kontakte</h2>
-                        <h3>Hauptansprechpartner</h3>
-                        <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${ansprechpartnerName}</span></div>
-                        <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${ansprechpartnerEmail}</span></div>
-                        <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${ansprechpartnerTelefon}</span></div>
-                        <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${ansprechpartnerPosition}</span></div>
-                        <h3>Weitere Kontakte</h3>
-                        ${additionalContactsHtml}
-                        
-                        <h2>Vertragsdokumente</h2>
-                        ${uploadedDocumentsHtml}
-
-                        <h2>Compliance & Monitoring</h2>
-                        <h3>Wichtige Verpflichtungen & Fristen</h3>
-                        ${obligationsHtml}
-                        <h3>Audit-Historie</h3>
-                        ${auditHistoryHtml}
-
-                        <h2>Leistungs- & Zahlungsmonitoring</h2>
-                        <h3>Aktueller Leistungsstand</h3>
-                        <div class="data-row"><span class="data-label">Aktueller Leistungsstand:</span> <span class="data-value">${leistungsstand}% erfüllt</span></div>
-                        <h3>Zahlungshistorie</h3>
-                        ${paymentHistoryHtml}
-
-                        <h2>Historie & Notizen</h2>
-                        <h3>Versionshistorie</h3>
-                        ${versionHistoryHtml}
-                        <h3>Interne Notizen</h3>
-                        <p>${internalNotes.replace(/\n/g, '<br>')}</p>
-
-                        <h2>Risikomanagement</h2>
-                        <h3>Vertragliche Risiken</h3>
-                        ${riskHtml}
-
-                    </div>
-                </body>
-                </html>
+            // Add styles to the new document
+            const style = doc.createElement('style');
+            style.textContent = `
+                body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
+                .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+                h1, h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                h1 { font-size: 2em; border-bottom: 3px solid #4f46e5; padding-bottom: 10px; }
+                h2 { font-size: 1.6em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                h3 { font-size: 1.3em; margin-bottom: 15px; }
+                h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                .data-row { display: flex; margin-bottom: 8px; }
+                .data-label { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
+                .data-value { flex-grow: 1; word-wrap: break-word; }
+                p { margin: 0 0 10px 0; }
+                ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
+                ul li { margin-bottom: 5px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
+                th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                th { background-color: #f0f4f8; font-weight: bold; }
+                tr:nth-child(even) { background-color: #fcfdff; }
             `;
+            head.appendChild(style);
+
+            // Create main container
+            const containerDiv = doc.createElement('div');
+            containerDiv.classList.add('container');
+            body.appendChild(containerDiv);
+
+            // --- Vertragsgrundlagen ---
+            const h1 = doc.createElement('h1');
+            h1.textContent = `Vertragsdokumentation: ${document.getElementById('vertragsbezeichnung').value || 'Unbenannter Vertrag'}`;
+            containerDiv.appendChild(h1);
+            containerDiv.appendChild(doc.createElement('hr'));
+
+            const h2Grundlagen = doc.createElement('h2');
+            h2Grundlagen.textContent = 'Vertragsgrundlagen';
+            containerDiv.appendChild(h2Grundlagen);
+
+            containerDiv.appendChild(createDataRow('Vertragsnummer:', document.getElementById('vertragsnummer').value));
+            containerDiv.appendChild(createDataRow('Vertragsbezeichnung:', document.getElementById('vertragsbezeichnung').value));
+            containerDiv.appendChild(createDataRow('Vertragspartner:', document.getElementById('vertragspartner').value));
+            containerDiv.appendChild(createDataRow('Vertragsstatus:', document.getElementById('vertragsstatus').value));
+            containerDiv.appendChild(createDataRow('Vertragsbeginn:', document.getElementById('vertragsbeginn').value));
+            containerDiv.appendChild(createDataRow('Vertragsende:', document.getElementById('vertragsende').value));
+            containerDiv.appendChild(createDataRow('Kündigungsfrist:', (document.getElementById('kuendigungsfrist').value || 'Nicht angegeben') + ' Tage'));
+            containerDiv.appendChild(createDataRow('Automatische Verlängerung:', document.getElementById('automatische-verlaengerung').value));
+            containerDiv.appendChild(createDataRow('Nächste Prüfung:', document.getElementById('naechste-pruefung').value));
+
+            const h3Inhalt = doc.createElement('h3');
+            h3Inhalt.textContent = 'Vertragsinhalt & Leistungen';
+            containerDiv.appendChild(h3Inhalt);
+            containerDiv.appendChild(createDataRow('Vertragsgegenstand:')); // Label only
+            containerDiv.appendChild(createParagraph(document.getElementById('vertragsgegenstand').value));
+            containerDiv.appendChild(createDataRow('Lieferbedingungen / SLAs:')); // Label only
+            containerDiv.appendChild(createParagraph(document.getElementById('lieferbedingungen').value));
+
+            const h3Finanzen = doc.createElement('h3');
+            h3Finanzen.textContent = 'Finanzielle Vereinbarungen';
+            containerDiv.appendChild(h3Finanzen);
+            containerDiv.appendChild(createDataRow('Gesamtwert:', (document.getElementById('gesamtwert').value || 'Nicht angegeben') + ' ' + (document.getElementById('waehrung').value || '')));
+            containerDiv.appendChild(createDataRow('Zahlungsbedingungen:', document.getElementById('zahlungsbedingungen').value));
+            containerDiv.appendChild(createDataRow('Zahlungshäufigkeit:', document.getElementById('zahlungshaeufigkeit').value));
+
+            // --- Vertragspartner & Kontakte ---
+            const h2Kontakte = doc.createElement('h2');
+            h2Kontakte.textContent = 'Vertragspartner & Kontakte';
+            containerDiv.appendChild(h2Kontakte);
+
+            const h3Hauptkontakt = doc.createElement('h3');
+            h3Hauptkontakt.textContent = 'Hauptansprechpartner';
+            containerDiv.appendChild(h3Hauptkontakt);
+            containerDiv.appendChild(createDataRow('Name:', document.getElementById('ansprechpartner-name').value));
+            containerDiv.appendChild(createDataRow('E-Mail:', document.getElementById('ansprechpartner-email').value));
+            containerDiv.appendChild(createDataRow('Telefon:', document.getElementById('ansprechpartner-telefon').value));
+            containerDiv.appendChild(createDataRow('Position:', document.getElementById('ansprechpartner-position').value));
+
+            const h3WeitereKontakte = doc.createElement('h3');
+            h3WeitereKontakte.textContent = 'Weitere Kontakte';
+            containerDiv.appendChild(h3WeitereKontakte);
+
+            const additionalContacts = document.querySelectorAll('#additionalContacts .stakeholder-item');
+            if (additionalContacts.length > 0) {
+                additionalContacts.forEach((contactItem, index) => {
+                    const h4Contact = doc.createElement('h4');
+                    h4Contact.textContent = `Weiterer Kontakt ${index + 1}`;
+                    containerDiv.appendChild(h4Contact);
+                    containerDiv.appendChild(createDataRow('Name:', contactItem.querySelector('.contact-name').value));
+                    containerDiv.appendChild(createDataRow('E-Mail:', contactItem.querySelector('.contact-email').value));
+                    containerDiv.appendChild(createDataRow('Telefon:', contactItem.querySelector('.contact-phone').value));
+                    containerDiv.appendChild(createDataRow('Position:', contactItem.querySelector('.contact-position').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine weiteren Kontakte erfasst.'));
+            }
+
+            // --- Vertragsdokumente ---
+            const h2Dokumente = doc.createElement('h2');
+            h2Dokumente.textContent = 'Vertragsdokumente';
+            containerDiv.appendChild(h2Dokumente);
+
+            const uploadedDocuments = document.querySelectorAll('#uploadedDocuments li');
+            if (uploadedDocuments.length > 0) {
+                const ul = doc.createElement('ul');
+                uploadedDocuments.forEach(docItem => {
+                    const li = doc.createElement('li');
+                    li.textContent = docItem.childNodes[0] ? docItem.childNodes[0].textContent.trim() : 'Nicht angegeben';
+                    ul.appendChild(li);
+                });
+                containerDiv.appendChild(ul);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Dokumente hochgeladen.'));
+            }
+
+            // --- Compliance & Monitoring ---
+            const h2Compliance = doc.createElement('h2');
+            h2Compliance.textContent = 'Compliance & Monitoring';
+            containerDiv.appendChild(h2Compliance);
+
+            const h3Verpflichtungen = doc.createElement('h3');
+            h3Verpflichtungen.textContent = 'Wichtige Verpflichtungen & Fristen';
+            containerDiv.appendChild(h3Verpflichtungen);
+
+            const obligations = document.querySelectorAll('#obligationsTableBody tr');
+            if (obligations.length > 0) {
+                const table = doc.createElement('table');
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Beschreibung', 'Frist', 'Verantwortlicher', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                obligations.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
+                    const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
+                    const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
+                    const status = row.querySelector('.obligation-status').value || 'Nicht angegeben';
+                    [description, date, responsible, status].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Verpflichtungen erfasst.'));
+            }
+
+            const h3Audit = doc.createElement('h3');
+            h3Audit.textContent = 'Audit-Historie';
+            containerDiv.appendChild(h3Audit);
+
+            const auditEntries = document.querySelectorAll('#auditHistory .audit-item');
+            if (auditEntries.length > 0) {
+                auditEntries.forEach((auditItem, index) => {
+                    const h4Audit = doc.createElement('h4');
+                    h4Audit.textContent = `Audit Eintrag ${index + 1}`;
+                    containerDiv.appendChild(h4Audit);
+                    containerDiv.appendChild(createDataRow('Datum des Audits:', auditItem.querySelector('.audit-date').value));
+                    containerDiv.appendChild(createDataRow('Auditor:', auditItem.querySelector('.audit-auditor').value));
+                    containerDiv.appendChild(createDataRow('Ergebnisse & Empfehlungen:')); // Label only
+                    containerDiv.appendChild(createParagraph(auditItem.querySelector('.audit-results').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Audit-Einträge erfasst.'));
+            }
+
+            // --- Leistungs- & Zahlungsmonitoring ---
+            const h2LeistungZahlung = doc.createElement('h2');
+            h2LeistungZahlung.textContent = 'Leistungs- & Zahlungsmonitoring';
+            containerDiv.appendChild(h2LeistungZahlung);
+
+            const h3Leistungsstand = doc.createElement('h3');
+            h3Leistungsstand.textContent = 'Aktueller Leistungsstand';
+            containerDiv.appendChild(h3Leistungsstand);
+            containerDiv.appendChild(createDataRow('Aktueller Leistungsstand:', (document.getElementById('leistungsstand').value || 'Nicht angegeben') + '% erfüllt'));
+
+            const h3Zahlungshistorie = doc.createElement('h3');
+            h3Zahlungshistorie.textContent = 'Zahlungshistorie';
+            containerDiv.appendChild(h3Zahlungshistorie);
+
+            const paymentEntries = document.querySelectorAll('#paymentTableBody tr');
+            if (paymentEntries.length > 0) {
+                const table = doc.createElement('table');
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Rechnungsnummer', 'Datum', 'Betrag', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                paymentEntries.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
+                    const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
+                    const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
+                    const status = row.querySelector('.payment-status').value || 'Nicht angegeben';
+                    [invoice, date, amount, status].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Zahlungseinträge erfasst.'));
+            }
+
+            // --- Historie & Notizen ---
+            const h2HistorieNotizen = doc.createElement('h2');
+            h2HistorieNotizen.textContent = 'Historie & Notizen';
+            containerDiv.appendChild(h2HistorieNotizen);
+
+            const h3Versionshistorie = doc.createElement('h3');
+            h3Versionshistorie.textContent = 'Versionshistorie';
+            containerDiv.appendChild(h3Versionshistorie);
+
+            const versionEntries = document.querySelectorAll('#versionHistory .version-item');
+            if (versionEntries.length > 0) {
+                versionEntries.forEach((versionItem, index) => {
+                    const h4Version = doc.createElement('h4');
+                    h4Version.textContent = `Version ${versionItem.querySelector('.version-number').value || 'Nicht angegeben'}`;
+                    containerDiv.appendChild(h4Version);
+                    containerDiv.appendChild(createDataRow('Datum:', versionItem.querySelector('.version-date').value));
+                    containerDiv.appendChild(createDataRow('Autor:', versionItem.querySelector('.version-author').value));
+                    containerDiv.appendChild(createDataRow('Änderungen:')); // Label only
+                    containerDiv.appendChild(createParagraph(versionItem.querySelector('.version-changes').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Versionseinträge erfasst.'));
+            }
+
+            const h3InterneNotizen = doc.createElement('h3');
+            h3InterneNotizen.textContent = 'Interne Notizen';
+            containerDiv.appendChild(h3InterneNotizen);
+            containerDiv.appendChild(createParagraph(document.getElementById('internalNotes').value));
+
+            // --- Risikomanagement ---
+            const h2Risikomanagement = doc.createElement('h2');
+            h2Risikomanagement.textContent = 'Risikomanagement';
+            containerDiv.appendChild(h2Risikomanagement);
+
+            const h3VertraglicheRisiken = doc.createElement('h3');
+            h3VertraglicheRisiken.textContent = 'Vertragliche Risiken';
+            containerDiv.appendChild(h3VertraglicheRisiken);
+
+            const riskEntries = document.querySelectorAll('#riskTableBody tr');
+            if (riskEntries.length > 0) {
+                const table = doc.createElement('table');
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Beschreibung', 'Kategorie', 'Wahrscheinlichkeit', 'Auswirkung', 'Maßnahme', 'Verantwortlicher', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                riskEntries.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
+                    const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
+                    const probability = row.querySelector('.risk-probability').value || 'Nicht angegeben';
+                    const impact = row.querySelector('.risk-impact').value || 'Nicht angegeben';
+                    const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
+                    const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
+                    const status = row.querySelector('.risk-status').value || 'Nicht angegeben';
+                    [description, category, probability, impact, measure, responsible, status].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Risikoeinträge erfasst.'));
+            }
+
+            // Serialize the entire new document to a string
+            const staticHtmlContent = `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
 
             const blob = new Blob([staticHtmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Vertragsdokumentation_${vertragsbezeichnung.replace(/[^a-z0-9]/gi, '_')}.html`;
+            a.download = `Vertragsdokumentation_${(document.getElementById('vertragsbezeichnung').value || 'Unbenannter Vertrag').replace(/[^a-z0-9]/gi, '_')}.html`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -804,6 +852,7 @@
 
             alert('Statische HTML-Dokumentation erstellt!');
         }
+
 
         function exportHandover() {
             alert('Übergabe-Paket Export würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe');
