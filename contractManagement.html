@@ -544,37 +544,130 @@
             // Add styles to the new document
             const style = doc.createElement('style');
             style.textContent = `
-                body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
-                .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
-                h1, h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
-                h1 { font-size: 2em; border-bottom: 3px solid #4f46e5; padding-bottom: 10px; }
-                h2 { font-size: 1.6em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                /* General Styles for Consistency (from styles.css) */
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background: #f0f2f5; /* Simplified background for static export */
+                    padding: 20px;
+                }
+
+                .report-container {
+                    max-width: 900px;
+                    margin: 20px auto;
+                    background: white;
+                    padding: 30px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+
+                .header-exported { /* Custom class for the exported header */
+                    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                    border-radius: 8px 8px 0 0;
+                    margin: -30px -30px 30px -30px; /* Adjust to fill container width */
+                }
+
+                .header-exported h1 {
+                    font-size: 2.2em;
+                    margin-bottom: 10px;
+                    font-weight: 300;
+                }
+
+                .header-exported p {
+                    font-size: 1.1em;
+                    opacity: 0.9;
+                }
+
+                h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                h2 { font-size: 1.8em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
                 h3 { font-size: 1.3em; margin-bottom: 15px; }
                 h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                
+                .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+                .form-group p, .data-item p { margin-bottom: 10px; padding-left: 10px; }
+                .form-group label, .data-item label { font-weight: bold; margin-bottom: 5px; display: block; color: #555; }
+                
                 .data-row { display: flex; margin-bottom: 8px; }
                 .data-label { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
                 .data-value { flex-grow: 1; word-wrap: break-word; }
                 p { margin: 0 0 10px 0; }
                 ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
                 ul li { margin-bottom: 5px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
-                th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-                th { background-color: #f0f4f8; font-weight: bold; }
-                tr:nth-child(even) { background-color: #fcfdff; }
+                
+                table.output-table { /* Specific style for tables in the output */
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                    margin-bottom: 20px;
+                    background: white;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    table-layout: auto;
+                }
+                .output-table th, .output-table td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    vertical-align: top; /* Align content to top for multi-line */
+                }
+                .output-table th { background-color: #f0f4f8; font-weight: bold; }
+                .output-table tr:nth-child(even) { background-color: #fcfdff; }
+
+                .status-badge {
+                    display: inline-block;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    font-size: 0.85em;
+                    font-weight: 600;
+                }
+                .status-badge.entwurf { background-color: #adb5bd; color: white; }
+                .status-badge.verhandlung { background-color: #ffc107; color: #333; }
+                .status-badge.genehmigung { background-color: #17a2b8; color: white; }
+                .status-badge.aktiv { background-color: #28a745; color: white; }
+                .status-badge.pausiert { background-color: #6c757d; color: white; }
+                .status-badge.gekuendigt { background-color: #dc3545; color: white; }
+                .status-badge.abgelaufen { background-color: #6c757d; color: white; }
+                .status-badge.offen { background-color: #007bff; color: white; }
+                .status-badge.inbearbeitung { background-color: #ffc107; color: #333; }
+                .status-badge.erfuellt { background-color: #28a745; color: white; }
+                .status-badge.überfällig { background-color: #dc3545; color: white; }
+                .status-badge.bezahlt { background-color: #28a745; color: white; }
+                .status-badge.niedrig { background-color: #2ecc71; color: white; }
+                .status-badge.mittel { background-color: #f1c40f; color: #333; }
+                .status-badge.hoch { background-color: #e74c3c; color: white; }
+
+
+                @media (max-width: 768px) {
+                    .data-row { flex-direction: column; }
+                    .data-label { width: 100%; margin-bottom: 5px; }
+                    .report-container { padding: 15px; }
+                }
             `;
             head.appendChild(style);
 
             // Create main container
             const containerDiv = doc.createElement('div');
-            containerDiv.classList.add('container');
+            containerDiv.classList.add('report-container');
             body.appendChild(containerDiv);
 
-            // --- Vertragsgrundlagen ---
-            const h1 = doc.createElement('h1');
-            h1.textContent = `Vertragsdokumentation: ${document.getElementById('vertragsbezeichnung').value || 'Unbenannter Vertrag'}`;
-            containerDiv.appendChild(h1);
-            containerDiv.appendChild(doc.createElement('hr'));
+            // Create and append the header
+            const headerDiv = doc.createElement('div');
+            headerDiv.classList.add('header-exported');
+            const headerH1 = doc.createElement('h1');
+            headerH1.textContent = 'ContractFlow';
+            const headerP = doc.createElement('p');
+            headerP.textContent = 'Professionelles Vertragsmanagement System';
+            headerDiv.appendChild(headerH1);
+            headerDiv.appendChild(headerP);
+            containerDiv.appendChild(headerDiv);
 
+            // --- Vertragsgrundlagen ---
             const h2Grundlagen = doc.createElement('h2');
             h2Grundlagen.textContent = 'Vertragsgrundlagen';
             containerDiv.appendChild(h2Grundlagen);
@@ -582,7 +675,7 @@
             containerDiv.appendChild(createDataRow('Vertragsnummer:', document.getElementById('vertragsnummer').value));
             containerDiv.appendChild(createDataRow('Vertragsbezeichnung:', document.getElementById('vertragsbezeichnung').value));
             containerDiv.appendChild(createDataRow('Vertragspartner:', document.getElementById('vertragspartner').value));
-            containerDiv.appendChild(createDataRow('Vertragsstatus:', document.getElementById('vertragsstatus').value));
+            containerDiv.appendChild(createDataRow('Vertragsstatus:', `<span class="status-badge ${document.getElementById('vertragsstatus').value.toLowerCase()}">${document.getElementById('vertragsstatus').value}</span>`));
             containerDiv.appendChild(createDataRow('Vertragsbeginn:', document.getElementById('vertragsbeginn').value));
             containerDiv.appendChild(createDataRow('Vertragsende:', document.getElementById('vertragsende').value));
             containerDiv.appendChild(createDataRow('Kündigungsfrist:', (document.getElementById('kuendigungsfrist').value || 'Nicht angegeben') + ' Tage'));
@@ -666,6 +759,7 @@
             const obligations = document.querySelectorAll('#obligationsTableBody tr');
             if (obligations.length > 0) {
                 const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
                 const thead = doc.createElement('thead');
                 const tbody = doc.createElement('tbody');
                 table.appendChild(thead);
@@ -684,10 +778,12 @@
                     const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
                     const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
                     const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
-                    const status = row.querySelector('.obligation-status').value || 'Nicht angegeben';
-                    [description, date, responsible, status].forEach(value => {
+                    const statusValue = row.querySelector('.obligation-status').value || 'Nicht angegeben';
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [description, date, responsible, statusHtml].forEach(value => {
                         const td = doc.createElement('td');
-                        td.textContent = value;
+                        td.innerHTML = value; // Use innerHTML for status badge
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
@@ -733,6 +829,7 @@
             const paymentEntries = document.querySelectorAll('#paymentTableBody tr');
             if (paymentEntries.length > 0) {
                 const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
                 const thead = doc.createElement('thead');
                 const tbody = doc.createElement('tbody');
                 table.appendChild(thead);
@@ -751,10 +848,12 @@
                     const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
                     const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
                     const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
-                    const status = row.querySelector('.payment-status').value || 'Nicht angegeben';
-                    [invoice, date, amount, status].forEach(value => {
+                    const statusValue = row.querySelector('.payment-status').value || 'Nicht angegeben';
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [invoice, date, amount, statusHtml].forEach(value => {
                         const td = doc.createElement('td');
-                        td.textContent = value;
+                        td.innerHTML = value; // Use innerHTML for status badge
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
@@ -805,6 +904,7 @@
             const riskEntries = document.querySelectorAll('#riskTableBody tr');
             if (riskEntries.length > 0) {
                 const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
                 const thead = doc.createElement('thead');
                 const tbody = doc.createElement('tbody');
                 table.appendChild(thead);
@@ -822,14 +922,19 @@
                     const tr = doc.createElement('tr');
                     const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
                     const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
-                    const probability = row.querySelector('.risk-probability').value || 'Nicht angegeben';
-                    const impact = row.querySelector('.risk-impact').value || 'Nicht angegeben';
+                    const probabilityValue = row.querySelector('.risk-probability').value || 'Nicht angegeben';
+                    const impactValue = row.querySelector('.risk-impact').value || 'Nicht angegeben';
                     const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
                     const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
-                    const status = row.querySelector('.risk-status').value || 'Nicht angegeben';
-                    [description, category, probability, impact, measure, responsible, status].forEach(value => {
+                    const statusValue = row.querySelector('.risk-status').value || 'Nicht angegeben';
+                    
+                    const probabilityHtml = `<span class="status-badge ${probabilityValue.toLowerCase().replace(/ /g, '')}">${probabilityValue}</span>`;
+                    const impactHtml = `<span class="status-badge ${impactValue.toLowerCase().replace(/ /g, '')}">${impactValue}</span>`;
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [description, category, probabilityHtml, impactHtml, measure, responsible, statusHtml].forEach(value => {
                         const td = doc.createElement('td');
-                        td.textContent = value;
+                        td.innerHTML = value; // Use innerHTML for status badges
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);

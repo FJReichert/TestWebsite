@@ -823,12 +823,14 @@
             const zertifizierungenRows = document.querySelectorAll('#zertifizierungen-tbody tr');
             zertifizierungenRows.forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
+                const statusValue = inputs[3].value || 'N/A';
+                const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
                 certificationsTable += `
                     <tr>
                         <td>${inputs[0].value || 'N/A'}</td>
                         <td>${inputs[1].value || 'N/A'}</td>
                         <td>${inputs[2].value || 'N/A'}</td>
-                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${statusHtml}</td>
                     </tr>
                 `;
             });
@@ -838,13 +840,15 @@
             const servicesRows = document.querySelectorAll('#services-tbody tr');
             servicesRows.forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
+                const statusValue = inputs[4].value || 'N/A';
+                const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
                 servicesTable += `
                     <tr>
                         <td>${inputs[0].value || 'N/A'}</td>
                         <td>${inputs[1].value || 'N/A'}</td>
                         <td>${inputs[2].value || 'N/A'}</td>
                         <td>${inputs[3].value || 'N/A'}</td>
-                        <td>${inputs[4].value || 'N/A'}</td>
+                        <td>${statusHtml}</td>
                     </tr>
                 `;
             });
@@ -862,12 +866,14 @@
             const opportunitiesRows = document.querySelectorAll('#opportunities-tbody tr');
             opportunitiesRows.forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
+                const stageValue = inputs[3].value || 'N/A';
+                const stageHtml = `<span class="status-badge ${stageValue.toLowerCase().replace(/ /g, '')}">${stageValue}</span>`;
                 opportunitiesTable += `
                     <tr>
                         <td>${inputs[0].value || 'N/A'}</td>
                         <td>${inputs[1].value || 'N/A'}</td>
                         <td>${inputs[2].value || 'N/A'}</td>
-                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${stageHtml}</td>
                         <td>${inputs[4].value || 'N/A'}</td>
                         <td>${inputs[5].value || 'N/A'}</td>
                     </tr>
@@ -886,6 +892,8 @@
             const campaignsRows = document.querySelectorAll('#campaigns-tbody tr');
             campaignsRows.forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
+                const statusValue = inputs[6].value || 'N/A';
+                const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
                 campaignsTable += `
                     <tr>
                         <td>${inputs[0].value || 'N/A'}</td>
@@ -894,7 +902,7 @@
                         <td>${inputs[3].value || 'N/A'}</td>
                         <td>${inputs[4].value || 'N/A'}</td>
                         <td>${inputs[5].value || 'N/A'}</td>
-                        <td>${inputs[6].value || 'N/A'}</td>
+                        <td>${statusHtml}</td>
                     </tr>
                 `;
             });
@@ -917,12 +925,14 @@
             const meilensteineRows = document.querySelectorAll('#meilensteine-tbody tr');
             meilensteineRows.forEach(row => {
                 const inputs = row.querySelectorAll('input, select');
+                const statusValue = inputs[3].value || 'N/A';
+                const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
                 milestonesTable += `
                     <tr>
                         <td>${inputs[0].value || 'N/A'}</td>
                         <td>${inputs[1].value || 'N/A'}</td>
                         <td>${inputs[2].value || 'N/A'}</td>
-                        <td>${inputs[3].value || 'N/A'}</td>
+                        <td>${statusHtml}</td>
                     </tr>
                 `;
             });
@@ -935,64 +945,168 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Partner Relationship Management - Dokumentation</title>
-                    <link rel="stylesheet" href="styles.css">
                     <style>
-                        body { background: #f0f2f5; color: #333; line-height: 1.6; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-                        .report-container { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-                        h1, h2, h3 { color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
-                        h1 { text-align: center; font-size: 2.5em; margin-bottom: 30px; }
-                        h2 { font-size: 1.8em; margin-top: 30px; }
-                        h3 { font-size: 1.4em; margin-top: 20px; border-bottom: 1px dashed #eee; }
+                        /* General Styles for Consistency (from styles.css) */
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            background: #f0f2f5; /* Simplified background for static export */
+                            padding: 20px;
+                        }
+
+                        .report-container {
+                            max-width: 900px;
+                            margin: 20px auto;
+                            background: white;
+                            padding: 30px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                        }
+
+                        .header-exported { /* Custom class for the exported header */
+                            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                            color: white;
+                            padding: 30px;
+                            text-align: center;
+                            border-radius: 8px 8px 0 0;
+                            margin: -30px -30px 30px -30px; /* Adjust to fill container width */
+                        }
+
+                        .header-exported h1 {
+                            font-size: 2.2em;
+                            margin-bottom: 10px;
+                            font-weight: 300;
+                        }
+
+                        .header-exported p {
+                            font-size: 1.1em;
+                            opacity: 0.9;
+                        }
+
+                        h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                        h2 { font-size: 1.8em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                        h3 { font-size: 1.3em; margin-bottom: 15px; }
+                        h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                        
+                        .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
                         .form-group p, .data-item p { margin-bottom: 10px; padding-left: 10px; }
                         .form-group label, .data-item label { font-weight: bold; margin-bottom: 5px; display: block; color: #555; }
-                        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        .data-table th { background-color: #f2f2f2; font-weight: bold; }
-                        .metric-card { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 10px; text-align: center; }
-                        .metric-card h4 { font-size: 1.5em; color: #3498db; }
-                        .metric-card p { font-size: 0.9em; color: #666; }
-                        .section-divider { border-top: 1px solid #ccc; margin: 40px 0; }
+                        
+                        .data-row-export { display: flex; margin-bottom: 8px; } /* Custom class for data rows in output */
+                        .data-label-export { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
+                        .data-value-export { flex-grow: 1; word-wrap: break-word; }
+                        p { margin: 0 0 10px 0; }
+                        ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
+                        ul li { margin-bottom: 5px; }
+                        
+                        table.output-table { /* Specific style for tables in the output */
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 15px;
+                            margin-bottom: 20px;
+                            background: white;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                            table-layout: auto;
+                        }
+                        .output-table th, .output-table td {
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            text-align: left;
+                            word-wrap: break-word;
+                            vertical-align: top; /* Align content to top for multi-line */
+                        }
+                        .output-table th { background-color: #f0f4f8; font-weight: bold; }
+                        .output-table tr:nth-child(even) { background-color: #fcfdff; }
+
+                        .status-badge {
+                            display: inline-block;
+                            padding: 5px 10px;
+                            border-radius: 5px;
+                            font-size: 0.85em;
+                            font-weight: 600;
+                        }
+                        /* Partner Statuses */
+                        .status-badge.geplant { background-color: #ffc107; color: #333; }
+                        .status-badge.laufend { background-color: #007bff; color: white; }
+                        .status-badge.pausiert { background-color: #6c757d; color: white; }
+                        .status-badge.abgeschlossen { background-color: #28a745; color: white; }
+                        .status-badge.aktiv { background-color: #28a745; color: white; }
+                        .status-badge.inaktiv { background-color: #dc3545; color: white; }
+                        .status-badge.beendet { background-color: #6c757d; color: white; }
+                        .status-badge.evaluierung { background-color: #17a2b8; color: white; }
+                        .status-badge.basic { background-color: #007bff; color: white; }
+                        .status-badge.advanced { background-color: #17a2b8; color: white; }
+                        .status-badge.expert { background-color: #28a745; color: white; }
+                        .status-badge.in-erneuerung { background-color: #ffc107; color: #333; }
+                        /* Opportunity Stages */
+                        .status-badge.lead { background-color: #6c757d; color: white; }
+                        .status-badge.qualified { background-color: #007bff; color: white; }
+                        .status-badge.proposal { background-color: #17a2b8; color: white; }
+                        .status-badge.negotiation { background-color: #ffc107; color: #333; }
+                        .status-badge.closed-won { background-color: #28a745; color: white; }
+                        .status-badge.closed-lost { background-color: #dc3545; color: white; }
+                        /* Campaign Statuses */
+                        .status-badge.planung { background-color: #6c757d; color: white; }
+                        .status-badge.erstellung { background-color: #007bff; color: white; }
+                        .status-badge.review { background-color: #ffc107; color: #333; }
+                        .status-badge.published { background-color: #28a745; color: white; }
+                        /* Content Statuses */
+                        .status-badge.inplanung { background-color: #6c757d; color: white; }
+                        .status-badge.inerstellung { background-color: #007bff; color: white; }
+                        .status-badge.verzoegert { background-color: #dc3545; color: white; }
+
+                        @media (max-width: 768px) {
+                            .data-row-export { flex-direction: column; }
+                            .data-label-export { width: 100%; margin-bottom: 5px; }
+                            .report-container { padding: 15px; }
+                        }
                     </style>
                 </head>
                 <body>
                     <div class="report-container">
-                        <h1>Partner Relationship Management Dokumentation</h1>
+                        <div class="header-exported">
+                            <h1>OpenProject PRM</h1>
+                            <p>Partner Relationship Management System</p>
+                        </div>
                         
                         <div class="section">
                             <h2>Projektinitiierung</h2>
                             <h3>Projektgrundlagen</h3>
-                            <div class="form-group"><label>Projektname:</label><p>${projectName.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Projekt-ID:</label><p>${projectID.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Projektleiter:</label><p>${projectLeader.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Projektstatus:</label><p>${projectStatus.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektname:</span><span class="data-value-export">${projectName.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Projekt-ID:</span><span class="data-value-export">${projectID.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektleiter:</span><span class="data-value-export">${projectLeader.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektstatus:</span><span class="data-value-export"><span class="status-badge ${projectStatus.toLowerCase().replace(/ /g, '')}">${projectStatus}</span></span></div>
                             <h3>Zeitplan & Budget</h3>
-                            <div class="form-group"><label>Startdatum:</label><p>${startDate.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Enddatum:</label><p>${endDate.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Budget (€):</label><p>${budget.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Startdatum:</span><span class="data-value-export">${startDate.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Enddatum:</span><span class="data-value-export">${endDate.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Budget (€):</span><span class="data-value-export">${budget.replace(/\n/g, '<br>')}</span></div>
                             <h3>Projektziel & Beschreibung</h3>
-                            <div class="form-group"><label>Projektziel:</label><p>${projectObjective.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Detaillierte Projektbeschreibung:</label><p>${projectDescription.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektziel:</span><span class="data-value-export">${projectObjective.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Detaillierte Projektbeschreibung:</span><span class="data-value-export">${projectDescription.replace(/\n/g, '<br>')}</p></div>
                         </div>
 
                         <div class="section">
                             <h2>Partner Management</h2>
                             <h3>Partner-Stammdaten</h3>
-                            <div class="form-group"><label>Partner Name:</label><p>${partnerName.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Partner-Typ:</label><p>${partnerType.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Partner-Tier:</label><p>${partnerTier.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Partner-Status:</label><p>${partnerStatus.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner Name:</span><span class="data-value-export">${partnerName.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Typ:</span><span class="data-value-export">${partnerType.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Tier:</span><span class="data-value-export">${partnerTier.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Status:</span><span class="data-value-export"><span class="status-badge ${partnerStatus.toLowerCase().replace(/ /g, '')}">${partnerStatus}</span></span></div>
                             <h3>Kontaktdaten</h3>
-                            <div class="form-group"><label>Hauptansprechpartner:</label><p>${contactPerson.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>E-Mail:</label><p>${partnerEmail.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Telefon:</label><p>${partnerPhone.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Website:</label><p>${partnerWebsite.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner:</span><span class="data-value-export">${contactPerson.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">E-Mail:</span><span class="data-value-export">${partnerEmail.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Telefon:</span><span class="data-value-export">${partnerPhone.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Website:</span><span class="data-value-export">${partnerWebsite.replace(/\n/g, '<br>')}</span></div>
                             <h3>Vertragsdaten</h3>
-                            <div class="form-group"><label>Vertragsbeginn:</label><p>${contractStart.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Vertragsende:</label><p>${contractEnd.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Provision (%):</label><p>${commission.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Rabatt (%):</label><p>${discount.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Vertragsbeginn:</span><span class="data-value-export">${contractStart.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Vertragsende:</span><span class="data-value-export">${contractEnd.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Provision (%):</span><span class="data-value-export">${commission.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Rabatt (%):</span><span class="data-value-export">${discount.replace(/\n/g, '<br>')}</p></div>
                             <h3>Zertifizierungen & Kompetenzen</h3>
-                            <table class="data-table">
+                            <table class="output-table">
                                 <thead><tr><th>Zertifizierung</th><th>Level</th><th>Gültig bis</th><th>Status</th></tr></thead>
                                 <tbody>${certificationsTable}</tbody>
                             </table>
@@ -1001,72 +1115,72 @@
                         <div class="section">
                             <h2>Service Management</h2>
                             <h3>Service-Portfolio</h3>
-                            <table class="data-table">
+                            <table class="output-table">
                                 <thead><tr><th>Service</th><th>Kategorie</th><th>SLA Level</th><th>Preis</th><th>Status</th></tr></thead>
                                 <tbody>${servicesTable}</tbody>
                             </table>
                             <h3>Service Level Agreements (SLA)</h3>
-                            <div class="form-group"><label>Reaktionszeit (Std):</label><p>${responseTime.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Lösungszeit (Std):</label><p>${resolutionTime.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Verfügbarkeit (%):</label><p>${availability.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Support-Zeiten:</label><p>${supportHours.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Reaktionszeit (Std):</span><span class="data-value-export">${responseTime.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Lösungszeit (Std):</span><span class="data-value-export">${resolutionTime.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Verfügbarkeit (%):</span><span class="data-value-export">${availability.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Support-Zeiten:</span><span class="data-value-export">${supportHours.replace(/\n/g, '<br>')}</span></div>
                             <h3>Ticket Management</h3>
-                            <div class="form-group"><label>Offene Tickets:</label><p>${openTickets.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Ø Reaktionszeit:</label><p>${avgResponse.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Kundenzufriedenheit:</label><p>${satisfaction.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Ticket-System Integration:</label><p>${selectedIntegrations.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Offene Tickets:</span><span class="data-value-export">${openTickets.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Ø Reaktionszeit:</span><span class="data-value-export">${avgResponse.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Kundenzufriedenheit:</span><span class="data-value-export">${satisfaction.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Ticket-System Integration:</span><span class="data-value-export">${selectedIntegrations.replace(/\n/g, '<br>')}</span></div>
                         </div>
 
                         <div class="section">
                             <h2>Vertrieb & Sales</h2>
                             <h3>Sales Pipeline</h3>
-                            <table class="data-table">
+                            <table class="output-table">
                                 <thead><tr><th>Opportunity</th><th>Kunde</th><th>Wert (€)</th><th>Stage</th><th>Wahrscheinlichkeit</th><th>Abschluss erwartet</th></tr></thead>
                                 <tbody>${opportunitiesTable}</tbody>
                             </table>
                             <h3>Sales Metriken</h3>
-                            <div class="form-group"><label>Pipeline Wert:</label><p>€ ${pipelineValue.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Conversion Rate:</label><p>${conversionRate.replace(/\n/g, '<br>')}%</p></div>
-                            <div class="form-group"><label>Durchschnittlicher Deal:</label><p>€ ${avgDeal.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Pipeline Wert:</span><span class="data-value-export">€ ${pipelineValue.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Conversion Rate:</span><span class="data-value-export">${conversionRate.replace(/\n/g, '<br>')}%</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Durchschnittlicher Deal:</span><span class="data-value-export">€ ${avgDeal.replace(/\n/g, '<br>')}</span></div>
                             <h3>Lead Management</h3>
-                            <div class="form-group"><label>Lead-Quelle:</label><p>${leadSource.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Lead Score:</label><p>${leadScoring.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Lead-Quelle:</span><span class="data-value-export">${leadSource.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Lead Score:</span><span class="data-value-export">${leadScoring.replace(/\n/g, '<br>')}</span></div>
                             <h3>CRM Integration</h3>
-                            <div class="form-group"><label>CRM System:</label><p>${crmSystem.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Sync Frequenz:</label><p>${syncFrequency.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">CRM System:</span><span class="data-value-export">${crmSystem.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Sync Frequenz:</span><span class="data-value-export">${syncFrequency.replace(/\n/g, '<br>')}</span></div>
                         </div>
 
                         <div class="section">
                             <h2>Marketing & Kampagnen</h2>
                             <h3>Kampagnen-Management</h3>
-                            <table class="data-table">
+                            <table class="output-table">
                                 <thead><tr><th>Kampagne</th><th>Typ</th><th>Zielgruppe</th><th>Budget (€)</th><th>Start</th><th>Ende</th><th>Status</th></tr></thead>
                                 <tbody>${campaignsTable}</tbody>
                             </table>
                             <h3>Marketing Metriken</h3>
-                            <div class="form-group"><label>Leads generiert:</label><p>${leadsGenerated.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Cost per Lead:</label><p>€ ${costPerLead.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>ROI (%):</label><p>${marketingROI.replace(/\n/g, '<br>')}%</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Leads generiert:</span><span class="data-value-export">${leadsGenerated.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Cost per Lead:</span><span class="data-value-export">€ ${costPerLead.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">ROI (%):</span><span class="data-value-export">${marketingROI.replace(/\n/g, '<br>')}%</span></div>
                             <h3>Content Management</h3>
-                            <div class="form-group"><label>Content-Typ:</label><p>${contentType.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Status:</label><p>${contentStatus.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Content-Typ:</span><span class="data-value-export">${contentType.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Status:</span><span class="data-value-export">${contentStatus.replace(/\n/g, '<br>')}</span></div>
                             <h3>Partner Marketing</h3>
-                            <div class="form-group"><label>Partner Marketing Programme:</label><p>${selectedPartnerPrograms.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner Marketing Programme:</span><span class="data-value-export">${selectedPartnerPrograms.replace(/\n/g, '<br>')}</p></div>
                         </div>
 
                         <div class="section">
                             <h2>Reporting & Analytics</h2>
                             <h3>Partner Performance</h3>
-                            <div class="form-group"><label>Partner Revenue (YTD):</label><p>${partnerRevenue.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Wachstum (YoY):</label><p>${partnerGrowth.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Partner Zufriedenheit:</label><p>${partnerSatisfaction.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner Revenue (YTD):</span><span class="data-value-export">${partnerRevenue.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Wachstum (YoY):</span><span class="data-value-export">${partnerGrowth.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner Zufriedenheit:</span><span class="data-value-export">${partnerSatisfaction.replace(/\n/g, '<br>')}</span></div>
                             <h3>Projektfortschritt</h3>
-                            <div class="form-group"><label>Gesamtfortschritt:</label><p>${overallProgress.replace(/\n/g, '<br>')}% abgeschlossen</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Gesamtfortschritt:</span><span class="data-value-export">${overallProgress.replace(/\n/g, '<br>')}% abgeschlossen</span></div>
                             <h3>Finanzberichte</h3>
-                            <div class="form-group"><label>Aktuelle Kosten (€):</label><p>€ ${currentCosts.replace(/\n/g, '<br>')}</p></div>
-                            <div class="form-group"><label>Kostenabweichung (€):</label><p>€ ${costDeviation.replace(/\n/g, '<br>')}</p></div>
+                            <div class="data-row-export"><span class="data-label-export">Aktuelle Kosten (€):</span><span class="data-value-export">€ ${currentCosts.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Kostenabweichung (€):</span><span class="data-value-export">€ ${costDeviation.replace(/\n/g, '<br>')}</span></div>
                             <h3>Meilensteine & Arbeitspakete</h3>
-                            <table class="data-table">
+                            <table class="output-table">
                                 <thead><tr><th>Arbeitspaket/Meilenstein</th><th>Verantwortlich</th><th>Geplantes Ende</th><th>Status</th></tr></thead>
                                 <tbody>${milestonesTable}</tbody>
                             </table>
