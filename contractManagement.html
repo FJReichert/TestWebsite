@@ -4,380 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ContractFlow - Vertragsmanagement System</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        /* Tab Navigation Styles */
-        .tab-nav {
-            display: flex;
-            background: #f0f0f0;
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto; /* Enable horizontal scrolling for many tabs */
-        }
-
-        .tab-button {
-            padding: 15px 25px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 1em;
-            color: #555;
-            transition: all 0.3s ease;
-            white-space: nowrap; /* Prevent wrapping */
-        }
-
-        .tab-button:hover {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .tab-button.active {
-            background: white;
-            color: #3498db;
-            border-bottom: 3px solid #3498db;
-            font-weight: 600;
-        }
-
-        .tab-content-wrapper {
-            padding: 20px 40px 40px 40px; /* Adjusted padding for content */
-        }
-
-        .tab-pane {
-            display: none; /* Hidden by default */
-        }
-
-        .tab-pane.active {
-            display: block; /* Show active tab content */
-        }
-
-        .content {
-            padding: 0; /* Removed padding as it's now in tab-content-wrapper */
-        }
-
-        .section {
-            margin-bottom: 40px;
-            padding: 30px;
-            border-radius: 10px;
-            background: #f8f9fa;
-            border-left: 5px solid #3498db;
-        }
-
-        .section h2 {
-            color: #2c3e50;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section h2::before {
-            content: '▶';
-            margin-right: 10px;
-            color: #3498db;
-        }
-
-        .section h3 {
-            color: #34495e;
-            font-size: 1.3em;
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #ecf0f1;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row-triple {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-row-quad {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 0.95em;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="date"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .textarea-large {
-            min-height: 150px;
-        }
-
-        .contract-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .contract-table th,
-        .contract-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .contract-table th {
-            background: #34495e;
-            color: white;
-            font-weight: 600;
-        }
-
-        .contract-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .add-button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-top: 10px;
-            transition: background 0.3s ease;
-        }
-
-        .add-button:hover {
-            background: #219a52;
-        }
-
-        .status-indicators {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .status-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .status-card h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .status-card.warning {
-            border-left-color: #f39c12;
-        }
-
-        .status-card.danger {
-            border-left-color: #e74c3c;
-        }
-
-        .status-card.success {
-            border-left-color: #27ae60;
-        }
-
-        .document-upload {
-            border: 2px dashed #bdc3c7;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            background: #fafafa;
-            transition: all 0.3s ease;
-        }
-
-        .document-upload:hover {
-            border-color: #3498db;
-            background: #f0f8ff;
-        }
-
-        .document-upload i {
-            font-size: 3em;
-            color: #bdc3c7;
-            margin-bottom: 15px;
-        }
-
-        .notification-badge {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-left: 10px;
-        }
-
-        .notification-badge.warning {
-            background: #f39c12;
-        }
-
-        .notification-badge.success {
-            background: #27ae60;
-        }
-
-        .save-button {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            font-size: 1.1em;
-            cursor: pointer;
-            display: block;
-            margin: 40px auto 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .save-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-        }
-
-        .contract-type-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .contract-type-card {
-            background: white;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .contract-type-card:hover {
-            border-color: #3498db;
-            background: #f8f9fa;
-        }
-
-        .contract-type-card.selected {
-            border-color: #3498db;
-            background: #e3f2fd;
-        }
-
-        .contract-type-card h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .contract-type-card p {
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            .form-row,
-            .form-row-triple,
-            .form-row-quad {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                margin: 10px;
-            }
-            
-            .tab-nav {
-                flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
-            }
-
-            .tab-button {
-                flex: 1 1 auto; /* Allow tabs to grow and shrink */
-                text-align: center;
-                padding: 10px 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -386,16 +13,16 @@
             <p>Professionelles Vertragsmanagement System</p>
         </div>
 
-        <div class="tab-nav">
-            <button class="tab-button active" onclick="openTab(event, 'vertragsgrundlagen')">Vertragsgrundlagen</button>
-            <button class="tab-button" onclick="openTab(event, 'partner-kontakte')">Vertragspartner & Kontakte</button>
-            <button class="tab-button" onclick="openTab(event, 'dokumente')">Vertragsdokumente</button>
-            <button class="tab-button" onclick="openTab(event, 'compliance-monitoring')">Compliance & Monitoring</button>
-            <button class="tab-button" onclick="openTab(event, 'leistungs-zahlung')">Leistungs- & Zahlungsmonitoring</button>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="openTab(event, 'vertragsgrundlagen')">Vertragsgrundlagen</button>
+            <button class="nav-tab" onclick="openTab(event, 'partner-kontakte')">Vertragspartner & Kontakte</button>
+            <button class="nav-tab" onclick="openTab(event, 'dokumente')">Vertragsdokumente</button>
+            <button class="nav-tab" onclick="openTab(event, 'compliance-monitoring')">Compliance & Monitoring</button>
+            <button class="nav-tab" onclick="openTab(event, 'leistungs-zahlung')">Leistungs- & Zahlungsmonitoring</button>
         </div>
 
-        <div class="tab-content-wrapper">
-            <div id="vertragsgrundlagen" class="tab-pane active">
+        <div class="content">
+            <div id="vertragsgrundlagen" class="tab-content active">
                 <div class="section">
                     <h2>Vertragsgrundlagen</h2>
                     
@@ -538,7 +165,7 @@
                 </div>
             </div>
 
-            <div id="partner-kontakte" class="tab-pane">
+            <div id="partner-kontakte" class="tab-content">
                 <div class="section">
                     <h2>Vertragspartner & Kontakte</h2>
                     
@@ -585,7 +212,7 @@
                     </div>
 
                     <h3>Ansprechpartner</h3>
-                    <table class="contract-table">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -593,16 +220,17 @@
                                 <th>E-Mail</th>
                                 <th>Telefon</th>
                                 <th>Rolle</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="kontakte-tbody">
                             <tr>
-                                <td><input type="text" placeholder="Vor- und Nachname" style="border: none; background: transparent;"></td>
-                                <td><input type="text" placeholder="Position/Abteilung" style="border: none; background: transparent;"></td>
-                                <td><input type="email" placeholder="email@beispiel.de" style="border: none; background: transparent;"></td>
-                                <td><input type="tel" placeholder="+49 123 456789" style="border: none; background: transparent;"></td>
+                                <td><input type="text" placeholder="Vor- und Nachname"></td>
+                                <td><input type="text" placeholder="Position/Abteilung"></td>
+                                <td><input type="email" placeholder="email@beispiel.de"></td>
+                                <td><input type="tel" placeholder="+49 123 456789"></td>
                                 <td>
-                                    <select style="border: none; background: transparent;">
+                                    <select>
                                         <option value="hauptkontakt">Hauptkontakt</option>
                                         <option value="fachlich">Fachlicher Kontakt</option>
                                         <option value="kaufmaennisch">Kaufmännischer Kontakt</option>
@@ -610,14 +238,15 @@
                                         <option value="rechtlich">Rechtlicher Kontakt</option>
                                     </select>
                                 </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="add-button" onclick="addKontakt()">+ Ansprechpartner hinzufügen</button>
+                    <button class="btn btn-secondary" onclick="addKontakt()">+ Ansprechpartner hinzufügen</button>
                 </div>
             </div>
 
-            <div id="dokumente" class="tab-pane">
+            <div id="dokumente" class="tab-content">
                 <div class="section">
                     <h2>Vertragsdokumente</h2>
                     
@@ -630,7 +259,7 @@
                     </div>
 
                     <h3>Dokument-Versionen</h3>
-                    <table class="contract-table">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Dokumentname</th>
@@ -638,15 +267,16 @@
                                 <th>Datum</th>
                                 <th>Typ</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="dokumente-tbody">
                             <tr>
-                                <td><input type="text" placeholder="Dokumentname" style="border: none; background: transparent;"></td>
-                                <td><input type="text" placeholder="v1.0" style="border: none; background: transparent;"></td>
-                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td><input type="text" placeholder="Dokumentname"></td>
+                                <td><input type="text" placeholder="v1.0"></td>
+                                <td><input type="date"></td>
                                 <td>
-                                    <select style="border: none; background: transparent;">
+                                    <select>
                                         <option value="hauptvertrag">Hauptvertrag</option>
                                         <option value="anhang">Anhang</option>
                                         <option value="nachtrag">Nachtrag</option>
@@ -655,21 +285,22 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select style="border: none; background: transparent;">
+                                    <select>
                                         <option value="entwurf">Entwurf</option>
                                         <option value="geprueft">Geprüft</option>
                                         <option value="genehmigt">Genehmigt</option>
                                         <option value="unterzeichnet">Unterzeichnet</option>
                                     </select>
                                 </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="add-button" onclick="addDokument()">+ Dokument hinzufügen</button>
+                    <button class="btn btn-secondary" onclick="addDokument()">+ Dokument hinzufügen</button>
                 </div>
             </div>
 
-            <div id="compliance-monitoring" class="tab-pane">
+            <div id="compliance-monitoring" class="tab-content">
                 <div class="section">
                     <h2>Compliance & Monitoring</h2>
                     
@@ -759,12 +390,12 @@
                 </div>
             </div>
 
-            <div id="leistungs-zahlung" class="tab-pane">
+            <div id="leistungs-zahlung" class="tab-content">
                 <div class="section">
                     <h2>Leistungs- & Zahlungsmonitoring</h2>
                     
                     <h3>Zahlungshistorie</h3>
-                    <table class="contract-table">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Rechnungsdatum</th>
@@ -772,26 +403,28 @@
                                 <th>Fälligkeitsdatum</th>
                                 <th>Zahlungsdatum</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="zahlungen-tbody">
                             <tr>
-                                <td><input type="date" style="border: none; background: transparent;"></td>
-                                <td><input type="number" placeholder="0,00" step="0.01" style="border: none; background: transparent;"></td>
-                                <td><input type="date" style="border: none; background: transparent;"></td>
-                                <td><input type="date" style="border: none; background: transparent;"></td>
+                                <td><input type="date"></td>
+                                <td><input type="number" placeholder="0,00" step="0.01"></td>
+                                <td><input type="date"></td>
+                                <td><input type="date"></td>
                                 <td>
-                                    <select style="border: none; background: transparent;">
+                                    <select>
                                         <option value="offen">Offen</option>
                                         <option value="bezahlt">Bezahlt</option>
                                         <option value="teilweise">Teilweise bezahlt</option>
                                         <option value="ueberfaellig">Überfällig</option>
                                     </select>
                                 </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="add-button" onclick="addZahlung()">+ Zahlung hinzufügen</button>
+                    <button class="btn btn-secondary" onclick="addZahlung()">+ Zahlung hinzufügen</button>
 
                     <h3>Leistungsübersicht</h3>
                     <div class="form-group">
@@ -819,7 +452,9 @@
             </div>
         </div>
 
-        <button class="save-button">Vertrag speichern</button>
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveContract()">Vertrag speichern</button>
+        </div>
     </div>
 
     <script>
@@ -835,12 +470,12 @@
             const tbody = document.getElementById('kontakte-tbody');
             const newRow = `
                 <tr>
-                    <td><input type="text" placeholder="Vor- und Nachname" style="border: none; background: transparent;"></td>
-                    <td><input type="text" placeholder="Position/Abteilung" style="border: none; background: transparent;"></td>
-                    <td><input type="email" placeholder="email@beispiel.de" style="border: none; background: transparent;"></td>
-                    <td><input type="tel" placeholder="+49 123 456789" style="border: none; background: transparent;"></td>
+                    <td><input type="text" placeholder="Vor- und Nachname"></td>
+                    <td><input type="text" placeholder="Position/Abteilung"></td>
+                    <td><input type="email" placeholder="email@beispiel.de"></td>
+                    <td><input type="tel" placeholder="+49 123 456789"></td>
                     <td>
-                        <select style="border: none; background: transparent;">
+                        <select>
                             <option value="hauptkontakt">Hauptkontakt</option>
                             <option value="fachlich">Fachlicher Kontakt</option>
                             <option value="kaufmaennisch">Kaufmännischer Kontakt</option>
@@ -848,6 +483,7 @@
                             <option value="rechtlich">Rechtlicher Kontakt</option>
                         </select>
                     </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                 </tr>
             `;
             tbody.insertAdjacentHTML('beforeend', newRow);
@@ -857,11 +493,11 @@
             const tbody = document.getElementById('dokumente-tbody');
             const newRow = `
                 <tr>
-                    <td><input type="text" placeholder="Dokumentname" style="border: none; background: transparent;"></td>
-                    <td><input type="text" placeholder="v1.0" style="border: none; background: transparent;"></td>
-                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td><input type="text" placeholder="Dokumentname"></td>
+                    <td><input type="text" placeholder="v1.0"></td>
+                    <td><input type="date"></td>
                     <td>
-                        <select style="border: none; background: transparent;">
+                        <select>
                             <option value="hauptvertrag">Hauptvertrag</option>
                             <option value="anhang">Anhang</option>
                             <option value="nachtrag">Nachtrag</option>
@@ -870,13 +506,14 @@
                         </select>
                     </td>
                     <td>
-                        <select style="border: none; background: transparent;">
+                        <select>
                             <option value="entwurf">Entwurf</option>
                             <option value="geprueft">Geprüft</option>
                             <option value="genehmigt">Genehmigt</option>
                             <option value="unterzeichnet">Unterzeichnet</option>
                         </select>
                     </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                 </tr>
             `;
             tbody.insertAdjacentHTML('beforeend', newRow);
@@ -886,18 +523,19 @@
             const tbody = document.getElementById('zahlungen-tbody');
             const newRow = `
                 <tr>
-                    <td><input type="date" style="border: none; background: transparent;"></td>
-                    <td><input type="number" placeholder="0,00" step="0.01" style="border: none; background: transparent;"></td>
-                    <td><input type="date" style="border: none; background: transparent;"></td>
-                    <td><input type="date" style="border: none; background: transparent;"></td>
+                    <td><input type="date"></td>
+                    <td><input type="number" placeholder="0,00" step="0.01"></td>
+                    <td><input type="date"></td>
+                    <td><input type="date"></td>
                     <td>
-                        <select style="border: none; background: transparent;">
+                        <select>
                             <option value="offen">Offen</option>
                             <option value="bezahlt">Bezahlt</option>
                             <option value="teilweise">Teilweise bezahlt</option>
                             <option value="ueberfaellig">Überfällig</option>
                         </select>
                     </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                 </tr>
             `;
             tbody.insertAdjacentHTML('beforeend', newRow);
@@ -911,18 +549,17 @@
         function openTab(evt, tabName) {
             let i, tabcontent, tablinks;
 
-            tabcontent = document.getElementsByClassName("tab-pane");
+            tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
                 tabcontent[i].classList.remove("active");
             }
 
-            tablinks = document.getElementsByClassName("tab-button");
+            tablinks = document.getElementsByClassName("nav-tab");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
             }
 
-            document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
@@ -930,12 +567,1622 @@
         // Set default open tab on page load
         document.addEventListener("DOMContentLoaded", function() {
             // Get the first tab button and trigger its click event
-            const firstTabButton = document.querySelector(".tab-button");
+            const firstTabButton = document.querySelector(".nav-tab");
             if (firstTabButton) {
                 firstTabButton.click();
             }
         });
 
+        function saveContract() {
+            console.log('Alle Vertragsdaten wurden erfolgreich gespeichert!');
+            // This function would typically collect all data from the forms
+            // and send it to a server or generate a downloadable file (e.g., JSON, PDF).
+            // For this example, it's a placeholder.
+        }
+    </script>
+</body>
+</html>
+```
+Here is the updated `projectManagement.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projektmanagement Dokumentationssystem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Projektmanagement Dokumentationssystem</h1>
+            <p>Einheitliche Vorlagen für alle Projektphasen</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="openTab(event, 'project-kickoff')">Project Kickoff</button>
+            <button class="nav-tab" onclick="openTab(event, 'meeting-minutes')">Meeting Minutes</button>
+            <button class="nav-tab" onclick="openTab(event, 'risk-management')">Risk Management</button>
+            <button class="nav-tab" onclick="openTab(event, 'lessons-learned')">Lessons Learned</button>
+            <button class="nav-tab" onclick="openTab(event, 'project-handover')">Project Handover</button>
+        </div>
+
+        <div class="content">
+            <div id="project-kickoff" class="tab-content active">
+                <div class="section">
+                    <h2>Projektübersicht</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-name">Projektname:</label>
+                            <input type="text" id="project-name" placeholder="Name des Projekts">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-leader">Projektleiter:</label>
+                            <input type="text" id="project-leader" placeholder="Name des Projektleiters">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-goal">Projektziele:</label>
+                        <textarea id="project-goal" placeholder="Hauptziele und SMART-Kriterien" class="textarea-large"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-scope">Projektumfang (Scope):</label>
+                        <textarea id="project-scope" placeholder="Was ist im Umfang enthalten? Was ist ausgeschlossen?" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Projektteam & Rollen</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rolle</th>
+                                <th>Verantwortlichkeit</th>
+                                <th>Kontakt</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="team-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td><input type="text" placeholder="Rolle"></td>
+                                <td><input type="text" placeholder="Verantwortlichkeit"></td>
+                                <td><input type="text" placeholder="E-Mail / Tel."></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addTeamMember()">+ Teammitglied hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Meilensteine & Zeitplan (High-Level)</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Meilenstein</th>
+                                <th>Lieferobjekte (Deliverables)</th>
+                                <th>Datum</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="milestone-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Meilenstein-Name"></td>
+                                <td><input type="text" placeholder="Deliverables"></td>
+                                <td><input type="date"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addMilestone()">+ Meilenstein hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Budget & Ressourcen (Schätzung)</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="estimated-budget">Geschätztes Budget (€):</label>
+                            <input type="number" id="estimated-budget" placeholder="Gesamtbudget" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="resources-needed">Benötigte Ressourcen:</label>
+                            <input type="text" id="resources-needed" placeholder="Personal, Software, Hardware">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Kommunikation & Stakeholder</h2>
+                    <div class="form-group">
+                        <label for="communication-plan">Kommunikationsplan:</label>
+                        <textarea id="communication-plan" placeholder="Frequenz, Kanäle, Teilnehmer der Meetings" class="textarea-large"></textarea>
+                    </div>
+                    <h3>Wichtige Stakeholder</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rolle</th>
+                                <th>Erwartung</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="stakeholder-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td><input type="text" placeholder="Rolle/Abteilung"></td>
+                                <td><input type="text" placeholder="Erwartungen"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addStakeholder()">+ Stakeholder hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Risikobetrachtung (Initial)</h2>
+                    <div class="form-group">
+                        <label for="initial-risks">Initiale Risiken:</label>
+                        <textarea id="initial-risks" placeholder="Erste identifizierte Risiken und Gegenmaßnahmen" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="version-info">
+                    <p id="version-date">Version 1.0 / <script>document.write(new Date().toLocaleDateString('de-DE'))</script></p>
+                </div>
+            </div>
+
+            <div id="meeting-minutes" class="tab-content">
+                <div class="section">
+                    <h2>Meeting Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meetingName">Meeting-Titel:</label>
+                            <input type="text" id="meetingName" placeholder="Z.B. Wöchentliches Projekt-Update">
+                        </div>
+                        <div class="form-group">
+                            <label for="meetingDate">Datum:</label>
+                            <input type="date" id="meetingDate">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meetingTime">Uhrzeit:</label>
+                            <input type="time" id="meetingTime">
+                        </div>
+                        <div class="form-group">
+                            <label for="meetingLocation">Ort/Online-Link:</label>
+                            <input type="text" id="meetingLocation" placeholder="Konferenzraum A / Zoom-Link">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="organizer">Organisator:</label>
+                        <input type="text" id="organizer" placeholder="Name des Organisators">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Teilnehmer & Abwesende</h2>
+                    <div class="form-group">
+                        <label for="presentParticipants">Anwesende Teilnehmer:</label>
+                        <textarea id="presentParticipants" placeholder="Namen der Anwesenden, durch Komma getrennt oder Liste"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="absentParticipants">Abwesende Teilnehmer:</label>
+                        <textarea id="absentParticipants" placeholder="Namen der Abwesenden (mit Entschuldigung)"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Agenda & Diskussionspunkte</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Thema</th>
+                                <th>Diskussionspunkte</th>
+                                <th>Aktionspunkte / Beschlüsse</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="agendaTableBody">
+                            <tr>
+                                <td><input type="text" placeholder="Agendapunkt"></td>
+                                <td><textarea placeholder="Wichtige Diskussionspunkte"></textarea></td>
+                                <td><textarea placeholder="Beschlüsse, nächste Schritte, Verantwortliche"></textarea></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addAgendaItem()">+ Agendapunkt hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Offene Punkte, Probleme & Risiken</h2>
+                    <div class="form-group">
+                        <label for="issuesRisks">Beschreibung offener Punkte, Probleme oder Risiken:</label>
+                        <textarea id="issuesRisks" placeholder="Aktuelle Herausforderungen, Blocker, neue Risiken"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Nächste Schritte & Verantwortlichkeiten</h2>
+                    <div class="form-group">
+                        <label for="nextSteps">Übersicht der nächsten Schritte:</label>
+                        <textarea id="nextSteps" placeholder="Klare Aktionspunkte, Verantwortlichkeiten und Fälligkeiten"></textarea>
+                    </div>
+                </div>
+                <div class="version-info">
+                    <p>Meeting Minutes Template</p>
+                </div>
+            </div>
+
+            <div id="risk-management" class="tab-content">
+                <div class="section">
+                    <h2>Risikoregistrierung</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Risiko-ID</th>
+                                <th>Beschreibung</th>
+                                <th>Eintrittsw.</th>
+                                <th>Auswirkung</th>
+                                <th>Risikowert</th>
+                                <th>Status</th>
+                                <th>Verantwortlich</th>
+                                <th>Maßnahmen</th>
+                                <th>Fälligkeit</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="risk-table-body">
+                            <tr>
+                                <td><input type="text" value="R-001" style="width: 50px;"></td>
+                                <td><input type="text" placeholder="Risikobeschreibung"></td>
+                                <td>
+                                    <select onchange="updateRiskScore(this)">
+                                        <option value="low">Niedrig</option>
+                                        <option value="medium">Mittel</option>
+                                        <option value="high">Hoch</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select onchange="updateRiskScore(this)">
+                                        <option value="low">Gering</option>
+                                        <option value="medium">Mittel</option>
+                                        <option value="high">Hoch</option>
+                                    </select>
+                                </td>
+                                <td class="risk-score">1</td>
+                                <td>
+                                    <select>
+                                        <option value="open">Offen</option>
+                                        <option value="in-progress">In Bearbeitung</option>
+                                        <option value="closed">Geschlossen</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" placeholder="Verantwortlicher"></td>
+                                <td><textarea placeholder="Gegenmaßnahmen"></textarea></td>
+                                <td><input type="date"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addRisk()">+ Risiko hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Risikobewertung & -strategie</h2>
+                    <div class="form-group">
+                        <label for="overall-risk-assessment">Gesamtrisikobewertung des Projekts:</label>
+                        <textarea id="overall-risk-assessment" placeholder="Zusammenfassung der Risikosituation und strategische Einschätzung" class="textarea-large"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="risk-strategy">Risikostrategie & -toleranz:</label>
+                        <textarea id="risk-strategy" placeholder="Ansatz zum Umgang mit Risiken, z.B. Akzeptanz, Minderung, Vermeidung, Übertragung" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Offene Fragen & Überwachung</h2>
+                    <div class="form-group">
+                        <label for="open-questions">Offene Fragen zur Risikobetrachtung:</label>
+                        <textarea id="open-questions" placeholder="Ungeklärte Punkte, die weitere Analyse erfordern"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="monitoring-frequency">Frequenz der Risikoüberwachung:</label>
+                        <input type="text" id="monitoring-frequency" placeholder="Z.B. Wöchentlich im Projektmeeting">
+                    </div>
+                </div>
+                <div class="version-info">
+                    <p>Risk Management Template</p>
+                </div>
+            </div>
+
+            <div id="lessons-learned" class="tab-content">
+                <div class="section">
+                    <h2>Projektdaten</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-name-ll">Projektname:</label>
+                            <input type="text" id="project-name-ll" placeholder="Name des Projekts">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-leader-ll">Projektleiter:</label>
+                            <input type="text" id="project-leader-ll" placeholder="Name des Projektleiters">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Datum der Lessons Learned Session:</label>
+                            <input type="date" id="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="moderator">Moderator:</label>
+                            <input type="text" id="moderator" placeholder="Name des Moderators">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="participants">Teilnehmer:</label>
+                        <textarea id="participants" placeholder="Namen der Teilnehmer (z.B. Teammitglieder, Stakeholder)" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Was lief gut? (Successes)</h2>
+                    <div class="form-group">
+                        <label for="successes">Beschreibung der Erfolge:</label>
+                        <textarea id="successes" placeholder="Was hat besonders gut funktioniert und sollte beibehalten werden?" class="textarea-large"></textarea>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Erfolg</th>
+                                <th>Warum war es ein Erfolg?</th>
+                                <th>Transferierbar auf andere Projekte?</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="successes-table-body">
+                            <tr>
+                                <td><input type="text" placeholder="Z.B. Kommunikation im Team"></td>
+                                <td><textarea placeholder="Details"></textarea></td>
+                                <td><input type="text" placeholder="Ja/Nein/Teilweise"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addSuccess()">+ Erfolg hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Was lief nicht gut? (Challenges & Failures)</h2>
+                    <div class="form-group">
+                        <label for="challenges">Beschreibung der Herausforderungen:</label>
+                        <textarea id="challenges" placeholder="Was hat nicht wie erwartet funktioniert? Wo gab es Probleme?" class="textarea-large"></textarea>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Herausforderung</th>
+                                <th>Ursache</th>
+                                <th>Auswirkung</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="challenges-table-body">
+                            <tr>
+                                <td><input type="text" placeholder="Z.B. Unklare Anforderungen"></td>
+                                <td><textarea placeholder="Root Cause Analysis"></textarea></td>
+                                <td><textarea placeholder="Folgen für das Projekt"></textarea></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addChallenge()">+ Herausforderung hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Lessons Learned & Empfehlungen</h2>
+                    <div class="form-group">
+                        <label for="lessons-learned-text">Zusammenfassung der Lessons Learned:</label>
+                        <textarea id="lessons-learned-text" placeholder="Kernaussagen und wichtigste Erkenntnisse" class="textarea-large"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recommendations">Empfehlungen für zukünftige Projekte:</label>
+                        <textarea id="recommendations" placeholder="Konkrete Handlungsempfehlungen, Best Practices, Prozessverbesserungen" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Aktionspunkte & Nächste Schritte</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Aktionspunkt</th>
+                                <th>Verantwortlich</th>
+                                <th>Fälligkeitsdatum</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="nextSteps-table-body">
+                            <tr>
+                                <td><textarea placeholder="Konkrete Aktion"></textarea></td>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td><input type="date"></td>
+                                <td>
+                                    <select>
+                                        <option value="open">Offen</option>
+                                        <option value="in-progress">In Bearbeitung</option>
+                                        <option value="done">Erledigt</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addNextStep()">+ Aktionspunkt hinzufügen</button>
+                </div>
+                <div class="version-info">
+                    <p>Lessons Learned Template</p>
+                </div>
+            </div>
+
+            <div id="project-handover" class="tab-content">
+                <div class="section">
+                    <h2>Projektinformationen</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-name-ho">Projektname:</label>
+                            <input type="text" id="project-name-ho" placeholder="Name des Projekts">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-leader-ho">Projektleiter (Übergabe):</label>
+                            <input type="text" id="project-leader-ho" placeholder="Name des aktuellen Projektleiters">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="receiving-party">Empfangende Partei/Abteilung:</label>
+                            <input type="text" id="receiving-party" placeholder="Name der empfangenden Person/Abteilung">
+                        </div>
+                        <div class="form-group">
+                            <label for="handover-date">Übergabedatum:</label>
+                            <input type="date" id="handover-date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="project-summary">Projektzusammenfassung:</label>
+                        <textarea id="project-summary" placeholder="Kurze Beschreibung des Projekts, Ziele, Ergebnisse" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Dokumentation & Wissensmanagement</h2>
+                    <div class="form-group">
+                        <label for="documentation-location">Speicherort der Projektdokumentation:</label>
+                        <input type="text" id="documentation-location" placeholder="Link zu SharePoint, Confluence, Ordnerstruktur">
+                    </div>
+                    <div class="form-group">
+                        <label for="key-documents">Wichtige Dokumente:</label>
+                        <textarea id="key-documents" placeholder="Liste der kritischsten Dokumente (z.B. Konzepte, Architekturen, Verträge)" class="textarea-large"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="knowledge-transfer">Wissenstransfer-Maßnahmen:</label>
+                        <textarea id="knowledge-transfer" placeholder="Schulungen, Workshops, Übergabemeetings" class="textarea-large"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Offene Punkte & Nächste Schritte</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Offener Punkt / Aufgabe</th>
+                                <th>Beschreibung</th>
+                                <th>Verantwortlich (Neu)</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="open-items-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Titel des Punktes"></td>
+                                <td><textarea placeholder="Kurze Beschreibung"></textarea></td>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td>
+                                    <select>
+                                        <option value="open">Offen</option>
+                                        <option value="in-progress">In Bearbeitung</option>
+                                        <option value="resolved">Gelöst</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addOpenItem()">+ Offenen Punkt hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Empfehlungen & Lessons Learned (für Nachfolge)</h2>
+                    <div class="form-group">
+                        <label for="handover-recommendations">Empfehlungen der Projektleitung:</label>
+                        <textarea id="handover-recommendations" placeholder="Wichtige Hinweise und Ratschläge für die Weiterführung" class="textarea-large"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="handover-lessons-learned">Lessons Learned aus Sicht der Übergabe:</label>
+                        <textarea id="handover-lessons-learned" placeholder="Erkenntnisse, die für die Nachfolge relevant sind" class="textarea-large"></textarea>
+                    </div>
+                </div>
+                <div class="version-info">
+                    <p>Projektübergabe Template</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveCombinedDocument()">Gesamtes Dokument speichern</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            tablinks = document.getElementsByClassName("nav-tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Project Kickoff functions
+        function addTeamMember() {
+            const tbody = document.getElementById('team-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td><input type="text" placeholder="Rolle"></td>
+                    <td><input type="text" placeholder="Verantwortlichkeit"></td>
+                    <td><input type="text" placeholder="E-Mail / Tel."></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addMilestone() {
+            const tbody = document.getElementById('milestone-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Meilenstein-Name"></td>
+                    <td><input type="text" placeholder="Deliverables"></td>
+                    <td><input type="date"></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addStakeholder() {
+            const tbody = document.getElementById('stakeholder-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td><input type="text" placeholder="Rolle/Abteilung"></td>
+                    <td><input type="text" placeholder="Erwartungen"></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Meeting Minutes functions
+        function addAgendaItem() {
+            const tbody = document.getElementById('agendaTableBody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Agendapunkt"></td>
+                    <td><textarea placeholder="Wichtige Diskussionspunkte"></textarea></td>
+                    <td><textarea placeholder="Beschlüsse, nächste Schritte, Verantwortliche"></textarea></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Risk Management functions
+        function addRisk() {
+            const tbody = document.getElementById('risk-table-body');
+            const newRow = `
+                <tr>
+                    <td><input type="text" value="R-${tbody.children.length + 1}" style="width: 50px;"></td>
+                    <td><input type="text" placeholder="Risikobeschreibung"></td>
+                    <td>
+                        <select onchange="updateRiskScore(this)">
+                            <option value="low">Niedrig</option>
+                            <option value="medium">Mittel</option>
+                            <option value="high">Hoch</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select onchange="updateRiskScore(this)">
+                            <option value="low">Gering</option>
+                            <option value="medium">Mittel</option>
+                            <option value="high">Hoch</option>
+                        </select>
+                    </td>
+                    <td class="risk-score">1</td>
+                    <td>
+                        <select>
+                            <option value="open">Offen</option>
+                            <option value="in-progress">In Bearbeitung</option>
+                            <option value="closed">Geschlossen</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Verantwortlicher"></td>
+                    <td><textarea placeholder="Gegenmaßnahmen"></textarea></td>
+                    <td><input type="date"></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+            tbody.lastElementChild.querySelector('select[onchange]').dispatchEvent(new Event('change')); // Calculate initial score
+        }
+
+        function updateRiskScore(selectElement) {
+            const row = selectElement.closest('tr');
+            const likelihoodSelect = row.cells[2].querySelector('select');
+            const impactSelect = row.cells[3].querySelector('select');
+            const scoreCell = row.cells[4];
+
+            const likelihood = likelihoodSelect.value;
+            const impact = impactSelect.value;
+
+            const scoresMap = {
+                'low': 1,
+                'medium': 2,
+                'high': 3,
+                'gering': 1, /* For impact */
+                'mittel': 2,
+                'hoch': 3
+            };
+
+            const calculatedScore = (scoresMap[likelihood] || 1) * (scoresMap[impact] || 1);
+            scoreCell.textContent = calculatedScore;
+        }
+
+        // Lessons Learned functions
+        function addSuccess() {
+            const tbody = document.getElementById('successes-table-body');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Z.B. Kommunikation im Team"></td>
+                    <td><textarea placeholder="Details"></textarea></td>
+                    <td><input type="text" placeholder="Ja/Nein/Teilweise"></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addChallenge() {
+            const tbody = document.getElementById('challenges-table-body');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Z.B. Unklare Anforderungen"></td>
+                    <td><textarea placeholder="Root Cause Analysis"></textarea></td>
+                    <td><textarea placeholder="Folgen für das Projekt"></textarea></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addNextStep() {
+            const tbody = document.getElementById('nextSteps-table-body');
+            const newRow = `
+                <tr>
+                    <td><textarea placeholder="Konkrete Aktion"></textarea></td>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="open">Offen</option>
+                            <option value="in-progress">In Bearbeitung</option>
+                            <option value="done">Erledigt</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Project Handover functions
+        function addOpenItem() {
+            const tbody = document.getElementById('open-items-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Titel des Punktes"></td>
+                    <td><textarea placeholder="Kurze Beschreibung"></textarea></td>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td>
+                        <select>
+                            <option value="open">Offen</option>
+                            <option value="in-progress">In Bearbeitung</option>
+                            <option value="resolved">Gelöst</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Set default open tab on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            const firstTabButton = document.querySelector(".nav-tab");
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+
+            // Set today's date for relevant inputs
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => {
+                if (!input.value) { // Only set if not already set
+                    input.value = today;
+                }
+            });
+             // Set default risk score for existing rows
+             document.querySelectorAll('#risk-table-body tr').forEach(row => {
+                const likelihoodSelect = row.cells[2].querySelector('select');
+                if (likelihoodSelect) { // Ensure the select element exists
+                    updateRiskScore(likelihoodSelect);
+                }
+            });
+        });
+
+        function saveCombinedDocument() {
+            console.log('Das gesamte Dokument wurde gespeichert. In einer echten Anwendung würden die Daten der Formulare in einem Backend gespeichert oder als Datei heruntergeladen.');
+            // This function would typically collect all data from the forms
+            // and send it to a server or generate a downloadable file (e.g., JSON, PDF).
+            // For this example, it's a placeholder.
+        }
+
+    </script>
+</body>
+</html>
+```
+Here is the updated `partnerRealationshipManagement.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenProject - Partner Relationship Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>OpenProject PRM</h1>
+            <p>Partner Relationship Management System</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('project', event)">📋 Projekt</button>
+            <button class="nav-tab" onclick="showTab('partner', event)">🤝 Partner</button>
+            <button class="nav-tab" onclick="showTab('service', event)">⚙️ Service</button>
+            <button class="nav-tab" onclick="showTab('sales', event)">💼 Vertrieb</button>
+            <button class="nav-tab" onclick="showTab('marketing', event)">📢 Marketing</button>
+            <button class="nav-tab" onclick="showTab('reporting', event)">📊 Reporting</button>
+        </div>
+
+        <div class="content">
+            <!-- Projekt Tab -->
+            <div id="project" class="tab-content active">
+                <div class="section">
+                    <h2>Projektinitiierung</h2>
+                    
+                    <h3>Projektgrundlagen</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="projektname">Projektname:</label>
+                            <input type="text" id="projektname" name="projektname" placeholder="Projektbezeichnung eingeben">
+                        </div>
+                        <div class="form-group">
+                            <label for="projekt-id">Projekt-ID:</label>
+                            <input type="text" id="projekt-id" name="projekt-id" placeholder="Interne Kennung">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="projektleiter">Projektleiter:</label>
+                            <input type="text" id="projektleiter" name="projektleiter" placeholder="Name des Verantwortlichen">
+                        </div>
+                        <div class="form-group">
+                            <label for="projektstatus">Projektstatus:</label>
+                            <select id="projektstatus" name="projektstatus">
+                                <option value="">Status auswählen</option>
+                                <option value="geplant">Geplant</option>
+                                <option value="laufend">Laufend</option>
+                                <option value="pausiert">Pausiert</option>
+                                <option value="abgeschlossen">Abgeschlossen</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Zeitplan & Budget</h3>
+                    <div class="form-row-triple">
+                        <div class="form-group">
+                            <label for="start-datum">Startdatum:</label>
+                            <input type="date" id="start-datum" name="start-datum">
+                        </div>
+                        <div class="form-group">
+                            <label for="end-datum">Enddatum:</label>
+                            <input type="date" id="end-datum" name="end-datum">
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Budget (€):</label>
+                            <input type="number" id="budget" name="budget" placeholder="0,00" step="0.01">
+                        </div>
+                    </div>
+
+                    <h3>Projektziel & Beschreibung</h3>
+                    <div class="form-group">
+                        <label for="projektziel">Projektziel:</label>
+                        <textarea id="projektziel" name="projektziel" placeholder="Hauptziele und erwartete Ergebnisse des Projekts beschreiben..." class="textarea-large"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projektbeschreibung">Detaillierte Projektbeschreibung:</label>
+                        <textarea id="projektbeschreibung" name="projektbeschreibung" placeholder="Umfassende Beschreibung des Projektumfangs, der Anforderungen und Deliverables..." class="textarea-large"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partner Tab -->
+            <div id="partner" class="tab-content">
+                <div class="section">
+                    <h2>Partner Management</h2>
+                    
+                    <h3>Partner-Stammdaten</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partner-name">Partner Name:</label>
+                            <input type="text" id="partner-name" name="partner-name" placeholder="Offizieller Partnername">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-typ">Partner-Typ:</label>
+                            <select id="partner-typ" name="partner-typ">
+                                <option value="">Typ auswählen</option>
+                                <option value="reseller">Reseller</option>
+                                <option value="distributor">Distributor</option>
+                                <option value="system-integrator">System Integrator</option>
+                                <option value="technology-partner">Technology Partner</option>
+                                <option value="service-partner">Service Partner</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partner-tier">Partner-Tier:</label>
+                            <select id="partner-tier" name="partner-tier">
+                                <option value="">Tier auswählen</option>
+                                <option value="gold">Gold Partner</option>
+                                <option value="silver">Silver Partner</option>
+                                <option value="bronze">Bronze Partner</option>
+                                <option value="standard">Standard Partner</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-status">Partner-Status:</label>
+                            <select id="partner-status" name="partner-status">
+                                <option value="">Status auswählen</option>
+                                <option value="aktiv">Aktiv</option>
+                                <option value="inaktiv">Inaktiv</option>
+                                <option value="beendet">Beendet</option>
+                                <option value="evaluierung">In Evaluierung</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Kontaktdaten</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partner-ansprechpartner">Hauptansprechpartner:</label>
+                            <input type="text" id="partner-ansprechpartner" name="partner-ansprechpartner" placeholder="Name & Position">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-email">E-Mail:</label>
+                            <input type="email" id="partner-email" name="partner-email" placeholder="kontakt@partner.de">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partner-telefon">Telefon:</label>
+                            <input type="tel" id="partner-telefon" name="partner-telefon" placeholder="+49 123 456789">
+                        </div>
+                        <div class="form-group">
+                            <label for="partner-website">Website:</label>
+                            <input type="url" id="partner-website" name="partner-website" placeholder="https://www.partner.de">
+                        </div>
+                    </div>
+
+                    <h3>Vertragsdaten</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vertragsstart">Vertragsbeginn:</label>
+                            <input type="date" id="vertragsstart" name="vertragsstart">
+                        </div>
+                        <div class="form-group">
+                            <label for="vertragsende">Vertragsende:</label>
+                            <input type="date" id="vertragsende" name="vertragsende">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="provision">Provision (%):</label>
+                            <input type="number" id="provision" name="provision" min="0" max="100" step="0.1" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label for="rabatt">Rabatt (%):</label>
+                            <input type="number" id="rabatt" name="rabatt" min="0" max="100" step="0.1" placeholder="0.0">
+                        </div>
+                    </div>
+
+                    <h3>Zertifizierungen & Kompetenzen</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Zertifizierung</th>
+                                <th>Level</th>
+                                <th>Gültig bis</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="zertifizierungen-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Zertifizierung eingeben"></td>
+                                <td>
+                                    <select>
+                                        <option value="basic">Basic</option>
+                                        <option value="advanced">Advanced</option>
+                                        <option value="expert">Expert</option>
+                                    </select>
+                                </td>
+                                <td><input type="date"></td>
+                                <td>
+                                    <select>
+                                        <option value="aktiv">Aktiv</option>
+                                        <option value="abgelaufen">Abgelaufen</option>
+                                        <option value="in-erneuerung">In Erneuerung</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addZertifizierung()">+ Zertifizierung hinzufügen</button>
+                </div>
+            </div>
+
+            <!-- Service Tab -->
+            <div id="service" class="tab-content">
+                <div class="section">
+                    <h2>Service Management</h2>
+                    
+                    <h3>Service-Portfolio</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Kategorie</th>
+                                <th>SLA Level</th>
+                                <th>Preis</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="services-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Service-Name"></td>
+                                <td>
+                                    <select>
+                                        <option value="support">Support</option>
+                                        <option value="implementation">Implementation</option>
+                                        <option value="consulting">Consulting</option>
+                                        <option value="training">Training</option>
+                                        <option value="maintenance">Maintenance</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="bronze">Bronze</option>
+                                        <option value="silver">Silver</option>
+                                        <option value="gold">Gold</option>
+                                        <option value="platinum">Platinum</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" placeholder="€"></td>
+                                <td>
+                                    <select>
+                                        <option value="aktiv">Aktiv</option>
+                                        <option value="inaktiv">Inaktiv</option>
+                                        <option value="entwicklung">In Entwicklung</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addService()">+ Service hinzufügen</button>
+
+                    <h3>Service Level Agreements (SLA)</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="response-time">Reaktionszeit (Std):</label>
+                            <input type="number" id="response-time" name="response-time" min="0" step="0.5" placeholder="24">
+                        </div>
+                        <div class="form-group">
+                            <label for="resolution-time">Lösungszeit (Std):</label>
+                            <input type="number" id="resolution-time" name="resolution-time" min="0" step="0.5" placeholder="72">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="availability">Verfügbarkeit (%):</label>
+                            <input type="number" id="availability" name="availability" min="0" max="100" step="0.1" placeholder="99.9">
+                        </div>
+                        <div class="form-group">
+                            <label for="support-hours">Support-Zeiten:</label>
+                            <select id="support-hours" name="support-hours">
+                                <option value="8x5">8x5 (Geschäftszeiten)</option>
+                                <option value="12x5">12x5 (Erweiterte Geschäftszeiten)</option>
+                                <option value="24x7">24x7 (Rund um die Uhr)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Ticket Management</h3>
+                    <div class="status-indicators">
+                        <div class="metric-card">
+                            <h4 id="open-tickets">24</h4>
+                            <p>Offene Tickets</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4 id="avg-response">2.3h</h4>
+                            <p>Ø Reaktionszeit</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4 id="satisfaction">4.7</h4>
+                            <p>Kundenzufriedenheit</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticket-system">Ticket-System Integration:</label>
+                        <div class="integration-box">
+                            <h4>Verfügbare Integrationen</h4>
+                            <div class="form-row">
+                                <label><input type="checkbox" name="integrations" value="jira"> Jira Service Desk</label>
+                                <label><input type="checkbox" name="integrations" value="servicenow"> ServiceNow</label>
+                                <label><input type="checkbox" name="integrations" value="zendesk"> Zendesk</label>
+                                <label><input type="checkbox" name="integrations" value="freshdesk"> Freshdesk</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Tab -->
+            <div id="sales" class="tab-content">
+                <div class="section">
+                    <h2>Vertrieb & Sales</h2>
+                    
+                    <h3>Sales Pipeline</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Opportunity</th>
+                                <th>Kunde</th>
+                                <th>Wert (€)</th>
+                                <th>Stage</th>
+                                <th>Wahrscheinlichkeit</th>
+                                <th>Abschluss erwartet</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="opportunities-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Opportunity Name"></td>
+                                <td><input type="text" placeholder="Kunde"></td>
+                                <td><input type="number" placeholder="€"></td>
+                                <td>
+                                    <select>
+                                        <option value="lead">Lead</option>
+                                        <option value="qualified">Qualified</option>
+                                        <option value="proposal">Proposal</option>
+                                        <option value="negotiation">Negotiation</option>
+                                        <option value="closed-won">Closed Won</option>
+                                        <option value="closed-lost">Closed Lost</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" min="0" max="100" placeholder="%"></td>
+                                <td><input type="date"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addOpportunity()">+ Opportunity hinzufügen</button>
+
+                    <h3>Sales Metriken</h3>
+                    <div class="status-indicators">
+                        <div class="status-card">
+                            <h4>Pipeline Wert</h4>
+                            <input type="number" id="pipeline-value" placeholder="€ 0,00" step="0.01">
+                        </div>
+                        <div class="status-card">
+                            <h4>Conversion Rate</h4>
+                            <input type="number" id="conversion-rate" placeholder="%" min="0" max="100" step="0.1">
+                        </div>
+                        <div class="status-card">
+                            <h4>Durchschnittlicher Deal</h4>
+                            <input type="number" id="avg-deal" placeholder="€ 0,00" step="0.01">
+                        </div>
+                    </div>
+
+                    <h3>Lead Management</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lead-source">Lead-Quelle:</label>
+                            <select id="lead-source" name="lead-source">
+                                <option value="">Quelle auswählen</option>
+                                <option value="website">Website</option>
+                                <option value="referral">Empfehlung</option>
+                                <option value="partner">Partner</option>
+                                <option value="event">Event/Messe</option>
+                                <option value="cold-call">Cold Call</option>
+                                <option value="marketing">Marketing Kampagne</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lead-scoring">Lead Score:</label>
+                            <input type="number" id="lead-scoring" name="lead-scoring" min="0" max="100" placeholder="0-100">
+                        </div>
+                    </div>
+
+                    <h3>CRM Integration</h3>
+                    <div class="integration-box">
+                        <h4>CRM System Verbindung</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="crm-system">CRM System:</label>
+                                <select id="crm-system" name="crm-system">
+                                    <option value="">System auswählen</option>
+                                    <option value="salesforce">Salesforce</option>
+                                    <option value="hubspot">HubSpot</option>
+                                    <option value="pipedrive">Pipedrive</option>
+                                    <option value="dynamics">Microsoft Dynamics</option>
+                                    <option value="custom">Custom CRM</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sync-frequency">Sync Frequenz:</label>
+                                <select id="sync-frequency" name="sync-frequency">
+                                    <option value="realtime">Real-time</option>
+                                    <option value="hourly">Stündlich</option>
+                                    <option value="daily">Täglich</option>
+                                    <option value="weekly">Wöchentlich</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketing Tab -->
+            <div id="marketing" class="tab-content">
+                <div class="section">
+                    <h2>Marketing & Kampagnen</h2>
+                    
+                    <h3>Kampagnen-Management</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Kampagne</th>
+                                <th>Typ</th>
+                                <th>Zielgruppe</th>
+                                <th>Budget (€)</th>
+                                <th>Start</th>
+                                <th>Ende</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="campaigns-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Kampagnen-Name"></td>
+                                <td>
+                                    <select>
+                                        <option value="email">E-Mail</option>
+                                        <option value="social">Social Media</option>
+                                        <option value="webinar">Webinar</option>
+                                        <option value="event">Event</option>
+                                        <option value="content">Content Marketing</option>
+                                        <option value="ppc">PPC/Ads</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" placeholder="Zielgruppe"></td>
+                                <td><input type="number" placeholder="€"></td>
+                                <td><input type="date"></td>
+                                <td><input type="date"></td>
+                                <td>
+                                    <select>
+                                        <option value="geplant">Geplant</option>
+                                        <option value="aktiv">Aktiv</option>
+                                        <option value="pausiert">Pausiert</option>
+                                        <option value="abgeschlossen">Abgeschlossen</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addCampaign()">+ Kampagne hinzufügen</button>
+
+                    <h3>Marketing Metriken</h3>
+                    <div class="status-indicators">
+                        <div class="status-card">
+                            <h4>Leads generiert</h4>
+                            <input type="number" id="leads-generated" placeholder="0">
+                        </div>
+                        <div class="status-card">
+                            <h4>Cost per Lead</h4>
+                            <input type="number" id="cost-per-lead" placeholder="€ 0,00" step="0.01">
+                        </div>
+                        <div class="status-card">
+                            <h4>ROI (%)</h4>
+                            <input type="number" id="marketing-roi" placeholder="%" step="0.1">
+                        </div>
+                    </div>
+
+                    <h3>Content Management</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="content-type">Content-Typ:</label>
+                            <select id="content-type" name="content-type">
+                                <option value="">Typ auswählen</option>
+                                <option value="blog">Blog Artikel</option>
+                                <option value="whitepaper">Whitepaper</option>
+                                <option value="case-study">Case Study</option>
+                                <option value="video">Video</option>
+                                <option value="webinar">Webinar</option>
+                                <option value="infographic">Infografik</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="content-status">Status:</label>
+                            <select id="content-status" name="content-status">
+                                <option value="planung">In Planung</option>
+                                <option value="erstellung">In Erstellung</option>
+                                <option value="review">Review</option>
+                                <option value="published">Veröffentlicht</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Partner Marketing</h3>
+                    <div class="form-group">
+                        <label for="partner-marketing">Partner Marketing Programme:</label>
+                        <div class="integration-box">
+                            <h4>Verfügbare Programme</h4>
+                            <div class="form-row">
+                                <label><input type="checkbox" name="partner-programs" value="co-marketing"> Co-Marketing</label>
+                                <label><input type="checkbox" name="partner-programs" value="mdf"> Market Development Funds</label>
+                                <label><input type="checkbox" name="partner-programs" value="lead-sharing"> Lead Sharing</label>
+                                <label><input type="checkbox" name="partner-programs" value="joint-events"> Joint Events</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reporting Tab -->
+            <div id="reporting" class="tab-content">
+                <div class="section">
+                    <h2>Reporting & Analytics</h2>
+                    
+                    <h3>Partner Performance</h3>
+                    <div class="status-indicators">
+                        <div class="metric-card">
+                            <h4 id="partner-revenue">€ 245.000</h4>
+                            <p>Partner Revenue (YTD)</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4 id="partner-growth">+23%</h4>
+                            <p>Wachstum (YoY)</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4 id="partner-satisfaction">4.2/5</h4>
+                            <p>Partner Zufriedenheit</p>
+                        </div>
+                    </div>
+
+                    <h3>Projektfortschritt</h3>
+                    <div class="status-card">
+                        <h4>Gesamtfortschritt</h4>
+                        <input type="range" min="0" max="100" value="0" id="progress-range" oninput="updateProgress(this.value)">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p id="progress-text">0% abgeschlossen</p>
+                    </div>
+
+                    <h3>Finanzberichte</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="aktuelle-kosten">Aktuelle Kosten (€):</label>
+                            <input type="number" id="aktuelle-kosten" name="aktuelle-kosten" placeholder="0,00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="kostenabweichung">Kostenabweichung (€):</label>
+                            <input type="number" id="kostenabweichung" name="kostenabweichung" placeholder="0,00" step="0.01">
+                        </div>
+                    </div>
+
+                    <h3>Meilensteine & Arbeitspakete</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Arbeitspaket/Meilenstein</th>
+                                <th>Verantwortlich</th>
+                                <th>Geplantes Ende</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="meilensteine-tbody">
+                            <tr>
+                                <td><input type="text" placeholder="Arbeitspaket eingeben"></td>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td><input type="date"></td>
+                                <td>
+                                    <select>
+                                        <option value="geplant">Geplant</option>
+                                        <option value="laufend">Laufend</option>
+                                        <option value="abgeschlossen">Abgeschlossen</option>
+                                        <option value="verzoegert">Verzögert</option>
+                                    </select>
+                                </td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary" onclick="addMeilenstein()">+ Arbeitspaket hinzufügen</button>
+
+                    <h3>Export & Integration</h3>
+                    <div class="integration-box">
+                        <h4>Datenexport</h4>
+                        <div class="form-row">
+                            <button class="btn btn-secondary" onclick="exportData('pdf')">📄 PDF Export</button>
+                            <button class="btn btn-secondary" onclick="exportData('excel')">📊 Excel Export</button>
+                            <button class="btn btn-secondary" onclick="exportData('csv')">📋 CSV Export</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveProject()">Alle Daten speichern</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName, event) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        function addZertifizierung() {
+            const tbody = document.getElementById('zertifizierungen-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Zertifizierung eingeben"></td>
+                    <td>
+                        <select>
+                            <option value="basic">Basic</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="expert">Expert</option>
+                        </select>
+                    </td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="abgelaufen">Abgelaufen</option>
+                            <option value="in-erneuerung">In Erneuerung</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addService() {
+            const tbody = document.getElementById('services-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Service-Name"></td>
+                    <td>
+                        <select>
+                            <option value="support">Support</option>
+                            <option value="implementation">Implementation</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="training">Training</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="bronze">Bronze</option>
+                            <option value="silver">Silver</option>
+                            <option value="gold">Gold</option>
+                            <option value="platinum">Platinum</option>
+                        </select>
+                    </td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td>
+                        <select>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="inaktiv">Inaktiv</option>
+                            <option value="entwicklung">In Entwicklung</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addOpportunity() {
+            const tbody = document.getElementById('opportunities-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Opportunity Name"></td>
+                    <td><input type="text" placeholder="Kunde"></td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td>
+                        <select>
+                            <option value="lead">Lead</option>
+                            <option value="qualified">Qualified</option>
+                            <option value="proposal">Proposal</option>
+                            <option value="negotiation">Negotiation</option>
+                            <option value="closed-won">Closed Won</option>
+                            <option value="closed-lost">Closed Lost</option>
+                        </select>
+                    </td>
+                    <td><input type="number" min="0" max="100" placeholder="%"></td>
+                    <td><input type="date"></td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addCampaign() {
+            const tbody = document.getElementById('campaigns-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Kampagnen-Name"></td>
+                    <td>
+                        <select>
+                            <option value="email">E-Mail</option>
+                            <option value="social">Social Media</option>
+                            <option value="webinar">Webinar</option>
+                            <option value="event">Event</option>
+                            <option value="content">Content Marketing</option>
+                            <option value="ppc">PPC/Ads</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Zielgruppe"></td>
+                    <td><input type="number" placeholder="€"></td>
+                    <td><input type="date"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="geplant">Geplant</option>
+                            <option value="aktiv">Aktiv</option>
+                            <option value="pausiert">Pausiert</option>
+                            <option value="abgeschlossen">Abgeschlossen</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function addMeilenstein() {
+            const tbody = document.getElementById('meilensteine-tbody');
+            const newRow = `
+                <tr>
+                    <td><input type="text" placeholder="Arbeitspaket eingeben"></td>
+                    <td><input type="text" placeholder="Name"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select>
+                            <option value="geplant">Geplant</option>
+                            <option value="laufend">Laufend</option>
+                            <option value="abgeschlossen">Abgeschlossen</option>
+                            <option value="verzoegert">Verzögert</option>
+                        </select>
+                    </td>
+                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function updateProgress(value) {
+            document.getElementById('progress-fill').style.width = value + '%';
+            document.getElementById('progress-text').textContent = value + '% abgeschlossen';
+        }
+
+        function exportData(format) {
+            console.log(`Datenexport im ${format.toUpperCase()} Format wird vorbereitet...`);
+        }
+
+        function saveProject() {
+            console.log('Alle Projektdaten wurden erfolgreich gespeichert!');
+        }
+
+        // Set default open tab on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            const firstTabButton = document.querySelector(".nav-tab");
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+        });
     </script>
 </body>
 </html>
