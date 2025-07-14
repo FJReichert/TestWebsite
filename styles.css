@@ -172,115 +172,103 @@ body {
     background: white;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    table-layout: auto; /* Use 'auto' for flexible column widths based on content */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .table th,
 .table td {
-    padding: 15px;
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-    /* New: Ensure text in table cells wraps correctly */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .table th {
-    background: #f8fafc;
+    background: #334155;
+    color: white;
     font-weight: 600;
-    color: #374151;
 }
 
 .table tr:hover {
-    background: #f9fafb;
+    background: #f1f5f9;
 }
 
 .btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    display: inline-block;
     font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.5rem; /* More rounded */
+    transition: all 0.15s ease-in-out;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 5px;
-    text-decoration: none; /* Added from index.html */
-    display: inline-block; /* Added from index.html */
 }
 
 .btn-primary {
-    background: #4f46e5;
-    color: white;
+    color: #fff;
+    background-color: #4f46e5; /* Primary brand color */
+    border-color: #4f46e5;
 }
 
 .btn-primary:hover {
-    background: #4338ca;
-    transform: translateY(-1px);
+    background-color: #4338ca; /* Darker shade on hover */
+    border-color: #4338ca;
 }
 
 .btn-secondary {
-    background: #6b7280;
-    color: white;
+    color: #374151; /* Dark gray text */
+    background-color: #e5e7eb; /* Light gray background */
+    border-color: #e5e7eb;
 }
 
 .btn-secondary:hover {
-    background: #4b5563;
-    transform: translateY(-1px); /* Added from index.html */
+    color: #1f2937;
+    background-color: #d1d5db;
+    border-color: #d1d5db;
 }
 
 .btn-success {
-    background: #10b981;
-    color: white;
+    color: #fff;
+    background-color: #22c55e;
+    border-color: #22c55e;
 }
 
 .btn-success:hover {
-    background: #059669;
-    transform: translateY(-1px); /* Added from index.html */
+    background-color: #16a34a;
+    border-color: #16a34a;
 }
 
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
+.delete-button {
+    background-color: #dc3545; /* Red for delete */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px; /* Slightly larger */
+    height: 24px; /* Slightly larger */
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+    position: absolute;
+    top: 8px; /* Adjust as needed */
+    right: 8px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease;
 }
 
-.status-geplant { background: #ddd6fe; color: #7c3aed; }
-.status-aktiv { background: #dcfce7; color: #16a34a; }
-.status-risiko { background: #fed7d7; color: #dc2626; }
-.status-abgeschlossen { background: #e0e7ff; color: #3730a3; }
-
-.actions {
-    text-align: center;
-    padding: 30px;
-    background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+.delete-button:hover {
+    background-color: #c82333;
 }
 
-.highlight-box {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-left: 4px solid #0ea5e9;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 8px;
-}
-
-.milestone-item {
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 15px 0;
-    transition: all 0.3s ease;
-}
-
-.milestone-item:hover {
-    border-color: #4f46e5;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-}
-
-.stakeholder-item, .milestone-item, .aufgaben-row {
+.stakeholder-item,
+.milestone-item,
+.project-row {
     position: relative; /* Needed for absolute positioning of delete button */
     border: 1px solid #e0e0e0;
     padding: 15px;
@@ -288,55 +276,175 @@ body {
     border-radius: 8px;
     background-color: #f9f9f9;
 }
-.stakeholder-item, .milestone-item, .project-row {
-            position: relative; /* Needed for absolute positioning of delete button */
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-}
 .stakeholder-item .form-group {
     margin-bottom: 10px;
 }
 .stakeholder-item .form-group label {
     margin-bottom: 5px;
 }
-.delete-button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 0.8rem;
-            line-height: 1;
-            cursor: pointer;
-            position: absolute;
-            top: 5px; /* Adjust as needed */
-            right: 5px; /* Adjust as needed */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            z-index: 10; /* Ensure it's above other elements */
-        }
 
+/* Specific additions for contractManagement.html styling */
+.form-row-triple {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-row-quad {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.textarea-large {
+    min-height: 150px;
+}
+
+.status-indicators {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.status-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #4f46e5; /* Primary theme color */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.status-card h4 {
+    color: #1e293b; /* Dark text */
+    margin-bottom: 10px;
+}
+
+.status-card.warning {
+    border-left-color: #f59e0b; /* Tailwind yellow-500 */
+}
+
+.status-card.danger {
+    border-left-color: #ef4444; /* Tailwind red-500 */
+}
+
+.status-card.success {
+    border-left-color: #22c55e; /* Tailwind green-500 */
+}
+
+.document-upload {
+    border: 2px dashed #94a3b8; /* Slate-400 */
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background: #f8fafc; /* Slate-50 */
+    transition: all 0.3s ease;
+}
+
+.document-upload:hover {
+    border-color: #4f46e5;
+    background: #eef2ff; /* Indigo-50 */
+}
+
+.document-upload i {
+    font-size: 3em;
+    color: #94a3b8;
+    margin-bottom: 15px;
+}
+
+.notification-badge {
+    display: inline-block;
+    background: #ef4444; /* Red-500 */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+.notification-badge.warning {
+    background: #f59e0b;
+}
+
+.notification-badge.success {
+    background: #22c55e;
+}
+
+.save-button {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed); /* Consistent with header */
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: block;
+    margin: 40px auto 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.contract-type-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.contract-type-card {
+    background: white;
+    border: 2px solid #e2e8f0; /* Slate-200 */
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contract-type-card:hover {
+    border-color: #4f46e5;
+    background: #f8fafc;
+}
+
+.contract-type-card.selected {
+    border-color: #4f46e5;
+    background: #eef2ff; /* Indigo-50 */
+}
+
+.contract-type-card h4 {
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.contract-type-card p {
+    color: #64748b;
+    font-size: 0.9em;
+}
+
+/* Media Queries (adjusted for consistency) */
 @media (max-width: 768px) {
-    .form-row {
+    .form-row,
+    .form-row-triple,
+    .form-row-quad {
         grid-template-columns: 1fr;
     }
-
-    .nav-tabs {
-        padding: 0 10px;
+    .container {
+        margin: 10px;
+    }
+    .nav-tabs { /* Changed from .tab-nav */
+        flex-wrap: wrap;
     }
 
-    .nav-tab {
-        padding: 12px 15px;
-        font-size: 0.9rem;
-    }
-
-    .content {
-        padding: 20px;
+    .nav-tab { /* Changed from .tab-button */
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 10px 15px;
     }
 }
