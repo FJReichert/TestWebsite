@@ -222,7 +222,7 @@
             <div id="leistungs-zahlung" class="tab-content">
                 <div class="section">
                     <h2>Leistungs- & Zahlungsmonitoring</h2>
-                    <h3>Leistungsstand</h3>
+                    <h3>Aktueller Leistungsstand</h3>
                     <div class="form-group">
                         <label for="leistungsstand">Aktueller Leistungsstand:</label>
                         <input type="range" id="leistungsstand" name="leistungsstand" min="0" max="100" value="50" oninput="updateLeistungsstand(this.value)">
@@ -344,21 +344,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Name:</label>
-                            <input type="text" placeholder="Name des Kontakts">
+                            <input type="text" class="contact-name" placeholder="Name des Kontakts">
                         </div>
                         <div class="form-group">
                             <label>E-Mail:</label>
-                            <input type="email" placeholder="E-Mail des Kontakts">
+                            <input type="email" class="contact-email" placeholder="E-Mail des Kontakts">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Telefon:</label>
-                            <input type="tel" placeholder="Telefonnummer">
+                            <input type="tel" class="contact-phone" placeholder="Telefonnummer">
                         </div>
                         <div class="form-group">
                             <label>Position:</label>
-                            <input type="text" placeholder="Position">
+                            <input type="text" class="contact-position" placeholder="Position">
                         </div>
                     </div>
                 </div>
@@ -375,11 +375,11 @@
             const tbody = document.getElementById('obligationsTableBody');
             const newRow = `
                 <tr class="obligation-row">
-                    <td><input type="text" placeholder="Verpflichtungsbeschreibung"></td>
-                    <td><input type="date"></td>
-                    <td><input type="text" placeholder="Verantwortlicher"></td>
+                    <td><input type="text" class="obligation-description" placeholder="Verpflichtungsbeschreibung"></td>
+                    <td><input type="date" class="obligation-date"></td>
+                    <td><input type="text" class="obligation-responsible" placeholder="Verantwortlicher"></td>
                     <td>
-                        <select>
+                        <select class="obligation-status">
                             <option>Offen</option>
                             <option>In Bearbeitung</option>
                             <option>Erfüllt</option>
@@ -399,16 +399,16 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Datum des Audits:</label>
-                            <input type="date">
+                            <input type="date" class="audit-date">
                         </div>
                         <div class="form-group">
                             <label>Auditor:</label>
-                            <input type="text" placeholder="Name des Auditors">
+                            <input type="text" class="audit-auditor" placeholder="Name des Auditors">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Ergebnisse & Empfehlungen:</label>
-                        <textarea placeholder="Zusammenfassung der Audit-Ergebnisse und Empfehlungen"></textarea>
+                        <textarea class="audit-results" placeholder="Zusammenfassung der Audit-Ergebnisse und Empfehlungen"></textarea>
                     </div>
                 </div>
             `;
@@ -423,11 +423,11 @@
             const tbody = document.getElementById('paymentTableBody');
             const newRow = `
                 <tr class="payment-row">
-                    <td><input type="text" placeholder="Rechnungsnummer"></td>
-                    <td><input type="date"></td>
-                    <td><input type="text" placeholder="Betrag"></td>
+                    <td><input type="text" class="payment-invoice" placeholder="Rechnungsnummer"></td>
+                    <td><input type="date" class="payment-date"></td>
+                    <td><input type="text" class="payment-amount" placeholder="Betrag"></td>
                     <td>
-                        <select>
+                        <select class="payment-status">
                             <option>Offen</option>
                             <option>Bezahlt</option>
                             <option>Überfällig</option>
@@ -447,20 +447,20 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Version:</label>
-                            <input type="text" placeholder="z.B. 1.0, 1.1">
+                            <input type="text" class="version-number" placeholder="z.B. 1.0, 1.1">
                         </div>
                         <div class="form-group">
                             <label>Datum:</label>
-                            <input type="date">
+                            <input type="date" class="version-date">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Änderungen:</label>
-                        <textarea placeholder="Beschreibung der Änderungen in dieser Version"></textarea>
+                        <textarea class="version-changes" placeholder="Beschreibung der Änderungen in dieser Version"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Autor:</label>
-                            <input type="text" placeholder="Name des Autors">
+                        <input type="text" class="version-author" placeholder="Name des Autors">
                     </div>
                 </div>
             `;
@@ -471,9 +471,9 @@
             const tbody = document.getElementById('riskTableBody');
             const newRow = `
                 <tr class="risk-row">
-                    <td><input type="text" placeholder="Risikobeschreibung"></td>
+                    <td><input type="text" class="risk-description" placeholder="Risikobeschreibung"></td>
                     <td>
-                        <select>
+                        <select class="risk-category">
                             <option>Rechtlich</option>
                             <option>Finanziell</option>
                             <option>Operationell</option>
@@ -481,23 +481,23 @@
                         </select>
                     </td>
                     <td>
-                        <select>
+                        <select class="risk-probability">
                             <option>Niedrig</option>
                             <option>Mittel</option>
                             <option>Hoch</option>
                         </select>
                     </td>
                     <td>
-                        <select>
+                        <select class="risk-impact">
                             <option>Gering</option>
                             <option>Mittel</option>
                             <option>Hoch</option>
                         </select>
                     </td>
-                    <td><input type="text" placeholder="Maßnahme zur Minderung"></td>
-                    <td><input type="text" placeholder="Verantwortlicher"></td>
+                    <td><input type="text" class="risk-measure" placeholder="Maßnahme zur Minderung"></td>
+                    <td><input type="text" class="risk-responsible" placeholder="Verantwortlicher"></td>
                     <td>
-                        <select>
+                        <select class="risk-status">
                             <option>Offen</option>
                             <option>In Bearbeitung</option>
                             <option>Geschlossen</option>
@@ -532,6 +532,203 @@
             const ansprechpartnerTelefon = document.getElementById('ansprechpartner-telefon').value || 'Nicht angegeben';
             const ansprechpartnerPosition = document.getElementById('ansprechpartner-position').value || 'Nicht angegeben';
 
+            // Collect additional contacts
+            let additionalContactsHtml = '';
+            document.querySelectorAll('#additionalContacts .stakeholder-item').forEach((contactItem, index) => {
+                const name = contactItem.querySelector('.contact-name').value || 'Nicht angegeben';
+                const email = contactItem.querySelector('.contact-email').value || 'Nicht angegeben';
+                const phone = contactItem.querySelector('.contact-phone').value || 'Nicht angegeben';
+                const position = contactItem.querySelector('.contact-position').value || 'Nicht angegeben';
+                additionalContactsHtml += `
+                    <h4>Weiterer Kontakt ${index + 1}</h4>
+                    <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${name}</span></div>
+                    <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${email}</span></div>
+                    <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${phone}</span></div>
+                    <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${position}</span></div>
+                `;
+            });
+
+            // Collect uploaded documents
+            let uploadedDocumentsHtml = '';
+            document.querySelectorAll('#uploadedDocuments li').forEach(docItem => {
+                const docName = docItem.textContent.trim().replace('X', ''); // Remove the 'X' from delete button
+                if (docName) {
+                    uploadedDocumentsHtml += `<li>${docName}</li>`;
+                }
+            });
+            if (uploadedDocumentsHtml) {
+                uploadedDocumentsHtml = `
+                    <h3>Hochgeladene Dokumente</h3>
+                    <ul>${uploadedDocumentsHtml}</ul>
+                `;
+            } else {
+                uploadedDocumentsHtml = `<h3>Hochgeladene Dokumente</h3><p>Keine Dokumente hochgeladen.</p>`;
+            }
+
+            // Collect obligations
+            let obligationsHtml = '';
+            document.querySelectorAll('#obligationsTableBody tr').forEach((row, index) => {
+                const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
+                const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
+                const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
+                const status = row.querySelector('.obligation-status').value || 'Nicht angegeben';
+                obligationsHtml += `
+                    <tr>
+                        <td>${description}</td>
+                        <td>${date}</td>
+                        <td>${responsible}</td>
+                        <td>${status}</td>
+                    </tr>
+                `;
+            });
+            if (obligationsHtml) {
+                obligationsHtml = `
+                    <h3>Wichtige Verpflichtungen & Fristen</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Beschreibung</th>
+                                <th>Frist</th>
+                                <th>Verantwortlicher</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>${obligationsHtml}</tbody>
+                    </table>
+                `;
+            } else {
+                obligationsHtml = `<h3>Wichtige Verpflichtungen & Fristen</h3><p>Keine Verpflichtungen erfasst.</p>`;
+            }
+
+            // Collect audit entries
+            let auditHistoryHtml = '';
+            document.querySelectorAll('#auditHistory .audit-item').forEach((auditItem, index) => {
+                const date = auditItem.querySelector('.audit-date').value || 'Nicht angegeben';
+                const auditor = auditItem.querySelector('.audit-auditor').value || 'Nicht angegeben';
+                const results = auditItem.querySelector('.audit-results').value || 'Nicht angegeben';
+                auditHistoryHtml += `
+                    <h4>Audit Eintrag ${index + 1}</h4>
+                    <div class="data-row"><span class="data-label">Datum des Audits:</span> <span class="data-value">${date}</span></div>
+                    <div class="data-row"><span class="data-label">Auditor:</span> <span class="data-value">${auditor}</span></div>
+                    <div class="data-row"><span class="data-label">Ergebnisse & Empfehlungen:</span></div>
+                    <p>${results.replace(/\n/g, '<br>')}</p>
+                `;
+            });
+            if (auditHistoryHtml) {
+                auditHistoryHtml = `
+                    <h3>Audit-Historie</h3>
+                    ${auditHistoryHtml}
+                `;
+            } else {
+                auditHistoryHtml = `<h3>Audit-Historie</h3><p>Keine Audit-Einträge erfasst.</p>`;
+            }
+
+            // Collect payment history
+            const leistungsstand = document.getElementById('leistungsstand').value || 'Nicht angegeben';
+            let paymentHistoryHtml = '';
+            document.querySelectorAll('#paymentTableBody tr').forEach((row, index) => {
+                const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
+                const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
+                const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
+                const status = row.querySelector('.payment-status').value || 'Nicht angegeben';
+                paymentHistoryHtml += `
+                    <tr>
+                        <td>${invoice}</td>
+                        <td>${date}</td>
+                        <td>${amount}</td>
+                        <td>${status}</td>
+                    </tr>
+                `;
+            });
+            if (paymentHistoryHtml) {
+                paymentHistoryHtml = `
+                    <h3>Zahlungshistorie</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rechnungsnummer</th>
+                                <th>Datum</th>
+                                <th>Betrag</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>${paymentHistoryHtml}</tbody>
+                    </table>
+                `;
+            } else {
+                paymentHistoryHtml = `<h3>Zahlungshistorie</h3><p>Keine Zahlungseinträge erfasst.</p>`;
+            }
+
+            // Collect version history
+            let versionHistoryHtml = '';
+            document.querySelectorAll('#versionHistory .version-item').forEach((versionItem, index) => {
+                const version = versionItem.querySelector('.version-number').value || 'Nicht angegeben';
+                const date = versionItem.querySelector('.version-date').value || 'Nicht angegeben';
+                const changes = versionItem.querySelector('.version-changes').value || 'Nicht angegeben';
+                const author = versionItem.querySelector('.version-author').value || 'Nicht angegeben';
+                versionHistoryHtml += `
+                    <h4>Version ${version}</h4>
+                    <div class="data-row"><span class="data-label">Datum:</span> <span class="data-value">${date}</span></div>
+                    <div class="data-row"><span class="data-label">Autor:</span> <span class="data-value">${author}</span></div>
+                    <div class="data-row"><span class="data-label">Änderungen:</span></div>
+                    <p>${changes.replace(/\n/g, '<br>')}</p>
+                `;
+            });
+            if (versionHistoryHtml) {
+                versionHistoryHtml = `
+                    <h3>Versionshistorie</h3>
+                    ${versionHistoryHtml}
+                `;
+            } else {
+                versionHistoryHtml = `<h3>Versionshistorie</h3><p>Keine Versionseinträge erfasst.</p>`;
+            }
+
+            const internalNotes = document.getElementById('internalNotes').value || 'Nicht angegeben';
+
+            // Collect risk entries
+            let riskHtml = '';
+            document.querySelectorAll('#riskTableBody tr').forEach((row, index) => {
+                const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
+                const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
+                const probability = row.querySelector('.risk-probability').value || 'Nicht angegeben';
+                const impact = row.querySelector('.risk-impact').value || 'Nicht angegeben';
+                const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
+                const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
+                const status = row.querySelector('.risk-status').value || 'Nicht angegeben';
+                riskHtml += `
+                    <tr>
+                        <td>${description}</td>
+                        <td>${category}</td>
+                        <td>${probability}</td>
+                        <td>${impact}</td>
+                        <td>${measure}</td>
+                        <td>${responsible}</td>
+                        <td>${status}</td>
+                    </tr>
+                `;
+            });
+            if (riskHtml) {
+                riskHtml = `
+                    <h3>Vertragliche Risiken</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Beschreibung</th>
+                                <th>Kategorie</th>
+                                <th>Wahrscheinlichkeit</th>
+                                <th>Auswirkung</th>
+                                <th>Maßnahme</th>
+                                <th>Verantwortlicher</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>${riskHtml}</tbody>
+                    </table>
+                `;
+            } else {
+                riskHtml = `<h3>Vertragliche Risiken</h3><p>Keine Risikoeinträge erfasst.</p>`;
+            }
+
 
             const staticHtmlContent = `
                 <!DOCTYPE html>
@@ -541,14 +738,23 @@
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Vertragsdokumentation - ${vertragsbezeichnung}</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
                         .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
-                        h1, h2, h3 { color: #333; }
-                        .section-title { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 20px; margin-bottom: 15px; }
-                        .data-row { display: flex; margin-bottom: 10px; }
-                        .data-label { font-weight: bold; width: 200px; color: #555; }
-                        .data-value { flex-grow: 1; }
+                        h1, h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                        h1 { font-size: 2em; border-bottom: 3px solid #4f46e5; padding-bottom: 10px; }
+                        h2 { font-size: 1.6em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                        h3 { font-size: 1.3em; margin-bottom: 15px; }
+                        h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                        .data-row { display: flex; margin-bottom: 8px; }
+                        .data-label { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
+                        .data-value { flex-grow: 1; word-wrap: break-word; }
                         p { margin: 0 0 10px 0; }
+                        ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
+                        ul li { margin-bottom: 5px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        th { background-color: #f0f4f8; font-weight: bold; }
+                        tr:nth-child(even) { background-color: #fcfdff; }
                     </style>
                 </head>
                 <body>
@@ -556,7 +762,7 @@
                         <h1>Vertragsdokumentation: ${vertragsbezeichnung}</h1>
                         <hr>
 
-                        <h2 class="section-title">Vertragsgrundlagen</h2>
+                        <h2>Vertragsgrundlagen</h2>
                         <div class="data-row"><span class="data-label">Vertragsnummer:</span> <span class="data-value">${vertragsnummer}</span></div>
                         <div class="data-row"><span class="data-label">Vertragsbezeichnung:</span> <span class="data-value">${vertragsbezeichnung}</span></div>
                         <div class="data-row"><span class="data-label">Vertragspartner:</span> <span class="data-value">${vertragspartner}</span></div>
@@ -567,24 +773,45 @@
                         <div class="data-row"><span class="data-label">Automatische Verlängerung:</span> <span class="data-value">${automatischeVerlaengerung}</span></div>
                         <div class="data-row"><span class="data-label">Nächste Prüfung:</span> <span class="data-value">${naechstePruefung}</span></div>
                         
-                        <h3 class="section-title">Vertragsinhalt & Leistungen</h3>
+                        <h3>Vertragsinhalt & Leistungen</h3>
                         <div class="data-row"><span class="data-label">Vertragsgegenstand:</span></div>
                         <p>${vertragsgegenstand.replace(/\n/g, '<br>')}</p>
                         <div class="data-row"><span class="data-label">Lieferbedingungen / SLAs:</span></div>
                         <p>${lieferbedingungen.replace(/\n/g, '<br>')}</p>
 
-                        <h3 class="section-title">Finanzielle Vereinbarungen</h3>
+                        <h3>Finanzielle Vereinbarungen</h3>
                         <div class="data-row"><span class="data-label">Gesamtwert:</span> <span class="data-value">${gesamtwert} ${waehrung}</span></div>
                         <div class="data-row"><span class="data-label">Zahlungsbedingungen:</span> <span class="data-value">${zahlungsbedingungen}</span></div>
                         <div class="data-row"><span class="data-label">Zahlungshäufigkeit:</span> <span class="data-value">${zahlungshaeufigkeit}</span></div>
 
-                        <h2 class="section-title">Hauptansprechpartner</h2>
+                        <h2>Vertragspartner & Kontakte</h2>
+                        <h3>Hauptansprechpartner</h3>
                         <div class="data-row"><span class="data-label">Name:</span> <span class="data-value">${ansprechpartnerName}</span></div>
                         <div class="data-row"><span class="data-label">E-Mail:</span> <span class="data-value">${ansprechpartnerEmail}</span></div>
                         <div class="data-row"><span class="data-label">Telefon:</span> <span class="data-value">${ansprechpartnerTelefon}</span></div>
                         <div class="data-row"><span class="data-label">Position:</span> <span class="data-value">${ansprechpartnerPosition}</span></div>
+                        ${additionalContactsHtml ? `<h3>Weitere Kontakte</h3>${additionalContactsHtml}` : ''}
+                        
+                        <h2>Vertragsdokumente</h2>
+                        ${uploadedDocumentsHtml}
 
-                        </div>
+                        <h2>Compliance & Monitoring</h2>
+                        ${obligationsHtml}
+                        ${auditHistoryHtml}
+
+                        <h2>Leistungs- & Zahlungsmonitoring</h2>
+                        <div class="data-row"><span class="data-label">Aktueller Leistungsstand:</span> <span class="data-value">${leistungsstand}% erfüllt</span></div>
+                        ${paymentHistoryHtml}
+
+                        <h2>Historie & Notizen</h2>
+                        ${versionHistoryHtml}
+                        <h3>Interne Notizen</h3>
+                        <p>${internalNotes.replace(/\n/g, '<br>')}</p>
+
+                        <h2>Risikomanagement</h2>
+                        ${riskHtml}
+
+                    </div>
                 </body>
                 </html>
             `;
@@ -605,6 +832,24 @@
         function exportHandover() {
             alert('Übergabe-Paket Export würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe');
         }
+
+        // Event listener for file upload
+        document.getElementById('file-upload').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const uploadedDocumentsList = document.getElementById('uploadedDocuments');
+            for (const file of files) {
+                const listItem = document.createElement('li');
+                listItem.textContent = file.name;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'X';
+                deleteButton.classList.add('delete-button'); // Use existing delete button style
+                deleteButton.onclick = function() {
+                    listItem.remove();
+                };
+                listItem.appendChild(deleteButton);
+                uploadedDocumentsList.appendChild(listItem);
+            }
+        });
 
     </script>
 </body>
