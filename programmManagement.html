@@ -10,6 +10,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programmmanagement Dokumentationssystem</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic styles for the form elements */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 1200px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #333; }
+        .header p { color: #666; }
+        .nav-tabs { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .nav-tab { background-color: #eee; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; transition: background-color 0.3s ease; }
+        .nav-tab:hover { background-color: #ddd; }
+        .nav-tab.active { background-color: #007bff; color: white; border-bottom: 2px solid #007bff; }
+        .tab-content { display: none; padding: 20px 0; }
+        .tab-content.active { display: block; }
+        .section { background-color: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 5px; padding: 20px; margin-bottom: 20px; }
+        .section h2 { color: #007bff; margin-top: 0; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
+        .section h3 { color: #555; margin-top: 0; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .btn-group { text-align: center; margin-top: 30px; }
+        .btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin: 0 10px; transition: background-color 0.3s ease; }
+        .btn:hover { background-color: #218838; }
+        .add-button { background-color: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .add-button:hover { background-color: #0056b3; }
+        .delete-button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px; }
+        .delete-button:hover { background-color: #c82333; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .data-table th { background-color: #f2f2f2; font-weight: bold; }
+        .risk-assessment-output { margin-top: 10px; padding: 10px; border: 1px solid #ccc; background-color: #f0f0f0; border-radius: 4px; }
+        .risk-assessment-output p { margin: 5px 0; }
+        .home-button {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            float: left;
+        }
+        .home-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,123 +79,121 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('grundlagen', event)">Programmgrundlagen</button>
-            <button class="nav-tab" onclick="showTab('strategie', event)">Programmstrategie & Planung</button>
-            <button class="nav-tab" onclick="showTab('durchfuehrung', event)">Programmdurchführung & Kontrolle</button>
-            <button class="nav-tab" onclick="showTab('abschluss', event)">Programm-Abschluss & Übergabe</button>
-            <button class="nav-tab" onclick="showTab('vorlagen', event)">Vorlagen & Tools</button>
+            <button class="nav-tab active" onclick="showTab('grundlagen', event)">Grundlagen</button>
+            <button class="nav-tab" onclick="showTab('strategie', event)">Strategie & Planung</button>
+            <button class="nav-tab" onclick="showTab('durchfuehrung', event)">Durchführung & Kontrolle</button>
+            <button class="nav-tab" onclick="showTab('abschluss', event)">Abschluss & Übergabe</button>
         </div>
 
         <div class="content">
             <div id="grundlagen" class="tab-content active">
                 <div class="section">
                     <h2>Programmgrundlagen</h2>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <h3>Organisationsdaten</h3>
-                            <label>Unternehmens-/Organisationsname:</label>
-                            <input type="text" placeholder="Name der Organisation">
-
-                            <label>Programm-Sponsor:</label>
-                            <input type="text" placeholder="Name & Position des Programm-Sponsors">
-
-                            <label>Lenkungsausschuss (falls zutreffend):</label>
-                            <textarea placeholder="Mitglieder des Lenkungsausschusses für das Programm"></textarea>
-
-                            <h3>Stakeholder/Ansprechpartner</h3>
-                            <div id="stakeholderContainer">
-                                <div class="stakeholder-item">
-                                    <button type="button" class="delete-button" onclick="deleteStakeholder(this)">X</button>
-                                    <div class="form-group">
-                                        <label>Name:</label>
-                                        <input type="text" placeholder="Name des Stakeholders">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Firma:</label>
-                                        <input type="text" placeholder="Firma des Stakeholders">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>E-Mail:</label>
-                                        <input type="email" placeholder="E-Mail des Stakeholders">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Telefonnummer:</label>
-                                        <input type="tel" placeholder="Telefonnummer des Stakeholders">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Rolle/Interesse:</label>
-                                        <textarea placeholder="Rolle oder Interesse des Stakeholders am Programm"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-secondary" onclick="addStakeholder()">+ Weiteren Stakeholder hinzufügen</button>
-
-                        </div>
-
-                        <div class="form-group">
-                            <h3>Programm-Details</h3>
-                            <label>Programmname:</label>
-                            <input type="text" placeholder="Bezeichnung des Programms">
-
-                            <label>Programm-ID:</label>
-                            <input type="text" placeholder="Interne Programm-Kennung">
-
-                            <label>Programm-Manager:</label>
-                            <input type="text" placeholder="Name des verantwortlichen Programm-Managers">
-
-                            <label>Programmlaufzeit:</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="date" placeholder="Startdatum">
-                                <input type="date" placeholder="Enddatum">
-                            </div>
-                        </div>
+                    <h3>Organisationsdaten</h3>
+                    <div class="form-group">
+                        <label>Unternehmens-/Organisationsname:</label>
+                        <input type="text" placeholder="Name der Organisation">
+                    </div>
+                    <div class="form-group">
+                        <label>Programm-Sponsor:</label>
+                        <input type="text" placeholder="Name & Position des Programm-Sponsors">
+                    </div>
+                    <div class="form-group">
+                        <label>Lenkungsausschuss (falls zutreffend):</label>
+                        <textarea placeholder="Mitglieder des Lenkungsausschusses für das Programm"></textarea>
                     </div>
 
+                    <h3>Stakeholder/Ansprechpartner</h3>
+                    <div id="stakeholderContainer">
+                        <div class="stakeholder-item">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" placeholder="Name des Stakeholders">
+                            </div>
+                            <div class="form-group">
+                                <label>Firma:</label>
+                                <input type="text" placeholder="Firma des Stakeholders">
+                            </div>
+                            <div class="form-group">
+                                <label>E-Mail:</label>
+                                <input type="text" placeholder="E-Mail des Stakeholders">
+                            </div>
+                            <div class="form-group">
+                                <label>Telefonnummer:</label>
+                                <input type="text" placeholder="Telefonnummer des Stakeholders">
+                            </div>
+                            <div class="form-group">
+                                <label>Rolle/Interesse:</label>
+                                <textarea placeholder="Rolle oder Interesse des Stakeholders am Programm"></textarea>
+                            </div>
+                            <button class="delete-button" onclick="this.closest('.stakeholder-item').remove()">X</button>
+                        </div>
+                    </div>
+                    <button class="add-button" onclick="addStakeholder()">+ Stakeholder hinzufügen</button>
+
+                    <h3>Programm-Details</h3>
+                    <div class="form-group">
+                        <label>Programmname:</label>
+                        <input type="text" placeholder="Bezeichnung des Programms">
+                    </div>
+                    <div class="form-group">
+                        <label>Programm-ID:</label>
+                        <input type="text" placeholder="Interne Programm-Kennung">
+                    </div>
+                    <div class="form-group">
+                        <label>Programm-Manager:</label>
+                        <input type="text" placeholder="Name des verantwortlichen Programm-Managers">
+                    </div>
+                    <div class="form-group">
+                        <label>Programmlaufzeit:</label>
+                        <input type="date"> bis <input type="date">
+                    </div>
                     <div class="form-group">
                         <label>Programm-Vision & Strategische Ziele:</label>
                         <textarea placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Business Case & Nutzen (Benefits):</label>
                         <textarea placeholder="Geschäftlicher Nutzen, erwarteter ROI und Begründung des Programms"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Programm-Beschreibung (Umfang & Abgrenzung):</label>
                         <textarea placeholder="Detaillierte Beschreibung des Programmumfangs und die Abgrenzung zu anderen Initiativen"></textarea>
-
-                        <label>Verbundene Projekte:</label>
-                        <div id="projectContainer">
-                            <div class="project-row">
-                                <button type="button" class="delete-button" onclick="deleteProject(this)">X</button>
-                                <div class="form-group">
-                                    <label>Projektname:</label>
-                                    <input type="text" placeholder="Name des Projekts">
-                                </div>
-                                <div class="form-group">
-                                    <label>Projektleiter:</label>
-                                    <input type="text" placeholder="Name des Projektleiters">
-                                </div>
-                                <div class="form-group">
-                                    <label>Startdatum:</label>
-                                    <input type="date">
-                                </div>
-                                <div class="form-group">
-                                    <label>Enddatum:</label>
-                                    <input type="date">
-                                </div>
-                                <div class="form-group">
-                                    <label>Status:</label>
-                                    <select>
-                                        <option>Geplant</option>
-                                        <option>Aktiv</option>
-                                        <option>On Hold</option>
-                                        <option>Abgeschlossen</option>
-                                        <option>Abgebrochen</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-secondary" onclick="addProject()">+ Weiteres Projekt hinzufügen</button>
                     </div>
+
+                    <h3>Verbundene Projekte</h3>
+                    <div id="projectContainer">
+                        <div class="project-row">
+                            <div class="form-group">
+                                <label>Projektname:</label>
+                                <input type="text" placeholder="Name des Projekts">
+                            </div>
+                            <div class="form-group">
+                                <label>Projektleiter:</label>
+                                <input type="text" placeholder="Name des Projektleiters">
+                            </div>
+                            <div class="form-group">
+                                <label>Startdatum:</label>
+                                <input type="date">
+                            </div>
+                            <div class="form-group">
+                                <label>Enddatum:</label>
+                                <input type="date">
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select>
+                                    <option value="Geplant">Geplant</option>
+                                    <option value="Laufend">Laufend</option>
+                                    <option value="Abgeschlossen">Abgeschlossen</option>
+                                    <option value="Verzögert">Verzögert</option>
+                                    <option value="Gestoppt">Gestoppt</option>
+                                </select>
+                            </div>
+                            <button class="delete-button" onclick="this.closest('.project-row').remove()">X</button>
+                        </div>
+                    </div>
+                    <button class="add-button" onclick="addProject()">+ Projekt hinzufügen</button>
                 </div>
             </div>
 
@@ -149,7 +205,8 @@
                     <div class="form-group">
                         <label>Governance-Struktur des Programms:</label>
                         <textarea placeholder="Beschreibung der Entscheidungsstrukturen, Gremien und Rollen innerhalb des Programms"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Rollen und Verantwortlichkeiten:</label>
                         <textarea placeholder="Detaillierte Definition der Rollen und Verantwortlichkeiten für alle Programmmitglieder und Stakeholder"></textarea>
                     </div>
@@ -158,10 +215,12 @@
                     <div class="form-group">
                         <label>Geschäftsanforderungen auf Programmebene:</label>
                         <textarea placeholder="Übergeordnete Geschäftsanforderungen, die durch das Programm erfüllt werden sollen"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Technische und systemische Anforderungen:</label>
                         <textarea placeholder="Anforderungen an die Gesamtarchitektur, Integrationen und technische Infrastruktur"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Nicht-funktionale Anforderungen:</label>
                         <textarea placeholder="Anforderungen an Performance, Skalierbarkeit, Sicherheit, Compliance, Verfügbarkeit etc. auf Programmebene"></textarea>
                     </div>
@@ -170,10 +229,12 @@
                     <div class="form-group">
                         <label>Ressourcenplanung (Personal, Infrastruktur, Tools):</label>
                         <textarea placeholder="Planung der benötigten personellen Ressourcen, Infrastruktur und Tools für das gesamte Programm"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Programm-Budget & Finanzierungsplan:</label>
                         <textarea placeholder="Detailliertes Gesamtbudget des Programms und Plan für die Mittelbeschaffung"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Kosten-Nutzen-Analyse und ROI-Prognose:</label>
                         <textarea placeholder="Analyse der erwarteten Kosten und Nutzen über die gesamte Programmlaufzeit, inkl. ROI-Prognosen"></textarea>
                     </div>
@@ -181,13 +242,42 @@
                     <h3>4. Kommunikations- und Change-Management</h3>
                     <div class="form-group">
                         <label>Kommunikationsstrategie & -plan:</label>
-                        <textarea placeholder="Plan für die interne und externe Kommunikation des Programms, Zielgruppen und Kanäle"></textarea>
-
+                        <textarea id="communication-strategy" placeholder="Plan für die interne und externe Kommunikation des Programms, Zielgruppen und Kanäle"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label>Change-Management-Strategie:</label>
-                        <textarea placeholder="Strategie zur Begleitung von Veränderungen, Sicherstellung der Akzeptanz und Minimierung von Widerständen"></textarea>
-
+                        <textarea id="change-management-strategy" placeholder="Strategie zur Begleitung von Veränderungen, Sicherstellung der Akzeptanz und Minimierung von Widerständen"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label>Stakeholder-Engagement-Plan:</label>
-                        <textarea placeholder="Plan zur aktiven Einbindung und Pflege der Beziehungen zu allen relevanten Stakeholdern"></textarea>
+                        <textarea id="stakeholder-engagement-plan" placeholder="Plan zur aktiven Einbindung und Pflege der Beziehungen zu allen relevanten Stakeholdern"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <h2>Kommunikationsplan für Meetings</h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Meeting-Titel</th>
+                                    <th>Frequenz</th>
+                                    <th>Kanäle</th>
+                                    <th>Teilnehmer</th>
+                                    <th>Verantwortlich</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="communication-plan-tbody">
+                                <tr>
+                                    <td><input type="text" placeholder="Z.B. Wöchentliches Programm-Update"></td>
+                                    <td><input type="text" placeholder="Z.B. Wöchentlich"></td>
+                                    <td><input type="text" placeholder="Z.B. Teams, E-Mail"></td>
+                                    <td><input type="text" placeholder="Z.B. Programmteam, Projektleiter"></td>
+                                    <td><input type="text" placeholder="Name"></td>
+                                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-button" onclick="addCommunicationPlanMeeting()">+ Meeting zum Kommunikationsplan hinzufügen</button>
                     </div>
                 </div>
             </div>
@@ -200,17 +290,20 @@
                     <div class="form-group">
                         <label>Aktueller Gesamtstatus Programm:</label>
                         <select>
-                            <option>🟢 Grün - Im Plan</option>
-                            <option>🟡 Gelb - Achtung</option>
-                            <option>🔴 Rot - Kritisch</option>
+                            <option value="Grün (Im Plan)">Grün (Im Plan)</option>
+                            <option value="Gelb (Leichte Abweichung)">Gelb (Leichte Abweichung)</option>
+                            <option value="Rot (Kritische Abweichung)">Rot (Kritische Abweichung)</option>
                         </select>
-
+                    </div>
+                    <div class="form-group">
                         <label>Abgeschlossene Meilensteine im Berichtszeitraum:</label>
                         <textarea placeholder="Detaillierte Beschreibung der fertiggestellten Meilensteine und erreichten Ziele der Projekte"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Nächste geplante Meilensteine & Aktivitäten:</label>
                         <textarea placeholder="Übersicht der unmittelbar bevorstehenden Meilensteine und Aktivitäten für den nächsten Berichtszeitraum"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Herausforderungen & Lösungsansätze auf Programmebene:</label>
                         <textarea placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"></textarea>
                     </div>
@@ -219,11 +312,11 @@
                     <div class="form-group">
                         <label>Detaillierter Zeitplan & Phasen:</label>
                         <textarea placeholder="Umfassender Zeitplan mit allen Programmphasen, Hauptaktivitäten und Abhängigkeiten"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Meilensteine auf Programmebene:</label>
                         <div id="programMilestones">
                             <div class="milestone-item">
-                                <button type="button" class="delete-button" onclick="deleteProgramMilestone(this)">X</button>
                                 <div class="form-group">
                                     <label>Meilenstein:</label>
                                     <input type="text" placeholder="Meilenstein-Bezeichnung">
@@ -236,16 +329,18 @@
                                     <label>Beschreibung & Erfolgskriterien:</label>
                                     <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
                                 </div>
+                                <button class="delete-button" onclick="this.closest('.milestone-item').remove()">X</button>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary" onclick="addProgramMilestone()">+ Weiteren Programm-Meilenstein hinzufügen</button>
-
+                        <button class="add-button" onclick="addProgramMilestone()">+ Meilenstein hinzufügen</button>
+                    </div>
+                    <div class="form-group">
                         <label>Programm-Roadmap:</label>
                         <textarea placeholder="Visualisierung des Programmverlaufs und der Hauptlieferobjekte über die Zeit"></textarea>
                     </div>
 
                     <h3>3. Risikomanagement auf Programmebene</h3>
-                    <table class="table">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>Risiko</th>
@@ -253,44 +348,47 @@
                                 <th>Eintrittswahrscheinlichkeit</th>
                                 <th>Auswirkung</th>
                                 <th>Maßnahme & Verantwortlicher</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="risikoTable">
                             <tr>
-                                <td><input type="text" placeholder="Risikobeschreibung"></td>
+                                <td><input type="text"></td>
                                 <td>
                                     <select>
-                                        <option>Strategisch</option>
-                                        <option>Finanziell</option>
-                                        <option>Operativ</option>
-                                        <option>Regulatorisch/Compliance</option>
-                                        <option>Reputation</option>
-                                        <option>Technologisch</option>
+                                        <option value="Technisch">Technisch</option>
+                                        <option value="Finanziell">Finanziell</option>
+                                        <option value="Personal">Personal</option>
+                                        <option value="Prozess">Prozess</option>
+                                        <option value="Markt">Markt</option>
                                     </select>
                                 </td>
                                 <td>
                                     <select>
-                                        <option>Niedrig</option>
-                                        <option>Mittel</option>
-                                        <option>Hoch</option>
+                                        <option value="Niedrig">Niedrig</option>
+                                        <option value="Mittel">Mittel</option>
+                                        <option value="Hoch">Hoch</option>
                                     </select>
                                 </td>
                                 <td>
                                     <select>
-                                        <option>Gering</option>
-                                        <option>Mittel</option>
-                                        <option>Hoch</option>
+                                        <option value="Gering">Gering</option>
+                                        <option value="Mittel">Mittel</option>
+                                        <option value="Erheblich">Erheblich</option>
                                     </select>
                                 </td>
                                 <td><input type="text" placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"></td>
+                                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-secondary" onclick="addRiskRow()">+ Weiteres Risiko hinzufügen</button>
+                    <button class="add-button" onclick="addRiskRow()">+ Risiko hinzufügen</button>
 
                     <div class="form-group">
                         <label>Aktuelle Issues/Probleme auf Programmebene:</label>
                         <textarea placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte, die das Programm betreffen"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label>Eskalationsprozesse:</label>
                         <textarea placeholder="Beschreibung der Eskalationswege für kritische Probleme im Programmkontext"></textarea>
                     </div>
@@ -305,16 +403,20 @@
                     <div class="form-group">
                         <label>Zusammenfassung der Programmergebnisse:</label>
                         <textarea placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Programms"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Erreichte Nutzen (Benefits) & Ziele:</label>
                         <textarea placeholder="Auflistung aller ursprünglich definierten Nutzen und Ziele, die erreicht wurden"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Nicht erreichte Nutzen/Ziele & Begründung:</label>
                         <textarea placeholder="Auflistung der Nutzen oder Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Finanzieller Abschluss & Abweichungen vom Budget:</label>
                         <textarea placeholder="Analyse der finalen Programmkosten, Abweichungen vom ursprünglichen Budget und Ursachenanalyse"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Qualitativer Abschluss & Lessons Learned:</label>
                         <textarea placeholder="Zusammenfassung der wichtigsten Learnings, Best Practices und Empfehlungen für zukünftige Programme oder Projekte"></textarea>
                     </div>
@@ -323,7 +425,8 @@
                     <div class="form-group">
                         <label>KPIs zur Nutzenmessung nach Programm-Abschluss:</label>
                         <textarea placeholder="Definition von Key Performance Indicators (KPIs) zur Messung des langfristigen Nutzens nach Programmende"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Monitoring-Plan für Benefits:</label>
                         <textarea placeholder="Plan zur Überwachung und Berichterstattung über die Realisierung der erwarteten Nutzen nach Programm-Abschluss"></textarea>
                     </div>
@@ -332,61 +435,48 @@
                     <div class="form-group">
                         <label>Übergabe an den Linienbetrieb/Nachfolgeorganisation:</label>
                         <textarea placeholder="Details zur formellen Übergabe der Programmergebnisse an die zuständigen Linienorganisationen oder nachfolgende Programme/Projekte"></textarea>
-
+                    </div>
+                    <div class="form-group">
                         <label>Formelle Programmschließung:</label>
                         <textarea placeholder="Datum und Details zur formellen Abnahme und Schließung des Programms"></textarea>
                     </div>
                 </div>
             </div>
 
-            <div id="vorlagen" class="tab-content">
-                <div class="section">
-                    <h2>Vorlagen & Tools</h2>
-                </div>
+            <div class="section">
+                <h2>Vorlagen & Tools</h2>
             </div>
         </div>
 
-        <div class="actions">
-            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
-            <button class="btn btn-primary" onclick="saveAsStaticHtml()">💾 Dokument speichern</button>
-            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
+        <div class="btn-group">
+            <button class="btn" onclick="saveAsStaticHtml()">Dokument speichern</button>
+            <button class="btn" onclick="exportHandover()">Übergabe-Paket Export</button>
         </div>
     </div>
 
     <script>
-        const documentVersion = "1.0";
-        const documentDate = "15. Juli 2025";
+        // Set initial document version and date
+        let documentVersion = "1.0";
+        let documentDate = new Date().toLocaleDateString('de-DE');
+        document.getElementById('documentInfo').textContent = `Version: ${documentVersion} | Datum: ${documentDate}`;
 
-        function displayDocumentInfo() {
-            const docInfoElement = document.getElementById('documentInfo');
-            if (docInfoElement) {
-                docInfoElement.innerHTML = `Version: ${documentVersion} | Datum: ${documentDate}`;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', displayDocumentInfo);
-
-        function showTab(tabName, event) {
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
-
-            const tabs = document.querySelectorAll('.nav-tab');
+        // Tab functionality
+        function showTab(tabId, event) {
+            const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
 
-            document.getElementById(tabName).classList.add('active');
-
-            if (event) {
-                event.currentTarget.classList.add('active');
-            }
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
 
-        // Add Stakeholder for Programmmanagement function
+        // Add stakeholder function
         function addStakeholder() {
             const container = document.getElementById('stakeholderContainer');
-            const newStakeholder = document.createElement('div');
-            newStakeholder.className = 'stakeholder-item';
-            newStakeholder.innerHTML = `
-                <button type="button" class="delete-button" onclick="deleteStakeholder(this)">X</button>
+            const newItem = document.createElement('div');
+            newItem.classList.add('stakeholder-item');
+            newItem.innerHTML = `
                 <div class="form-group">
                     <label>Name:</label>
                     <input type="text" placeholder="Name des Stakeholders">
@@ -397,35 +487,27 @@
                 </div>
                 <div class="form-group">
                     <label>E-Mail:</label>
-                    <input type="email" placeholder="E-Mail des Stakeholders">
+                    <input type="text" placeholder="E-Mail des Stakeholders">
                 </div>
                 <div class="form-group">
                     <label>Telefonnummer:</label>
-                    <input type="tel" placeholder="Telefonnummer des Stakeholders">
+                    <input type="text" placeholder="Telefonnummer des Stakeholders">
                 </div>
                 <div class="form-group">
                     <label>Rolle/Interesse:</label>
                     <textarea placeholder="Rolle oder Interesse des Stakeholders am Programm"></textarea>
                 </div>
+                <button class="delete-button" onclick="this.closest('.stakeholder-item').remove()">X</button>
             `;
-            container.appendChild(newStakeholder);
+            container.appendChild(newItem);
         }
 
-        // Delete Stakeholder for Programmmanagement function
-        function deleteStakeholder(buttonElement) {
-            const item = buttonElement.closest('.stakeholder-item');
-            if (item) {
-                item.remove();
-            }
-        }
-
-        // Add Project for Programmmanagement function
+        // Add project function
         function addProject() {
             const container = document.getElementById('projectContainer');
-            const newProject = document.createElement('div');
-            newProject.className = 'project-row';
-            newProject.innerHTML = `
-                <button type="button" class="delete-button" onclick="deleteProject(this)">X</button>
+            const newItem = document.createElement('div');
+            newItem.classList.add('project-row');
+            newItem.innerHTML = `
                 <div class="form-group">
                     <label>Projektname:</label>
                     <input type="text" placeholder="Name des Projekts">
@@ -445,32 +527,24 @@
                 <div class="form-group">
                     <label>Status:</label>
                     <select>
-                        <option>Geplant</option>
-                        <option>Aktiv</option>
-                        <option>On Hold</option>
-                        <option>Abgeschlossen</option>
-                        <option>Abgebrochen</option>
+                        <option value="Geplant">Geplant</option>
+                        <option value="Laufend">Laufend</option>
+                        <option value="Abgeschlossen">Abgeschlossen</option>
+                        <option value="Verzögert">Verzögert</option>
+                        <option value="Gestoppt">Gestoppt</option>
                     </select>
                 </div>
+                <button class="delete-button" onclick="this.closest('.project-row').remove()">X</button>
             `;
-            container.appendChild(newProject);
+            container.appendChild(newItem);
         }
 
-        // Delete Project for Programmmanagement function
-        function deleteProject(buttonElement) {
-            const item = buttonElement.closest('.project-row');
-            if (item) {
-                item.remove();
-            }
-        }
-
-        // Add Program Milestone for Programmmanagement function
+        // Add Program Milestone function
         function addProgramMilestone() {
-            const milestonesContainer = document.getElementById('programMilestones');
-            const newMilestone = document.createElement('div');
-            newMilestone.className = 'milestone-item';
-            newMilestone.innerHTML = `
-                <button type="button" class="delete-button" onclick="deleteProgramMilestone(this)">X</button>
+            const container = document.getElementById('programMilestones');
+            const newItem = document.createElement('div');
+            newItem.classList.add('milestone-item');
+            newItem.innerHTML = `
                 <div class="form-group">
                     <label>Meilenstein:</label>
                     <input type="text" placeholder="Meilenstein-Bezeichnung">
@@ -483,59 +557,109 @@
                     <label>Beschreibung & Erfolgskriterien:</label>
                     <textarea placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"></textarea>
                 </div>
+                <button class="delete-button" onclick="this.closest('.milestone-item').remove()">X</button>
             `;
-            milestonesContainer.appendChild(newMilestone);
+            container.appendChild(newItem);
         }
 
-        // Delete Program Milestone for Programmmanagement function
-        function deleteProgramMilestone(buttonElement) {
-            const item = buttonElement.closest('.milestone-item');
-            if (item) {
-                item.remove();
-            }
-        }
-
+        // Add Risk Row function
         function addRiskRow() {
             const tableBody = document.getElementById('risikoTable');
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" placeholder="Risikobeschreibung"></td>
+                <td><input type="text"></td>
                 <td>
                     <select>
-                        <option>Strategisch</option>
-                        <option>Finanziell</option>
-                        <option>Operativ</option>
-                        <option>Regulatorisch/Compliance</option>
-                        <option>Reputation</option>
-                        <option>Technologisch</option>
+                        <option value="Technisch">Technisch</option>
+                        <option value="Finanziell">Finanziell</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Prozess">Prozess</option>
+                        <option value="Markt">Markt</option>
                     </select>
                 </td>
                 <td>
                     <select>
-                        <option>Niedrig</option>
-                        <option>Mittel</option>
-                        <option>Hoch</option>
+                        <option value="Niedrig">Niedrig</option>
+                        <option value="Mittel">Mittel</option>
+                        <option value="Hoch">Hoch</option>
                     </select>
                 </td>
                 <td>
                     <select>
-                        <option>Gering</option>
-                        <option>Mittel</option>
-                        <option>Hoch</option>
+                        <option value="Gering">Gering</option>
+                        <option value="Mittel">Mittel</option>
+                        <option value="Erheblich">Erheblich</option>
                     </select>
                 </td>
                 <td><input type="text" placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"></td>
+                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
             `;
             tableBody.appendChild(newRow);
         }
 
-        // Function to print the document
-        function printDocument() {
-            window.print();
+        // Add Communication Plan Meeting for Programmmanagement function
+        function addCommunicationPlanMeeting() {
+            const tbody = document.getElementById('communication-plan-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Z.B. Wöchentliches Programm-Update"></td>
+                <td><input type="text" placeholder="Z.B. Wöchentlich"></td>
+                <td><input type="text" placeholder="Z.B. Teams, E-Mail"></td>
+                <td><input type="text" placeholder="Z.B. Programmteam, Projektleiter"></td>
+                <td><input type="text" placeholder="Name"></td>
+                <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+            `;
+            tbody.appendChild(newRow);
         }
 
         // Function to save the document as a static HTML file
         function saveAsStaticHtml() {
+            // Helper to escape HTML for display
+            const escapeHtml = (text) => {
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            }
+
+            // Function to get table rows data for static export
+            const getTableRowsHtml = (tableBodyId, columnSelectors) => {
+                const rows = Array.from(document.querySelectorAll(`#${tableBodyId} tr`));
+                return rows.map(row => {
+                    const cells = Array.from(row.cells);
+                    let rowHtml = '<tr>';
+                    columnSelectors.forEach((selector, index) => {
+                        let value = '';
+                        // Ensure the index is within the bounds of cells
+                        if (cells[index]) {
+                            if (selector.type === 'input') {
+                                value = cells[index].querySelector('input')?.value || '';
+                            } else if (selector.type === 'textarea') {
+                                value = cells[index].querySelector('textarea')?.value || '';
+                            } else if (selector.type === 'select') {
+                                // For select, get the text of the selected option
+                                value = cells[index].querySelector('select')?.options[cells[index].querySelector('select').selectedIndex]?.text || '';
+                            } else if (selector.type === 'span') {
+                                value = cells[index].querySelector('span')?.textContent || '';
+                            }
+                        }
+                        rowHtml += `<td><p>${escapeHtml(value).replace(/\n/g, '<br>')}</p></td>`;
+                    });
+                    rowHtml += '</tr>';
+                    return rowHtml;
+                }).join('');
+            };
+
+            // Get Communication Plan Table Data
+            const communicationPlanTableHtml = getTableRowsHtml('communication-plan-tbody', [
+                { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }
+            ]);
+
+
             const staticHtmlContent = `
                 <!DOCTYPE html>
                 <html lang="de">
@@ -573,65 +697,65 @@
                                     <h2>Programmgrundlagen</h2>
                                     <h3>Organisationsdaten</h3>
                                     <label>Unternehmens-/Organisationsname:</label>
-                                    <p>${document.querySelector('#grundlagen input[placeholder="Name der Organisation"]') ? document.querySelector('#grundlagen input[placeholder="Name der Organisation"]').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Name der Organisation"]') ? escapeHtml(document.querySelector('#grundlagen input[placeholder="Name der Organisation"]').value) : ''}</p>
 
                                     <label>Programm-Sponsor:</label>
-                                    <p>${document.querySelector('#grundlagen input[placeholder="Name & Position des Programm-Sponsors"]') ? document.querySelector('#grundlagen input[placeholder="Name & Position des Programm-Sponsors"]').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Name & Position des Programm-Sponsors"]') ? escapeHtml(document.querySelector('#grundlagen input[placeholder="Name & Position des Programm-Sponsors"]').value) : ''}</p>
 
                                     <label>Lenkungsausschuss (falls zutreffend):</label>
-                                    <p>${document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Programm"]') ? document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Programm"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Programm"]') ? escapeHtml(document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Programm"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>Stakeholder/Ansprechpartner</h3>
                                     ${Array.from(document.querySelectorAll('#stakeholderContainer .stakeholder-item')).map(item => `
                                         <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 5px;">
                                             <label>Name:</label>
-                                            <p>${item.querySelector('input[placeholder="Name des Stakeholders"]') ? item.querySelector('input[placeholder="Name des Stakeholders"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Name des Stakeholders"]') ? escapeHtml(item.querySelector('input[placeholder="Name des Stakeholders"]').value) : ''}</p>
                                             <label>Firma:</label>
-                                            <p>${item.querySelector('input[placeholder="Firma des Stakeholders"]') ? item.querySelector('input[placeholder="Firma des Stakeholders"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Firma des Stakeholders"]') ? escapeHtml(item.querySelector('input[placeholder="Firma des Stakeholders"]').value) : ''}</p>
                                             <label>E-Mail:</label>
-                                            <p>${item.querySelector('input[placeholder="E-Mail des Stakeholders"]') ? item.querySelector('input[placeholder="E-Mail des Stakeholders"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="E-Mail des Stakeholders"]') ? escapeHtml(item.querySelector('input[placeholder="E-Mail des Stakeholders"]').value) : ''}</p>
                                             <label>Telefonnummer:</label>
-                                            <p>${item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]') ? item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]') ? escapeHtml(item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]').value) : ''}</p>
                                             <label>Rolle/Interesse:</label>
-                                            <p>${item.querySelector('textarea[placeholder="Rolle oder Interesse des Stakeholders am Programm"]') ? item.querySelector('textarea[placeholder="Rolle oder Interesse des Stakeholders am Programm"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                            <p>${item.querySelector('textarea[placeholder="Rolle oder Interesse des Stakeholders am Programm"]') ? escapeHtml(item.querySelector('textarea[placeholder="Rolle oder Interesse des Stakeholders am Programm"]').value).replace(/\n/g, '<br>') : ''}</p>
                                         </div>
                                     `).join('')}
 
                                     <h3>Programm-Details</h3>
                                     <label>Programmname:</label>
-                                    <p>${document.querySelector('#grundlagen input[placeholder="Bezeichnung des Programms"]') ? document.querySelector('#grundlagen input[placeholder="Bezeichnung des Programms"]').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Bezeichnung des Programms"]') ? escapeHtml(document.querySelector('#grundlagen input[placeholder="Bezeichnung des Programms"]').value) : ''}</p>
 
                                     <label>Programm-ID:</label>
-                                    <p>${document.querySelector('#grundlagen input[placeholder="Interne Programm-Kennung"]') ? document.querySelector('#grundlagen input[placeholder="Interne Programm-Kennung"]').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Interne Programm-Kennung"]') ? escapeHtml(document.querySelector('#grundlagen input[placeholder="Interne Programm-Kennung"]').value) : ''}</p>
 
                                     <label>Programm-Manager:</label>
-                                    <p>${document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Programm-Managers"]') ? document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Programm-Managers"]').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Programm-Managers"]') ? escapeHtml(document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Programm-Managers"]').value) : ''}</p>
 
                                     <label>Programmlaufzeit:</label>
-                                    <p>${document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)') ? document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)').value : ''} - ${document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)') ? document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)').value : ''}</p>
+                                    <p>${document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)') ? escapeHtml(document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)').value) : ''} - ${document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)') ? escapeHtml(document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)').value) : ''}</p>
 
                                     <label>Programm-Vision & Strategische Ziele:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"]') ? document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"]') ? escapeHtml(document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Programms"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Business Case & Nutzen (Benefits):</label>
-                                    <p>${document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter ROI und Begründung des Programms"]') ? document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter ROI und Begründung des Programms"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter ROI und Begründung des Programms"]') ? escapeHtml(document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter ROI und Begründung des Programms"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Programm-Beschreibung (Umfang & Abgrenzung):</label>
-                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung des Programmumfangs und die Abgrenzung zu anderen Initiativen"]') ? document.querySelector('textarea[placeholder="Detaillierte Beschreibung des Programmumfangs und die Abgrenzung zu anderen Initiativen"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung des Programmumfangs und die Abgrenzung zu anderen Initiativen"]') ? escapeHtml(document.querySelector('textarea[placeholder="Detaillierte Beschreibung des Programmumfangs und die Abgrenzung zu anderen Initiativen"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Verbundene Projekte:</label>
                                     ${Array.from(document.querySelectorAll('#projectContainer .project-row')).map(item => `
                                         <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 5px;">
                                             <label>Projektname:</label>
-                                            <p>${item.querySelector('input[placeholder="Name des Projekts"]') ? item.querySelector('input[placeholder="Name des Projekts"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Name des Projekts"]') ? escapeHtml(item.querySelector('input[placeholder="Name des Projekts"]').value) : ''}</p>
                                             <label>Projektleiter:</label>
-                                            <p>${item.querySelector('input[placeholder="Name des Projektleiters"]') ? item.querySelector('input[placeholder="Name des Projektleiters"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Name des Projektleiters"]') ? escapeHtml(item.querySelector('input[placeholder="Name des Projektleiters"]').value) : ''}</p>
                                             <label>Startdatum:</label>
-                                            <p>${item.querySelector('input[type="date"]:nth-of-type(1)') ? item.querySelector('input[type="date"]:nth-of-type(1)').value : ''}</p>
+                                            <p>${item.querySelector('input[type="date"]:nth-of-type(1)') ? escapeHtml(item.querySelector('input[type="date"]:nth-of-type(1)').value) : ''}</p>
                                             <label>Enddatum:</label>
-                                            <p>${item.querySelector('input[type="date"]:nth-of-type(2)') ? item.querySelector('input[type="date"]:nth-of-type(2)').value : ''}</p>
+                                            <p>${item.querySelector('input[type="date"]:nth-of-type(2)') ? escapeHtml(item.querySelector('input[type="date"]:nth-of-type(2)').value) : ''}</p>
                                             <label>Status:</label>
-                                            <p>${item.querySelector('select') ? item.querySelector('select').value : ''}</p>
+                                            <p>${item.querySelector('select') ? escapeHtml(item.querySelector('select').value) : ''}</p>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -643,40 +767,56 @@
 
                                     <h3>1. Programm-Governance & Organisation</h3>
                                     <label>Governance-Struktur des Programms:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Beschreibung der Entscheidungsstrukturen, Gremien und Rollen innerhalb des Programms"]') ? document.querySelector('#strategie textarea[placeholder="Beschreibung der Entscheidungsstrukturen, Gremien und Rollen innerhalb des Programms"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('#strategie textarea[placeholder="Beschreibung der Entscheidungsstrukturen, Gremien und Rollen innerhalb des Programms"]') ? escapeHtml(document.querySelector('#strategie textarea[placeholder="Beschreibung der Entscheidungsstrukturen, Gremien und Rollen innerhalb des Programms"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Rollen und Verantwortlichkeiten:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Detaillierte Definition der Rollen und Verantwortlichkeiten für alle Programmmitglieder und Stakeholder"]') ? document.querySelector('#strategie textarea[placeholder="Detaillierte Definition der Rollen und Verantwortlichkeiten für alle Programmmitglieder und Stakeholder"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('#strategie textarea[placeholder="Detaillierte Definition der Rollen und Verantwortlichkeiten für alle Programmmitglieder und Stakeholder"]') ? escapeHtml(document.querySelector('#strategie textarea[placeholder="Detaillierte Definition der Rollen und Verantwortlichkeiten für alle Programmmitglieder und Stakeholder"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>2. Umfassendes Anforderungsmanagement</h3>
                                     <label>Geschäftsanforderungen auf Programmebene:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Übergeordnete Geschäftsanforderungen, die durch das Programm erfüllt werden sollen"]') ? document.querySelector('#strategie textarea[placeholder="Übergeordnete Geschäftsanforderungen, die durch das Programm erfüllt werden sollen"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('#strategie textarea[placeholder="Übergeordnete Geschäftsanforderungen, die durch das Programm erfüllt werden sollen"]') ? escapeHtml(document.querySelector('#strategie textarea[placeholder="Übergeordnete Geschäftsanforderungen, die durch das Programm erfüllt werden sollen"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Technische und systemische Anforderungen:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Anforderungen an die Gesamtarchitektur, Integrationen und technische Infrastruktur"]') ? document.querySelector('#strategie textarea[placeholder="Anforderungen an die Gesamtarchitektur, Integrationen und technische Infrastruktur"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('#strategie textarea[placeholder="Anforderungen an die Gesamtarchitektur, Integrationen und technische Infrastruktur"]') ? escapeHtml(document.querySelector('#strategie textarea[placeholder="Anforderungen an die Gesamtarchitektur, Integrationen und technische Infrastruktur"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Nicht-funktionale Anforderungen:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Sicherheit, Compliance, Verfügbarkeit etc. auf Programmebene"]') ? document.querySelector('#strategie textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Sicherheit, Compliance, Verfügbarkeit etc. auf Programmebene"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Sicherheit, Compliance, Verfügbarkeit etc. auf Programmebene"]') ? escapeHtml(document.querySelector('textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Sicherheit, Compliance, Verfügbarkeit etc. auf Programmebene"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>3. Ressourcen- und Finanzmanagement</h3>
                                     <label>Ressourcenplanung (Personal, Infrastruktur, Tools):</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Planung der benötigten personellen Ressourcen, Infrastruktur und Tools für das gesamte Programm"]') ? document.querySelector('#strategie textarea[placeholder="Planung der benötigten personellen Ressourcen, Infrastruktur und Tools für das gesamte Programm"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Planung der benötigten personellen Ressourcen, Infrastruktur und Tools für das gesamte Programm"]') ? escapeHtml(document.querySelector('textarea[placeholder="Planung der benötigten personellen Ressourcen, Infrastruktur und Tools für das gesamte Programm"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Programm-Budget & Finanzierungsplan:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Detailliertes Gesamtbudget des Programms und Plan für die Mittelbeschaffung"]') ? document.querySelector('#strategie textarea[placeholder="Detailliertes Gesamtbudget des Programms und Plan für die Mittelbeschaffung"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Detailliertes Gesamtbudget des Programms und Plan für die Mittelbeschaffung"]') ? escapeHtml(document.querySelector('textarea[placeholder="Detailliertes Gesamtbudget des Programms und Plan für die Mittelbeschaffung"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Kosten-Nutzen-Analyse und ROI-Prognose:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Analyse der erwarteten Kosten und Nutzen über die gesamte Programmlaufzeit, inkl. ROI-Prognosen"]') ? document.querySelector('#strategie textarea[placeholder="Analyse der erwarteten Kosten und Nutzen über die gesamte Programmlaufzeit, inkl. ROI-Prognosen"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Analyse der erwarteten Kosten und Nutzen über die gesamte Programmlaufzeit, inkl. ROI-Prognosen"]') ? escapeHtml(document.querySelector('textarea[placeholder="Analyse der erwarteten Kosten und Nutzen über die gesamte Programmlaufzeit, inkl. ROI-Prognosen"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>4. Kommunikations- und Change-Management</h3>
                                     <label>Kommunikationsstrategie & -plan:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Plan für die interne und externe Kommunikation des Programms, Zielgruppen und Kanäle"]') ? document.querySelector('#strategie textarea[placeholder="Plan für die interne und externe Kommunikation des Programms, Zielgruppen und Kanäle"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.getElementById('communication-strategy') ? escapeHtml(document.getElementById('communication-strategy').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Change-Management-Strategie:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Strategie zur Begleitung von Veränderungen, Sicherstellung der Akzeptanz und Minimierung von Widerständen"]') ? document.querySelector('#strategie textarea[placeholder="Strategie zur Begleitung von Veränderungen, Sicherstellung der Akzeptanz und Minimierung von Widerständen"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.getElementById('change-management-strategy') ? escapeHtml(document.getElementById('change-management-strategy').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Stakeholder-Engagement-Plan:</label>
-                                    <p>${document.querySelector('#strategie textarea[placeholder="Plan zur aktiven Einbindung und Pflege der Beziehungen zu allen relevanten Stakeholdern"]') ? document.querySelector('textarea[placeholder="Plan zur aktiven Einbindung und Pflege der Beziehungen zu allen relevanten Stakeholdern"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.getElementById('stakeholder-engagement-plan') ? escapeHtml(document.getElementById('stakeholder-engagement-plan').value).replace(/\n/g, '<br>') : ''}</p>
+
+                                    <h2>Kommunikationsplan für Meetings</h2>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Meeting-Titel</th>
+                                                <th>Frequenz</th>
+                                                <th>Kanäle</th>
+                                                <th>Teilnehmer</th>
+                                                <th>Verantwortlich</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="communication-plan-tbody">
+                                            ${communicationPlanTableHtml}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
@@ -686,35 +826,35 @@
 
                                     <h3>1. Fortschrittsbericht & Statusaktualisierung</h3>
                                     <label>Aktueller Gesamtstatus Programm:</label>
-                                    <p>${document.querySelector('#durchfuehrung select:nth-of-type(1)') ? document.querySelector('#durchfuehrung select:nth-of-type(1)').value : ''}</p>
+                                    <p>${document.querySelector('#durchfuehrung select:nth-of-type(1)') ? escapeHtml(document.querySelector('#durchfuehrung select:nth-of-type(1)').value) : ''}</p>
 
                                     <label>Abgeschlossene Meilensteine im Berichtszeitraum:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Meilensteine und erreichten Ziele der Projekte"]') ? document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Meilensteine und erreichten Ziele der Projekte"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Meilensteine und erreichten Ziele der Projekte"]') ? escapeHtml(document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Meilensteine und erreichten Ziele der Projekte"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Nächste geplante Meilensteine & Aktivitäten:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Meilensteine und Aktivitäten für den nächsten Berichtszeitraum"]') ? document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Meilensteine und Aktivitäten für den nächsten Berichtszeitraum"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Meilensteine und Aktivitäten für den nächsten Berichtszeitraum"]') ? escapeHtml(document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Meilensteine und Aktivitäten für den nächsten Berichtszeitraum"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Herausforderungen & Lösungsansätze auf Programmebene:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]') ? document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]') ? escapeHtml(document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>2. Programm-Zeitplan & -Roadmap</h3>
                                     <label>Detaillierter Zeitplan & Phasen:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Umfassender Zeitplan mit allen Programmphasen, Hauptaktivitäten und Abhängigkeiten"]') ? document.querySelector('textarea[placeholder="Umfassender Zeitplan mit allen Programmphasen, Hauptaktivitäten und Abhängigkeiten"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Umfassender Zeitplan mit allen Programmphasen, Hauptaktivitäten und Abhängigkeiten"]') ? escapeHtml(document.querySelector('textarea[placeholder="Umfassender Zeitplan mit allen Programmphasen, Hauptaktivitäten und Abhängigkeiten"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Meilensteine auf Programmebene:</label>
                                     ${Array.from(document.querySelectorAll('#programMilestones .milestone-item')).map(item => `
                                         <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 5px;">
                                             <label>Meilenstein:</label>
-                                            <p>${item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]') ? item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value : ''}</p>
+                                            <p>${item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]') ? escapeHtml(item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value) : ''}</p>
                                             <label>Zieldatum:</label>
-                                            <p>${item.querySelector('input[type="date"]') ? item.querySelector('input[type="date"]').value : ''}</p>
+                                            <p>${item.querySelector('input[type="date"]') ? escapeHtml(item.querySelector('input[type="date"]').value) : ''}</p>
                                             <label>Beschreibung & Erfolgskriterien:</label>
-                                            <p>${item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]') ? item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                            <p>${item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]') ? escapeHtml(item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value).replace(/\n/g, '<br>') : ''}</p>
                                         </div>
                                     `).join('')}
 
                                     <label>Programm-Roadmap:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Visualisierung des Programmverlaufs und der Hauptlieferobjekte über die Zeit"]') ? document.querySelector('textarea[placeholder="Visualisierung des Programmverlaufs und der Hauptlieferobjekte über die Zeit"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Visualisierung des Programmverlaufs und der Hauptlieferobjekte über die Zeit"]') ? escapeHtml(document.querySelector('textarea[placeholder="Visualisierung des Programmverlaufs und der Hauptlieferobjekte über die Zeit"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>3. Risikomanagement auf Programmebene</h3>
                                     <table>
@@ -730,19 +870,19 @@
                                         <tbody>
                                             ${Array.from(document.querySelectorAll('#risikoTable tr')).map(row => `
                                                 <tr>
-                                                    <td>${row.querySelector('input[type="text"]') ? row.querySelector('input[type="text"]').value : ''}</td>
-                                                    <td>${row.querySelector('select:nth-of-type(1)') ? row.querySelector('select:nth-of-type(1)').value : ''}</td>
-                                                    <td>${row.querySelector('select:nth-of-type(2)') ? row.querySelector('select:nth-of-type(2)').value : ''}</td>
-                                                    <td>${row.querySelector('select:nth-of-type(3)') ? row.querySelector('select:nth-of-type(3)').value : ''}</td>
-                                                    <td>${row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]') ? row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]').value : ''}</td>
+                                                    <td>${row.querySelector('input[type="text"]') ? escapeHtml(row.querySelector('input[type="text"]').value) : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(1)') ? escapeHtml(row.querySelector('select:nth-of-type(1)').value) : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(2)') ? escapeHtml(row.querySelector('select:nth-of-type(2)').value) : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(3)') ? escapeHtml(row.querySelector('select:nth-of-type(3)').value) : ''}</td>
+                                                    <td>${row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]') ? escapeHtml(row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]').value) : ''}</td>
                                                 </tr>
                                             `).join('')}
                                         </tbody>
                                     </table>
                                     <label>Aktuelle Issues/Probleme auf Programmebene:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte, die das Programm betreffen"]') ? document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte, die das Programm betreffen"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte, die das Programm betreffen"]') ? escapeHtml(document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte, die das Programm betreffen"]').value).replace(/\n/g, '<br>') : ''}</p>
                                     <label>Eskalationsprozesse:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme im Programmkontext"]') ? document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme im Programmkontext"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme im Programmkontext"]') ? escapeHtml(document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme im Programmkontext"]').value).replace(/\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
@@ -752,33 +892,33 @@
 
                                     <h3>1. Abschlussbericht des Programms</h3>
                                     <label>Zusammenfassung der Programmergebnisse:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Programms"]') ? document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Programms"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Programms"]') ? escapeHtml(document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Programms"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Erreichte Nutzen (Benefits) & Ziele:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Nutzen und Ziele, die erreicht wurden"]') ? document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Nutzen und Ziele, die erreicht wurden"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Nutzen und Ziele, die erreicht wurden"]') ? escapeHtml(document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Nutzen und Ziele, die erreicht wurden"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Nicht erreichte Nutzen/Ziele & Begründung:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Auflistung der Nutzen oder Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung"]') ? document.querySelector('textarea[placeholder="Auflistung der Nutzen oder Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Auflistung der Nutzen oder Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung"]') ? escapeHtml(document.querySelector('textarea[placeholder="Auflistung der Nutzen oder Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Finanzieller Abschluss & Abweichungen vom Budget:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Analyse der finalen Programmkosten, Abweichungen vom ursprünglichen Budget und Ursachenanalyse"]') ? document.querySelector('textarea[placeholder="Analyse der finalen Programmkosten, Abweichungen vom ursprünglichen Budget und Ursachenanalyse"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Analyse der finalen Programmkosten, Abweichungen vom ursprünglichen Budget und Ursachenanalyse"]') ? escapeHtml(document.querySelector('textarea[placeholder="Analyse der finalen Programmkosten, Abweichungen vom ursprünglichen Budget und Ursachenanalyse"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Qualitativer Abschluss & Lessons Learned:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Zusammenfassung der wichtigsten Learnings, Best Practices und Empfehlungen für zukünftige Programme oder Projekte"]') ? document.querySelector('textarea[placeholder="Zusammenfassung der wichtigsten Learnings, Best Practices und Empfehlungen für zukünftige Programme oder Projekte"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Zusammenfassung der wichtigsten Learnings, Best Practices und Empfehlungen für zukünftige Programme oder Projekte"]') ? escapeHtml(document.querySelector('textarea[placeholder="Zusammenfassung der wichtigsten Learnings, Best Practices und Empfehlungen für zukünftige Programme oder Projekte"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>2. Evaluierung & Monitoring des Nutzens</h3>
                                     <label>KPIs zur Nutzenmessung nach Programm-Abschluss:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Definition von Key Performance Indicators (KPIs) zur Messung des langfristigen Nutzens nach Programmende"]') ? document.querySelector('textarea[placeholder="Definition von Key Performance Indicators (KPIs) zur Messung des langfristigen Nutzens nach Programmende"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Definition von Key Performance Indicators (KPIs) zur Messung des langfristigen Nutzens nach Programmende"]') ? escapeHtml(document.querySelector('textarea[placeholder="Definition von Key Performance Indicators (KPIs) zur Messung des langfristigen Nutzens nach Programmende"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Monitoring-Plan für Benefits:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Plan zur Überwachung und Berichterstattung über die Realisierung der erwarteten Nutzen nach Programm-Abschluss"]') ? document.querySelector('textarea[placeholder="Plan zur Überwachung und Berichterstattung über die Realisierung der erwarteten Nutzen nach Programm-Abschluss"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Plan zur Überwachung und Berichterstattung über die Realisierung der erwarteten Nutzen nach Programm-Abschluss"]') ? escapeHtml(document.querySelector('textarea[placeholder="Plan zur Überwachung und Berichterstattung über die Realisierung der erwarteten Nutzen nach Programm-Abschluss"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <h3>3. Formeller Programm-Abschluss</h3>
                                     <label>Übergabe an den Linienbetrieb/Nachfolgeorganisation:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Details zur formellen Übergabe der Programmergebnisse an die zuständigen Linienorganisationen oder nachfolgende Programme/Projekte"]') ? document.querySelector('textarea[placeholder="Details zur formellen Übergabe der Programmergebnisse an die zuständigen Linienorganisationen oder nachfolgende Programme/Projekte"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Details zur formellen Übergabe der Programmergebnisse an die zuständigen Linienorganisationen oder nachfolgende Programme/Projekte"]') ? escapeHtml(document.querySelector('textarea[placeholder="Details zur formellen Übergabe der Programmergebnisse an die zuständigen Linienorganisationen oder nachfolgende Programme/Projekte"]').value).replace(/\n/g, '<br>') : ''}</p>
 
                                     <label>Formelle Programmschließung:</label>
-                                    <p>${document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme und Schließung des Programms"]') ? document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme und Schließung des Programms"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme und Schließung des Programms"]') ? escapeHtml(document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme und Schließung des Programms"]').value).replace(/\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
