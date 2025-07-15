@@ -485,18 +485,34 @@
         });
 
         function showTab(tabName, event) {
+            console.log('showTab called with tabName:', tabName); // Debugging: Welcher Tab-Name wird übergeben?
+
             const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
+            tabContents.forEach(content => {
+                // Defensive check, although content from querySelectorAll should not be null
+                if (content) {
+                    content.classList.remove('active');
+                }
+            });
 
             const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
+            tabs.forEach(tab => {
+                // Defensive check, although tab from querySelectorAll should not be null
+                if (tab) {
+                    tab.classList.remove('active');
+                }
+            });
 
-            // The fix is here: Ensure tabName is directly used as the ID
             const targetTab = document.getElementById(tabName);
-            if (targetTab) { // Added a check to prevent error if element is null
+            console.log('Target tab element for', tabName, ':', targetTab); // Debugging: Wird das Element gefunden?
+
+            if (targetTab) {
                 targetTab.classList.add('active');
+            } else {
+                console.error('FEHLER: Element mit ID "' + tabName + '" wurde nicht gefunden. Überprüfen Sie die IDs in Ihrem HTML.');
             }
-            if (event && event.currentTarget) { // Added a check for event.currentTarget
+
+            if (event && event.currentTarget) {
                 event.currentTarget.classList.add('active');
             }
         }
