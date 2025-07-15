@@ -467,7 +467,6 @@
                     </tbody>
                 </table>
                 <button class="add-button" onclick="addContent()">+ Inhalt hinzufügen</button>
-
                 <h3>Kommunikationskanäle</h3>
                 <div class="form-group">
                     <label for="social-media-links">Social Media Links:</label>
@@ -503,36 +502,66 @@
                         <input type="number" id="new-partners" placeholder="0">
                     </div>
                     <div class="metric-card">
-                        <h4>Partner-Zufriedenheit</h4>
-                        <input type="number" id="partner-satisfaction" placeholder="0.0">
+                        <h4>Partner-Aktivität</h4>
+                        <input type="number" id="partner-activity" placeholder="0">
                     </div>
                 </div>
 
                 <h3>Finanzberichte</h3>
-                <div class="data-row-export"><span class="data-label-export">Aktuelle Kosten (€):</span><span class="data-value-export">€ ${currentCosts.replace(/\n/g, '<br>')}</span></div>
-                <div class="data-row-export"><span class="data-label-export">Kostenabweichung (€):</span><span class="data-value-export">€ ${costDeviation.replace(/\n/g, '<br>')}</span></div>
+                <div class="form-group">
+                    <label for="current-costs">Aktuelle Kosten (€):</label>
+                    <input type="number" id="current-costs" placeholder="0,00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="cost-deviation">Kostenabweichung (€):</label>
+                    <input type="number" id="cost-deviation" placeholder="0,00" step="0.01">
+                </div>
+
                 <h3>Meilensteine & Arbeitspakete</h3>
-                <table class="output-table">
-                    <thead><tr><th>Arbeitspaket/Meilenstein</th><th>Verantwortlich</th><th>Geplantes Ende</th><th>Status</th></tr></thead>
-                    <tbody>${milestonesTable}</tbody>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Arbeitspaket/Meilenstein</th>
+                            <th>Verantwortlich</th>
+                            <th>Geplantes Ende</th>
+                            <th>Status</th>
+                            <th>Aktion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="milestones-tbody">
+                        <tr class="data-row">
+                            <td><input type="text" placeholder="Bezeichnung"></td>
+                            <td><input type="text" placeholder="Name"></td>
+                            <td><input type="date"></td>
+                            <td>
+                                <select>
+                                    <option value="open">Offen</option>
+                                    <option value="in-progress">In Arbeit</option>
+                                    <option value="completed">Abgeschlossen</option>
+                                    <option value="delayed">Verzögert</option>
+                                </select>
+                            </td>
+                            <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+                        </tr>
+                    </tbody>
                 </table>
+                <button class="add-button" onclick="addMilestone()">+ Meilenstein/Arbeitspaket hinzufügen</button>
             </div>
         </div>
-        <div class="actions">
-            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
-            <button class="btn btn-primary" onclick="generateDocumentation()">💾 Dokument speichern</button>
-            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
+
+        <div class="btn-group">
+            <button class="btn" onclick="saveAsStaticHtml()">Dokument speichern</button>
+            <button class="btn" onclick="exportHandover()">Übergabe-Paket Export</button>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const documentInfoDiv = document.getElementById('documentInfo');
-            if (documentInfoDiv) {
-                documentInfoDiv.innerHTML = `Version 1.0 (Stand: ${new Date().toLocaleDateString('de-DE')})`;
-            }
-        });
+        // Set initial document version and date
+        let documentVersion = "1.0";
+        let documentDate = new Date().toLocaleDateString('de-DE');
+        document.getElementById('documentInfo').textContent = `Version: ${documentVersion} | Datum: ${documentDate}`;
 
+        // Tab functionality
         function showTab(tabId, event) {
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
@@ -543,11 +572,12 @@
             event.currentTarget.classList.add('active');
         }
 
+        // Functions to add rows to tables
         function addZertifizierung() {
             const tbody = document.getElementById('zertifizierungen-tbody');
-            const row = document.createElement('tr');
-            row.classList.add('data-row');
-            row.innerHTML = `
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
                 <td><input type="text" placeholder="Zertifizierung eingeben"></td>
                 <td>
                     <select>
@@ -566,14 +596,14 @@
                 </td>
                 <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(newRow);
         }
 
         function addService() {
             const tbody = document.getElementById('services-tbody');
-            const row = document.createElement('tr');
-            row.classList.add('data-row');
-            row.innerHTML = `
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
                 <td><input type="text" placeholder="Service-Name"></td>
                 <td>
                     <select>
@@ -602,14 +632,14 @@
                 </td>
                 <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(newRow);
         }
 
         function addOpportunity() {
             const tbody = document.getElementById('opportunities-tbody');
-            const row = document.createElement('tr');
-            row.classList.add('data-row');
-            row.innerHTML = `
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
                 <td><input type="text" placeholder="Opportunity Name"></td>
                 <td><input type="text" placeholder="Kunde"></td>
                 <td><input type="number" placeholder="€"></td>
@@ -627,14 +657,14 @@
                 <td><input type="date"></td>
                 <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(newRow);
         }
 
         function addCampaign() {
             const tbody = document.getElementById('campaigns-tbody');
-            const row = document.createElement('tr');
-            row.classList.add('data-row');
-            row.innerHTML = `
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
                 <td><input type="text" placeholder="Kampagnenname"></td>
                 <td>
                     <select>
@@ -658,14 +688,14 @@
                 <td><input type="number" placeholder="0"></td>
                 <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(newRow);
         }
 
         function addContent() {
             const tbody = document.getElementById('content-tbody');
-            const row = document.createElement('tr');
-            row.classList.add('data-row');
-            row.innerHTML = `
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
                 <td><input type="text" placeholder="Titel des Inhalts"></td>
                 <td>
                     <select>
@@ -686,119 +716,201 @@
                 </td>
                 <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(newRow);
+        }
+
+        function addMilestone() {
+            const tbody = document.getElementById('milestones-tbody');
+            const newRow = document.createElement('tr');
+            newRow.classList.add('data-row');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Bezeichnung"></td>
+                <td><input type="text" placeholder="Name"></td>
+                <td><input type="date"></td>
+                <td>
+                    <select>
+                        <option value="open">Offen</option>
+                        <option value="in-progress">In Arbeit</option>
+                        <option value="completed">Abgeschlossen</option>
+                        <option value="delayed">Verzögert</option>
+                    </select>
+                </td>
+                <td><button class="delete-button" onclick="deleteRow(this)">-</button></td>
+            `;
+            tbody.appendChild(newRow);
         }
 
         function deleteRow(button) {
-            button.closest('tr').remove();
+            button.closest('.data-row').remove();
         }
 
-        function generateDocumentation() {
-            const projektname = document.getElementById('projektname').value || 'Unbenanntes Projekt';
-            const projektId = document.getElementById('projekt-id').value || 'N/A';
-            const projektleiter = document.getElementById('projektleiter').value || 'N/A';
-            const projektstatus = document.getElementById('projektstatus').value || 'Nicht definiert';
-            const startDatum = document.getElementById('start-datum').value || 'N/A';
-            const endDatum = document.getElementById('end-datum').value || 'N/A';
-            const budget = document.getElementById('budget').value || '0.00';
-            const projektziel = document.getElementById('projektziel').value || 'Kein Ziel definiert.';
-            const projektbeschreibung = document.getElementById('projektbeschreibung').value || 'Keine detaillierte Beschreibung vorhanden.';
+        function escapeHtml(text) {
+            var map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
 
-            const partnerName = document.getElementById('partner-name').value || 'Nicht definiert';
-            const partnerTyp = document.getElementById('partner-typ').value || 'Nicht definiert';
-            const partnerTier = document.getElementById('partner-tier').value || 'Nicht definiert';
-            const partnerStatus = document.getElementById('partner-status').value || 'Nicht definiert';
-            const partnerAnsprechpartner = document.getElementById('partner-ansprechpartner').value || 'N/A';
-            const partnerEmail = document.getElementById('partner-email').value || 'N/A';
-            const partnerTelefon = document.getElementById('partner-telefon').value || 'N/A';
-            const partnerWebsite = document.getElementById('partner-website').value || 'N/A';
-            const vertragsstart = document.getElementById('vertragsstart').value || 'N/A';
-            const vertragsende = document.getElementById('vertragsende').value || 'N/A';
-            const provision = document.getElementById('provision').value || '0.0';
-            const rabatt = document.getElementById('rabatt').value || '0.0';
 
-            const zertifizierungen = Array.from(document.querySelectorAll('#zertifizierungen-tbody tr')).map(row => {
-                const inputs = row.querySelectorAll('input, select');
-                return {
-                    zertifizierung: inputs[0].value,
-                    level: inputs[1].value,
-                    gueltigBis: inputs[2].value,
-                    status: inputs[3].value
-                };
-            });
+        // Function to save the current form data as a static HTML file for documentation
+        function saveAsStaticHtml() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // Months start at 0!
+            let dd = today.getDate();
 
-            const services = Array.from(document.querySelectorAll('#services-tbody tr')).map(row => {
-                const inputs = row.querySelectorAll('input, select');
-                return {
-                    service: inputs[0].value,
-                    kategorie: inputs[1].value,
-                    slaLevel: inputs[2].value,
-                    preis: inputs[3].value,
-                    status: inputs[4].value
-                };
-            });
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
 
-            const responseTime = document.getElementById('response-time').value || 'N/A';
-            const resolutionTime = document.getElementById('resolution-time').value || 'N/A';
-            const availability = document.getElementById('availability').value || 'N/A';
-            const supportHours = document.getElementById('support-hours').value || 'N/A';
-            const ticketSystemIntegration = Array.from(document.querySelectorAll('input[name="integrations"]:checked')).map(cb => cb.value).join(', ') || 'Keine';
+            const formattedToday = dd + '.' + mm + '.' + yyyy;
 
-            const opportunities = Array.from(document.querySelectorAll('#opportunities-tbody tr')).map(row => {
-                const inputs = row.querySelectorAll('input, select');
-                return {
-                    opportunity: inputs[0].value,
-                    kunde: inputs[1].value,
-                    wert: inputs[2].value,
-                    stage: inputs[3].value,
-                    wahrscheinlichkeit: inputs[4].value,
-                    abschlussErwartet: inputs[5].value
-                };
-            });
+            // Project Tab Data
+            const projektname = document.getElementById('projektname') ? escapeHtml(document.getElementById('projektname').value) : '';
+            const projektId = document.getElementById('projekt-id') ? escapeHtml(document.getElementById('projekt-id').value) : '';
+            const projektleiter = document.getElementById('projektleiter') ? escapeHtml(document.getElementById('projektleiter').value) : '';
+            const projektstatus = document.getElementById('projektstatus') ? escapeHtml(document.getElementById('projektstatus').value) : '';
+            const startDatum = document.getElementById('start-datum') ? escapeHtml(document.getElementById('start-datum').value) : '';
+            const endDatum = document.getElementById('end-datum') ? escapeHtml(document.getElementById('end-datum').value) : '';
+            const budget = document.getElementById('budget') ? escapeHtml(document.getElementById('budget').value) : '';
+            const projektziel = document.getElementById('projektziel') ? escapeHtml(document.getElementById('projektziel').value).replace(/\n/g, '<br>') : '';
+            const projektbeschreibung = document.getElementById('projektbeschreibung') ? escapeHtml(document.getElementById('projektbeschreibung').value).replace(/\n/g, '<br>') : '';
 
-            const pipelineValue = document.getElementById('pipeline-value').value || '0.00';
-            const conversionRate = document.getElementById('conversion-rate').value || '0.0';
-            const avgDealValue = document.getElementById('avg-deal-value').value || '0.00';
+            // Partner Tab Data
+            const partnerName = document.getElementById('partner-name') ? escapeHtml(document.getElementById('partner-name').value) : '';
+            const partnerTyp = document.getElementById('partner-typ') ? escapeHtml(document.getElementById('partner-typ').value) : '';
+            const partnerTier = document.getElementById('partner-tier') ? escapeHtml(document.getElementById('partner-tier').value) : '';
+            const partnerStatus = document.getElementById('partner-status') ? escapeHtml(document.getElementById('partner-status').value) : '';
+            const partnerAnsprechpartner = document.getElementById('partner-ansprechpartner') ? escapeHtml(document.getElementById('partner-ansprechpartner').value) : '';
+            const partnerEmail = document.getElementById('partner-email') ? escapeHtml(document.getElementById('partner-email').value) : '';
+            const partnerTelefon = document.getElementById('partner-telefon') ? escapeHtml(document.getElementById('partner-telefon').value) : '';
+            const partnerWebsite = document.getElementById('partner-website') ? escapeHtml(document.getElementById('partner-website').value) : '';
+            const vertragsstart = document.getElementById('vertragsstart') ? escapeHtml(document.getElementById('vertragsstart').value) : '';
+            const vertragsende = document.getElementById('vertragsende') ? escapeHtml(document.getElementById('vertragsende').value) : '';
+            const provision = document.getElementById('provision') ? escapeHtml(document.getElementById('provision').value) : '';
+            const rabatt = document.getElementById('rabatt') ? escapeHtml(document.getElementById('rabatt').value) : '';
 
-            const campaigns = Array.from(document.querySelectorAll('#campaigns-tbody tr')).map(row => {
-                const inputs = row.querySelectorAll('input, select');
-                return {
-                    kampagnenname: inputs[0].value,
-                    typ: inputs[1].value,
-                    startdatum: inputs[2].value,
-                    enddatum: inputs[3].value,
-                    budget: inputs[4].value,
-                    status: inputs[5].value,
-                    leads: inputs[6].value,
-                    konversionen: inputs[7].value
-                };
-            });
+            const zertifizierungenTable = Array.from(document.querySelectorAll('#zertifizierungen-tbody tr')).map(row => {
+                const cert = escapeHtml(row.cells[0].querySelector('input').value);
+                const level = escapeHtml(row.cells[1].querySelector('select').value);
+                const validUntil = escapeHtml(row.cells[2].querySelector('input').value);
+                const status = escapeHtml(row.cells[3].querySelector('select').value);
+                return `<tr><td>${cert}</td><td>${level}</td><td>${validUntil}</td><td>${status}</td></tr>`;
+            }).join('');
+            const finalZertifizierungenTable = zertifizierungenTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Zertifizierung</th><th>Level</th><th>Gültig bis</th><th>Status</th></tr></thead>
+                    <tbody>${zertifizierungenTable}</tbody>
+                </table>
+            ` : '<p>Keine Zertifizierungen eingetragen.</p>';
 
-            const content = Array.from(document.querySelectorAll('#content-tbody tr')).map(row => {
-                const inputs = row.querySelectorAll('input, select');
-                return {
-                    titel: inputs[0].value,
-                    typ: inputs[1].value,
-                    erstellungsdatum: inputs[2].value,
-                    status: inputs[3].value
-                };
-            });
+            // Service Tab Data
+            const servicesTable = Array.from(document.querySelectorAll('#services-tbody tr')).map(row => {
+                const service = escapeHtml(row.cells[0].querySelector('input').value);
+                const category = escapeHtml(row.cells[1].querySelector('select').value);
+                const slaLevel = escapeHtml(row.cells[2].querySelector('select').value);
+                const price = escapeHtml(row.cells[3].querySelector('input').value);
+                const status = escapeHtml(row.cells[4].querySelector('select').value);
+                return `<tr><td>${service}</td><td>${category}</td><td>${slaLevel}</td><td>${price}</td><td>${status}</td></tr>`;
+            }).join('');
+            const finalServicesTable = servicesTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Service</th><th>Kategorie</th><th>SLA Level</th><th>Preis</th><th>Status</th></tr></thead>
+                    <tbody>${servicesTable}</tbody>
+                </table>
+            ` : '<p>Keine Services eingetragen.</p>';
 
-            const socialMediaLinks = document.getElementById('social-media-links').value || 'N/A';
-            const newsletterFrequency = document.getElementById('newsletter-frequency').value || 'N/A';
-            const eventCalendar = document.getElementById('event-calendar').value || 'N/A';
+            const responseTime = document.getElementById('response-time') ? escapeHtml(document.getElementById('response-time').value) : '';
+            const resolutionTime = document.getElementById('resolution-time') ? escapeHtml(document.getElementById('resolution-time').value) : '';
+            const availability = document.getElementById('availability') ? escapeHtml(document.getElementById('availability').value) : '';
+            const supportHours = document.getElementById('support-hours') ? escapeHtml(document.getElementById('support-hours').value) : '';
+            const openTickets = document.getElementById('open-tickets') ? escapeHtml(document.getElementById('open-tickets').textContent) : '';
+            const avgResponse = document.getElementById('avg-response') ? escapeHtml(document.getElementById('avg-response').textContent) : '';
+            const satisfaction = document.getElementById('satisfaction') ? escapeHtml(document.getElementById('satisfaction').textContent) : '';
+            const integrations = Array.from(document.querySelectorAll('input[name="integrations"]:checked')).map(cb => escapeHtml(cb.value)).join(', ');
 
-            const partnerRevenue = document.getElementById('partner-revenue').value || '0.00';
-            const newPartners = document.getElementById('new-partners').value || '0';
-            const partnerSatisfaction = document.getElementById('partner-satisfaction').value || '0.0';
+            // Sales Tab Data
+            const opportunitiesTable = Array.from(document.querySelectorAll('#opportunities-tbody tr')).map(row => {
+                const opportunity = escapeHtml(row.cells[0].querySelector('input').value);
+                const customer = escapeHtml(row.cells[1].querySelector('input').value);
+                const value = escapeHtml(row.cells[2].querySelector('input').value);
+                const stage = escapeHtml(row.cells[3].querySelector('select').value);
+                const probability = escapeHtml(row.cells[4].querySelector('input').value);
+                const expectedClose = escapeHtml(row.cells[5].querySelector('input').value);
+                return `<tr><td>${opportunity}</td><td>${customer}</td><td>${value}</td><td>${stage}</td><td>${probability}</td><td>${expectedClose}</td></tr>`;
+            }).join('');
+            const finalOpportunitiesTable = opportunitiesTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Opportunity</th><th>Kunde</th><th>Wert (€)</th><th>Stage</th><th>Wahrscheinlichkeit</th><th>Abschluss erwartet</th></tr></thead>
+                    <tbody>${opportunitiesTable}</tbody>
+                </table>
+            ` : '<p>Keine Opportunities eingetragen.</p>';
 
-            const currentCosts = "Hier würden die tatsächlichen Kosten aus einem Backend-System geladen.";
-            const costDeviation = "Hier würde die Kostenabweichung berechnet.";
+            const pipelineValue = document.getElementById('pipeline-value') ? escapeHtml(document.getElementById('pipeline-value').value) : '';
+            const conversionRate = document.getElementById('conversion-rate') ? escapeHtml(document.getElementById('conversion-rate').value) : '';
+            const avgDealValue = document.getElementById('avg-deal-value') ? escapeHtml(document.getElementById('avg-deal-value').value) : '';
 
-            const milestonesTable = `
-                <tr><td>Meilenstein 1</td><td>Team A</td><td>2024-12-31</td><td>Abgeschlossen</td></tr>
-                <tr><td>Meilenstein 2</td><td>Team B</td><td>2025-06-30</td><td>In Bearbeitung</td></tr>
-            `; // Example static content
+            const campaignsTable = Array.from(document.querySelectorAll('#campaigns-tbody tr')).map(row => {
+                const campaignName = escapeHtml(row.cells[0].querySelector('input').value);
+                const type = escapeHtml(row.cells[1].querySelector('select').value);
+                const startDate = escapeHtml(row.cells[2].querySelector('input').value);
+                const endDate = escapeHtml(row.cells[3].querySelector('input').value);
+                const budget = escapeHtml(row.cells[4].querySelector('input').value);
+                const status = escapeHtml(row.cells[5].querySelector('select').value);
+                const leads = escapeHtml(row.cells[6].querySelector('input').value);
+                const conversions = escapeHtml(row.cells[7].querySelector('input').value);
+                return `<tr><td>${campaignName}</td><td>${type}</td><td>${startDate}</td><td>${endDate}</td><td>${budget}</td><td>${status}</td><td>${leads}</td><td>${conversions}</td></tr>`;
+            }).join('');
+            const finalCampaignsTable = campaignsTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Kampagnenname</th><th>Typ</th><th>Startdatum</th><th>Enddatum</th><th>Budget (€)</th><th>Status</th><th>Leads</th><th>Konversionen</th></tr></thead>
+                    <tbody>${campaignsTable}</tbody>
+                </table>
+            ` : '<p>Keine Kampagnen eingetragen.</p>';
+
+            // Marketing Tab Data
+            const contentTable = Array.from(document.querySelectorAll('#content-tbody tr')).map(row => {
+                const title = escapeHtml(row.cells[0].querySelector('input').value);
+                const type = escapeHtml(row.cells[1].querySelector('select').value);
+                const creationDate = escapeHtml(row.cells[2].querySelector('input').value);
+                const status = escapeHtml(row.cells[3].querySelector('select').value);
+                return `<tr><td>${title}</td><td>${type}</td><td>${creationDate}</td><td>${status}</td></tr>`;
+            }).join('');
+            const finalContentTable = contentTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Titel</th><th>Typ</th><th>Erstellungsdatum</th><th>Status</th></tr></thead>
+                    <tbody>${contentTable}</tbody>
+                </table>
+            ` : '<p>Keine Inhalte eingetragen.</p>';
+
+            const socialMediaLinks = document.getElementById('social-media-links') ? escapeHtml(document.getElementById('social-media-links').value).replace(/\n/g, '<br>') : '';
+            const newsletterFrequency = document.getElementById('newsletter-frequency') ? escapeHtml(document.getElementById('newsletter-frequency').value) : '';
+            const eventCalendar = document.getElementById('event-calendar') ? escapeHtml(document.getElementById('event-calendar').value) : '';
+
+            // Reporting Tab Data
+            const partnerRevenue = document.getElementById('partner-revenue') ? escapeHtml(document.getElementById('partner-revenue').value) : '';
+            const newPartners = document.getElementById('new-partners') ? escapeHtml(document.getElementById('new-partners').value) : '';
+            const partnerActivity = document.getElementById('partner-activity') ? escapeHtml(document.getElementById('partner-activity').value) : '';
+            const currentCosts = document.getElementById('current-costs') ? escapeHtml(document.getElementById('current-costs').value) : '';
+            const costDeviation = document.getElementById('cost-deviation') ? escapeHtml(document.getElementById('cost-deviation').value) : '';
+
+            const milestonesTable = Array.from(document.querySelectorAll('#milestones-tbody tr')).map(row => {
+                const milestone = escapeHtml(row.cells[0].querySelector('input').value);
+                const responsible = escapeHtml(row.cells[1].querySelector('input').value);
+                const plannedEnd = escapeHtml(row.cells[2].querySelector('input').value);
+                const status = escapeHtml(row.cells[3].querySelector('select').value);
+                return `<tr><td>${milestone}</td><td>${responsible}</td><td>${plannedEnd}</td><td>${status}</td></tr>`;
+            }).join('');
+            const finalMilestonesTable = milestonesTable ? `
+                <table class="output-table">
+                    <thead><tr><th>Arbeitspaket/Meilenstein</th><th>Verantwortlich</th><th>Geplantes Ende</th><th>Status</th></tr></thead>
+                    <tbody>${milestonesTable}</tbody>
+                </table>
+            ` : '<p>Keine Meilensteine/Arbeitspakete eingetragen.</p>';
+
 
             const staticHtmlContent = `
                 <!DOCTYPE html>
@@ -806,183 +918,145 @@
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>PartnerRelationshipManagement-Dokumentation</title>
+                    <title>Partner Relationship Management Dokumentation - ${projektname}</title>
                     <style>
-                        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f4; color: #333; }
-                        .document-container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: 20px auto; }
-                        h1, h2, h3 { color: #333; }
-                        .section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-                        .section:last-child { border-bottom: none; }
-                        .data-row-export { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted #eee; }
-                        .data-label-export { font-weight: bold; }
-                        .data-value-export { text-align: right; }
-                        .output-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                        .output-table th, .output-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        .output-table th { background-color: #f2f2f2; }
-                        .status-indicators-export { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-                        .metric-card-export, .status-card-export { background-color: #e9e9e9; padding: 10px; border-radius: 5px; flex: 1; min-width: 150px; text-align: center; }
-                        .metric-card-export h4, .status-card-export h4 { margin: 0 0 5px 0; color: #555; }
-                        .metric-card-export p, .status-card-export p { margin: 0; font-size: 0.9em; color: #777; }
-                        ul { list-style-type: none; padding: 0; }
-                        ul li { background-color: #f9f9f9; padding: 8px; margin-bottom: 5px; border-radius: 4px; }
-                        .document-info { font-size: 0.8em; color: #666; margin-top: 10px; text-align: right;}
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f4f4f4; }
+                        .document-container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+                        .header-export { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #007bff; padding-bottom: 15px; }
+                        .header-export h1 { color: #007bff; margin: 0; font-size: 2em; }
+                        .header-export p { color: #555; font-size: 1.1em; }
+                        .section-export { margin-bottom: 25px; border: 1px solid #e1e1e1; border-radius: 5px; padding: 20px; background-color: #f9f9f9; }
+                        .section-export h2 { color: #007bff; border-bottom: 1px solid #007bff; padding-bottom: 10px; margin-top: 0; margin-bottom: 15px; font-size: 1.5em; }
+                        .section-export h3 { color: #555; margin-top: 20px; margin-bottom: 10px; font-size: 1.2em; }
+                        .data-row-export { display: flex; margin-bottom: 8px; }
+                        .data-label-export { font-weight: bold; margin-right: 10px; color: #333; flex-shrink: 0; width: 200px; }
+                        .data-value-export { flex-grow: 1; color: #666; }
+                        .output-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        .output-table th, .output-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        .output-table th { background-color: #e9ecef; font-weight: bold; color: #333; }
+                        .document-info-export { text-align: right; font-size: 0.9em; color: #777; margin-top: 20px; }
+                        .metric-card-export {
+                            background-color: #fff;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            padding: 15px;
+                            margin-bottom: 15px;
+                            text-align: center;
+                            display: inline-block;
+                            width: 30%;
+                            margin-right: 2%;
+                            box-sizing: border-box;
+                        }
+                        .metric-card-export h4 { margin: 0 0 5px 0; color: #007bff; font-size: 1.8em; }
+                        .metric-card-export p { margin: 0; color: #666; font-size: 0.9em; }
                     </style>
                 </head>
                 <body>
                     <div class="document-container">
-                        <div class="header">
-                            <h1>OpenProject PRM Dokumentation</h1>
-                            <p>Partner Relationship Management System</p>
-                            <div class="document-info">Version 1.0 (Stand: ${new Date().toLocaleDateString('de-DE')})</div>
+                        <div class="header-export">
+                            <h1>Partner Relationship Management System</h1>
+                            <p>Dokumentation</p>
+                            <div class="document-info-export">Version: ${documentVersion} | Datum: ${formattedToday}</div>
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Projektinitiierung</h2>
-                            <div class="data-row-export"><span class="data-label-export">Projektname:</span><span class="data-value-export">${projektname.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Projekt-ID:</span><span class="data-value-export">${projektId.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Projektleiter:</span><span class="data-value-export">${projektleiter.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Projektstatus:</span><span class="data-value-export">${projektstatus.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Startdatum:</span><span class="data-value-export">${startDatum.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Enddatum:</span><span class="data-value-export">${endDatum.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Budget (€):</span><span class="data-value-export">€ ${budget.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Projektziel:</span><span class="data-value-export">${projektziel.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Detaillierte Projektbeschreibung:</span><span class="data-value-export">${projektbeschreibung.replace(/\n/g, '<br>')}</span></div>
+                            <h3>Projektgrundlagen</h3>
+                            <div class="data-row-export"><span class="data-label-export">Projektname:</span><span class="data-value-export">${projektname}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Projekt-ID:</span><span class="data-value-export">${projektId}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektleiter:</span><span class="data-value-export">${projektleiter}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Projektstatus:</span><span class="data-value-export">${projektstatus}</span></div>
+
+                            <h3>Zeitplan & Budget</h3>
+                            <div class="data-row-export"><span class="data-label-export">Startdatum:</span><span class="data-value-export">${startDatum}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Enddatum:</span><span class="data-value-export">${endDatum}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Budget (€):</span><span class="data-value-export">€ ${budget}</span></div>
+
+                            <h3>Projektziel & Beschreibung</h3>
+                            <div class="data-row-export"><span class="data-label-export">Projektziel:</span><span class="data-value-export">${projektziel}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Detaillierte Projektbeschreibung:</span><span class="data-value-export">${projektbeschreibung}</span></div>
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Partner Management</h2>
-                            <div class="data-row-export"><span class="data-label-export">Partner Name:</span><span class="data-value-export">${partnerName.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Partner-Typ:</span><span class="data-value-export">${partnerTyp.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Partner-Tier:</span><span class="data-value-export">${partnerTier.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Partner-Status:</span><span class="data-value-export">${partnerStatus.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner:</span><span class="data-value-export">${partnerAnsprechpartner.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">E-Mail:</span><span class="data-value-export">${partnerEmail.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Telefon:</span><span class="data-value-export">${partnerTelefon.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Website:</span><span class="data-value-export">${partnerWebsite.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsbeginn:</span><span class="data-value-export">${vertragsstart.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsende:</span><span class="data-value-export">${vertragsende.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Provision (%):</span><span class="data-value-export">${provision.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Rabatt (%):</span><span class="data-value-export">${rabatt.replace(/\n/g, '<br>')}</span></div>
+                            <h3>Partner-Stammdaten</h3>
+                            <div class="data-row-export"><span class="data-label-export">Partner Name:</span><span class="data-value-export">${partnerName}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Typ:</span><span class="data-value-export">${partnerTyp}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Tier:</span><span class="data-value-export">${partnerTier}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Status:</span><span class="data-value-export">${partnerStatus}</span></div>
+
+                            <h3>Kontaktdaten</h3>
+                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner:</span><span class="data-value-export">${partnerAnsprechpartner}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">E-Mail:</span><span class="data-value-export">${partnerEmail}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Telefon:</span><span class="data-value-export">${partnerTelefon}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Website:</span><span class="data-value-export">${partnerWebsite}</span></div>
+
+                            <h3>Vertragsdaten</h3>
+                            <div class="data-row-export"><span class="data-label-export">Vertragsbeginn:</span><span class="data-value-export">${vertragsstart}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Vertragsende:</span><span class="data-value-export">${vertragsende}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Provision (%):</span><span class="data-value-export">${provision}%</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Rabatt (%):</span><span class="data-value-export">${rabatt}%</span></div>
+
                             <h3>Zertifizierungen & Kompetenzen</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Zertifizierung</th><th>Level</th><th>Gültig bis</th><th>Status</th></tr></thead>
-                                <tbody>
-                                    ${zertifizierungen.map(z => `
-                                        <tr>
-                                            <td>${z.zertifizierung.replace(/\n/g, '<br>')}</td>
-                                            <td>${z.level.replace(/\n/g, '<br>')}</td>
-                                            <td>${z.gueltigBis.replace(/\n/g, '<br>')}</td>
-                                            <td>${z.status.replace(/\n/g, '<br>')}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                            ${finalZertifizierungenTable}
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Service Management</h2>
                             <h3>Service-Portfolio</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Service</th><th>Kategorie</th><th>SLA Level</th><th>Preis</th><th>Status</th></tr></thead>
-                                <tbody>
-                                    ${services.map(s => `
-                                        <tr>
-                                            <td>${s.service.replace(/\n/g, '<br>')}</td>
-                                            <td>${s.kategorie.replace(/\n/g, '<br>')}</td>
-                                            <td>${s.slaLevel.replace(/\n/g, '<br>')}</td>
-                                            <td>${s.preis.replace(/\n/g, '<br>')}</td>
-                                            <td>${s.status.replace(/\n/g, '<br>')}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                            ${finalServicesTable}
+
                             <h3>Service Level Agreements (SLA)</h3>
-                            <div class="data-row-export"><span class="data-label-export">Reaktionszeit (Std):</span><span class="data-value-export">${responseTime.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Lösungszeit (Std):</span><span class="data-value-export">${resolutionTime.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Verfügbarkeit (%):</span><span class="data-value-export">${availability.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Support-Zeiten:</span><span class="data-value-export">${supportHours.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Reaktionszeit (Std):</span><span class="data-value-export">${responseTime}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Lösungszeit (Std):</span><span class="data-value-export">${resolutionTime}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Verfügbarkeit (%):</span><span class="data-value-export">${availability}%</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Support-Zeiten:</span><span class="data-value-export">${supportHours}</span></div>
+
                             <h3>Ticket Management</h3>
-                            <div class="data-row-export"><span class="data-label-export">Ticket-System Integration:</span><span class="data-value-export">${ticketSystemIntegration.replace(/\n/g, '<br>')}</span></div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                                <div class="metric-card-export"><h4>${openTickets}</h4><p>Offene Tickets</p></div>
+                                <div class="metric-card-export"><h4>${avgResponse}</h4><p>Ø Reaktionszeit</p></div>
+                                <div class="metric-card-export"><h4>${satisfaction}</h4><p>Kundenzufriedenheit</p></div>
+                            </div>
+                            <div class="data-row-export"><span class="data-label-export">Ticket-System Integrationen:</span><span class="data-value-export">${integrations}</span></div>
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Vertrieb & Sales</h2>
                             <h3>Sales Pipeline</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Opportunity</th><th>Kunde</th><th>Wert (€)</th><th>Stage</th><th>Wahrscheinlichkeit</th><th>Abschluss erwartet</th></tr></thead>
-                                <tbody>
-                                    ${opportunities.map(o => `
-                                        <tr>
-                                            <td>${o.opportunity.replace(/\n/g, '<br>')}</td>
-                                            <td>${o.kunde.replace(/\n/g, '<br>')}</td>
-                                            <td>${o.wert.replace(/\n/g, '<br>')}</td>
-                                            <td>${o.stage.replace(/\n/g, '<br>')}</td>
-                                            <td>${o.wahrscheinlichkeit.replace(/\n/g, '<br>')}</td>
-                                            <td>${o.abschlussErwartet.replace(/\n/g, '<br>')}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                            ${finalOpportunitiesTable}
+
                             <h3>Sales Metriken</h3>
-                            <div class="data-row-export"><span class="data-label-export">Pipeline Wert:</span><span class="data-value-export">€ ${pipelineValue.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Conversion Rate:</span><span class="data-value-export">${conversionRate.replace(/\n/g, '<br>')}%</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Durchschnittlicher Deal Wert:</span><span class="data-value-export">€ ${avgDealValue.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Pipeline Wert:</span><span class="data-value-export">€ ${pipelineValue}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Conversion Rate:</span><span class="data-value-export">${conversionRate}%</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Durchschnittlicher Deal Wert:</span><span class="data-value-export">€ ${avgDealValue}</span></div>
+
                             <h3>Marketing Kampagnen</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Kampagnenname</th><th>Typ</th><th>Startdatum</th><th>Enddatum</th><th>Budget (€)</th><th>Status</th><th>Leads</th><th>Konversionen</th></tr></thead>
-                                <tbody>
-                                    ${campaigns.map(c => `
-                                        <tr>
-                                            <td>${c.kampagnenname.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.typ.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.startdatum.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.enddatum.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.budget.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.status.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.leads.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.konversionen.replace(/\n/g, '<br>')}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                            ${finalCampaignsTable}
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Marketing & Kommunikation</h2>
                             <h3>Inhalt & Materialien</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Titel</th><th>Typ</th><th>Erstellungsdatum</th><th>Status</th></tr></thead>
-                                <tbody>
-                                    ${content.map(c => `
-                                        <tr>
-                                            <td>${c.titel.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.typ.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.erstellungsdatum.replace(/\n/g, '<br>')}</td>
-                                            <td>${c.status.replace(/\n/g, '<br>')}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                            ${finalContentTable}
+
                             <h3>Kommunikationskanäle</h3>
-                            <div class="data-row-export"><span class="data-label-export">Social Media Links:</span><span class="data-value-export">${socialMediaLinks.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Newsletter Frequenz:</span><span class="data-value-export">${newsletterFrequency.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Event Kalender Integration:</span><span class="data-value-export">${eventCalendar.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Social Media Links:</span><span class="data-value-export">${socialMediaLinks}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Newsletter Frequenz:</span><span class="data-value-export">${newsletterFrequency}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Event Kalender Integration:</span><span class="data-value-export">${eventCalendar}</span></div>
                         </div>
 
-                        <div class="section">
+                        <div class="section-export">
                             <h2>Reporting & Analyse</h2>
                             <h3>Leistungsindikatoren (KPIs)</h3>
-                            <div class="data-row-export"><span class="data-label-export">Umsatz mit Partnern:</span><span class="data-value-export">€ ${partnerRevenue.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Neue Partner:</span><span class="data-value-export">${newPartners.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Partner-Zufriedenheit:</span><span class="data-value-export">${partnerSatisfaction.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Umsatz mit Partnern (€):</span><span class="data-value-export">€ ${partnerRevenue}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Neue Partner:</span><span class="data-value-export">${newPartners}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Partner-Aktivität:</span><span class="data-value-export">${partnerActivity}</span></div>
                             <h3>Finanzberichte</h3>
-                            <div class="data-row-export"><span class="data-label-export">Aktuelle Kosten (€):</span><span class="data-value-export">€ ${currentCosts.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Kostenabweichung (€):</span><span class="data-value-export">€ ${costDeviation.replace(/\n/g, '<br>')}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Aktuelle Kosten (€):</span><span class="data-value-export">€ ${currentCosts}</span></div>
+                            <div class="data-row-export"><span class="data-label-export">Kostenabweichung (€):</span><span class="data-value-export">€ ${costDeviation}</span></div>
                             <h3>Meilensteine & Arbeitspakete</h3>
-                            <table class="output-table">
-                                <thead><tr><th>Arbeitspaket/Meilenstein</th><th>Verantwortlich</th><th>Geplantes Ende</th><th>Status</th></tr></thead>
-                                <tbody>${milestonesTable}</tbody>
-                            </table>
+                            ${finalMilestonesTable}
                         </div>
                     </div>
                 </body>
