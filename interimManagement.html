@@ -4,520 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interim Management Dokumentationssystem</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Script-Bibliotheken für PDF-Export und OCR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
-    <style>
-        /* General Styles - Combined from all files, with programmManagement.html as base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px; /* programmManagement.html had 15px, handover had 20px, kickoff had 15px */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            animation: slideIn 0.8s ease-out; /* From handover */
-        }
-
-        @keyframes slideIn { /* From handover */
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 30px; /* From report, was 40px in others */
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>'); /* From kickoff */
-            opacity: 0.3; /* From kickoff */
-            animation: float 20s infinite linear; /* From handover */
-        }
-
-        @keyframes float { /* From handover */
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-100px); }
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* From kickoff */
-            position: relative;
-            z-index: 1;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: flex;
-            justify-content: flex-start; /* Changed to flex-start for better alignment if many tabs */
-            background: #2c3e50; /* Darker background for tabs */
-            padding: 10px 0;
-            border-bottom: 3px solid #3498db;
-            flex-wrap: wrap; /* Allow tabs to wrap */
-        }
-
-        .nav-tab {
-            background: none;
-            border: none;
-            padding: 15px 25px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-        }
-
-        .nav-tab:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-tab.active {
-            color: white;
-            background: #3498db;
-            font-weight: 600;
-            box-shadow: inset 0 3px 10px rgba(0,0,0,0.2);
-        }
-
-        /* Content Sections */
-        .content {
-            padding: 40px; /* From kickoff/handover, report had 30px */
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section {
-            background: #f8f9fa;
-            padding: 30px; /* Common */
-            margin-bottom: 30px; /* Common */
-            border-radius: 12px; /* From kickoff */
-            border-left: 5px solid #3498db;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .section:hover {
-            transform: translateY(-2px); /* Common */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Common */
-        }
-
-        .section h2 {
-            color: #2c3e50;
-            margin-bottom: 25px; /* From kickoff */
-            font-size: 1.6rem; /* From kickoff */
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 2px solid #3498db; /* From report */
-            padding-bottom: 10px; /* From report */
-        }
-
-        /* Numbered headers for Handover */
-        .section h2::before {
-            content: '';
-            width: 40px; /* From handover */
-            height: 40px; /* From handover */
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-right: 15px; /* Added margin */
-        }
-
-        /* Forms and Inputs */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px; /* From handover, common */
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #495057;
-            font-size: 0.95rem;
-            display: block; /* From handover */
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 12px; /* Common */
-            border: 2px solid #e9ecef; /* Common */
-            border-radius: 8px; /* Common */
-            font-size: 1rem; /* Common */
-            transition: all 0.3s ease;
-            background: white;
-            width: 100%; /* From handover */
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-            font-family: inherit;
-        }
-
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-            border-radius: 10px; /* From handover */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* From handover */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* From kickoff */
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        th {
-            background: linear-gradient(135deg, #3498db, #2980b9); /* Common */
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            font-size: 0.95rem;
-        }
-
-        tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        tr:hover {
-            background: #e8f4f8; /* From kickoff */
-            transform: scale(1.01); /* From kickoff */
-            transition: all 0.2s ease;
-        }
-
-        .table-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .table-input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2980b9, #3498db);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #218838);
-            color: white;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838, #28a745);
-            transform: translateY(-2px);
-        }
-
-        /* Specific styles for interim elements */
-        .stakeholder-card { /* From kickoff */
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid #3498db;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .stakeholder-card:hover { /* From kickoff */
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .stakeholder-card h3 { /* From kickoff */
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .stakeholder-details { /* From kickoff */
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .stakeholder-detail { /* From kickoff */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stakeholder-detail strong { /* From kickoff */
-            color: #495057;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .interest-level, .influence-level { /* From kickoff */
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .level-high { background: #ffebee; color: #c62828; } /* From kickoff */
-        .level-medium { background: #fff3e0; color: #ef6c00; } /* From kickoff */
-        .level-low { background: #e8f5e8; color: #2e7d32; } /* From kickoff */
-
-        .communication-row { /* From kickoff */
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 2fr 2fr;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            align-items: center;
-        }
-        .communication-row:nth-child(even) { background: #f8f9fa; } /* From kickoff */
-
-        .rag-table, .risk-table, .progress-table { /* From report */
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .rag-table th, .risk-table th, .progress-table th { /* From report */
-            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .rag-table td, .risk-table td, .progress-table td { /* From report */
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .rag-table tr:hover, .risk-table tr:hover, .progress-table tr:hover { /* From report */
-            background: #f8f9fa;
-        }
-
-        .status-indicator { /* From report */
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 12px;
-        }
-        .status-green { background: #d4edda; color: #155724; } /* From report */
-        .status-yellow { background: #fff3cd; color: #856404; } /* From report */
-        .status-red { background: #f8d7da; color: #721c24; } /* From report */
-
-        .info-grid { /* From report */
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .info-item { /* From report */
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .info-item label { /* From report */
-            font-weight: bold;
-            color: #2c3e50;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .info-item input, .info-item textarea { /* From report */
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
-        }
-
-        .info-item input:focus, .info-item textarea:focus { /* From report */
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .status-badge { /* From handover */
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-progress { background: #fff3cd; color: #856404; } /* From handover */
-        .status-complete { background: #d4edda; color: #155724; } /* From handover */
-        .status-pending { background: #f8d7da; color: #721c24; } /* From handover */
-
-        .checklist-item { /* From handover */
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: white;
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        .checklist-item:hover { /* From handover */
-            border-color: #3498db;
-            transform: translateX(5px);
-        }
-
-        .checklist-item input[type="checkbox"] { /* From handover */
-            width: 20px;
-            height: 20px;
-            margin-right: 15px;
-            cursor: pointer;
-        }
-
-        .actions { /* From handover and kickoff */
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            padding: 30px;
-            background: #f8f9fa;
-            border-top: 1px solid #e0e0e0;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <a href="index.html" class="home-button">Zur Startseite</a>
             <h1>Interim Management Dokumentationssystem</h1>
             <p>Umfassende Vorlage für die gesamte Interim Management Phase</p>
         </div>
@@ -532,7 +29,7 @@
             <div id="kickoff" class="tab-content active">
                 <div class="section">
                     <h2>Interim Management Kickoff Details</h2>
-                    <div class="form-grid">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="project-name">Projektname:</label>
                             <input type="text" id="project-name" placeholder="Projektname">
@@ -541,10 +38,18 @@
                             <label for="client-company">Kundenunternehmen:</label>
                             <input type="text" id="client-company" placeholder="Name des Kundenunternehmens">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="interim-manager">Interim Manager:</label>
                             <input type="text" id="interim-manager" placeholder="Name des Interim Managers">
                         </div>
+                        <div class="form-group">
+                            <label for="role">Rolle/Position:</label>
+                            <input type="text" id="role" placeholder="Übernommene Rolle/Position">
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="start-date">Startdatum:</label>
                             <input type="date" id="start-date">
@@ -553,20 +58,16 @@
                             <label for="end-date">Voraussichtliches Enddatum:</label>
                             <input type="date" id="end-date">
                         </div>
-                        <div class="form-group">
-                            <label for="role">Rolle/Position:</label>
-                            <input type="text" id="role" placeholder="Übernommene Rolle/Position">
-                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="assignment-goals">Ziele des Einsatzes:</label>
-                        <textarea id="assignment-goals" placeholder="Detaillierte Beschreibung der primären Ziele und Erwartungen des Interim Mandats"></textarea>
+                        <textarea id="assignment-goals" placeholder="Detaillierte Beschreibung der primären Ziele und Erwartungen des Interim Mandats" class="textarea-large"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="scope">Umfang des Mandats:</label>
-                        <textarea id="scope" placeholder="Genaue Definition des Umfangs, Verantwortlichkeiten und Abgrenzungen"></textarea>
+                        <textarea id="scope" placeholder="Genaue Definition des Umfangs, Verantwortlichkeiten und Abgrenzungen" class="textarea-large"></textarea>
                     </div>
                 </div>
 
@@ -577,20 +78,20 @@
                             <h3>Stakeholder 1</h3>
                             <div class="stakeholder-details">
                                 <div class="stakeholder-detail">
-                                    <strong>Name:</strong> <input type="text" class="table-input" placeholder="Name">
+                                    <strong>Name:</strong> <input type="text" class="data-table-input" placeholder="Name">
                                 </div>
                                 <div class="stakeholder-detail">
-                                    <strong>Rolle:</strong> <input type="text" class="table-input" placeholder="Rolle">
+                                    <strong>Rolle:</strong> <input type="text" class="data-table-input" placeholder="Rolle">
                                 </div>
                                 <div class="stakeholder-detail">
-                                    <strong>Abteilung:</strong> <input type="text" class="table-input" placeholder="Abteilung">
+                                    <strong>Abteilung:</strong> <input type="text" class="data-table-input" placeholder="Abteilung">
                                 </div>
                                 <div class="stakeholder-detail">
-                                    <strong>E-Mail:</strong> <input type="email" class="table-input" placeholder="E-Mail">
+                                    <strong>E-Mail:</strong> <input type="email" class="data-table-input" placeholder="E-Mail">
                                 </div>
                                 <div class="stakeholder-detail">
                                     <strong>Interesse:</strong>
-                                    <select class="table-input interest-level">
+                                    <select class="data-table-input interest-level">
                                         <option value="low" class="level-low">Niedrig</option>
                                         <option value="medium" class="level-medium">Mittel</option>
                                         <option value="high" class="level-high">Hoch</option>
@@ -598,237 +99,226 @@
                                 </div>
                                 <div class="stakeholder-detail">
                                     <strong>Einfluss:</strong>
-                                    <select class="table-input influence-level">
+                                    <select class="data-table-input influence-level">
                                         <option value="low" class="level-low">Niedrig</option>
                                         <option value="medium" class="level-medium">Mittel</option>
                                         <option value="high" class="level-high">Hoch</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-top: 15px;">
+                            <div class="form-group">
                                 <label>Kommunikationsstrategie:</label>
-                                <textarea class="table-input" placeholder="Geplante Kommunikationsmaßnahmen"></textarea>
+                                <textarea class="data-table-input" placeholder="Geplante Kommunikationsmaßnahmen"></textarea>
                             </div>
+                            <button onclick="removeStakeholderKickoff(this)" class="delete-button">X</button>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" onclick="addStakeholderKickoff()">+ Weiteren Stakeholder hinzufügen</button>
+                    <button class="add-button" onclick="addStakeholderKickoff()">+ Weiteren Stakeholder hinzufügen</button>
                 </div>
 
                 <div class="section">
                     <h2>Deliverables & Meilensteine</h2>
-                    <div class="table-container">
-                        <table id="deliverables-table">
-                            <thead>
-                                <tr>
-                                    <th>Aufgabe/Liefergegenstand</th>
-                                    <th>Verantwortlicher</th>
-                                    <th>Fälligkeitsdatum</th>
-                                    <th>Status</th>
-                                    <th>Aktion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" class="table-input" placeholder="Aufgabe beschreiben"></td>
-                                    <td><input type="text" class="table-input" placeholder="Verantwortlicher"></td>
-                                    <td><input type="date" class="table-input"></td>
-                                    <td>
-                                        <select class="table-input">
-                                            <option>Geplant</option>
-                                            <option>In Arbeit</option>
-                                            <option>Abgeschlossen</option>
-                                            <option>Verzögert</option>
-                                        </select>
-                                    </td>
-                                    <td><button onclick="removeRow(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Entfernen</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-secondary" onclick="addDeliverableRow()">+ Liefergegenstand hinzufügen</button>
+                    <table class="data-table" id="deliverables-table">
+                        <thead>
+                            <tr>
+                                <th>Aufgabe/Liefergegenstand</th>
+                                <th>Verantwortlicher</th>
+                                <th>Fälligkeitsdatum</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Aufgabe beschreiben"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
+                                <td><input type="date" class="data-table-input"></td>
+                                <td>
+                                    <select class="data-table-input">
+                                        <option>Geplant</option>
+                                        <option>In Arbeit</option>
+                                        <option>Abgeschlossen</option>
+                                        <option>Verzögert</option>
+                                    </select>
+                                </td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addDeliverableRow()">+ Liefergegenstand hinzufügen</button>
                 </div>
 
                 <div class="section">
                     <h2>Kommunikationsplan</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Zielgruppe</th>
-                                    <th>Frequenz</th>
-                                    <th>Kanal</th>
-                                    <th>Format</th>
-                                    <th>Zweck</th>
-                                    <th>Verantwortlicher</th>
-                                </tr>
-                            </thead>
-                            <tbody id="communication-plan-table">
-                                <tr class="communication-row">
-                                    <td><input type="text" class="table-input" placeholder="Zielgruppe"></td>
-                                    <td><input type="text" class="table-input" placeholder="Frequenz"></td>
-                                    <td><input type="text" class="table-input" placeholder="Kanal"></td>
-                                    <td><input type="text" class="table-input" placeholder="Format"></td>
-                                    <td><input type="text" class="table-input" placeholder="Zweck"></td>
-                                    <td><input type="text" class="table-input" placeholder="Verantwortlicher"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-secondary" onclick="addCommunicationRow()">+ Kommunikationspunkt hinzufügen</button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Zielgruppe</th>
+                                <th>Frequenz</th>
+                                <th>Kanal</th>
+                                <th>Format</th>
+                                <th>Zweck</th>
+                                <th>Verantwortlicher</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="communication-plan-table">
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Zielgruppe"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Frequenz"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Kanal"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Format"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Zweck"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addCommunicationRow()">+ Kommunikationspunkt hinzufügen</button>
                 </div>
 
                 <div class="section">
                     <h2>Ressourcen & Tools</h2>
                     <div class="form-group">
                         <label for="needed-resources">Benötigte Ressourcen (Teammitglieder, Software, Hardware):</label>
-                        <textarea id="needed-resources" placeholder="Liste aller benötigten Ressourcen"></textarea>
+                        <textarea id="needed-resources" placeholder="Liste aller benötigten Ressourcen" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="access-requirements">Zugangsberechtigungen & Systeme:</label>
-                        <textarea id="access-requirements" placeholder="Erforderliche Zugänge und Systeme"></textarea>
+                        <textarea id="access-requirements" placeholder="Erforderliche Zugänge und Systeme" class="textarea-large"></textarea>
                     </div>
-                </div>
-
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="saveFormKickoff()">💾 Speichern</button>
-                    <button class="btn btn-secondary" onclick="exportPDFKickoff()">📄 Als PDF exportieren</button>
-                    <button class="btn btn-success" onclick="printFormKickoff()">🖨️ Drucken</button>
                 </div>
             </div>
 
             <div id="report" class="tab-content">
                 <div class="section">
                     <h2>Berichtsübersicht</h2>
-                    <div class="info-grid">
-                        <div class="info-item">
+                    <div class="form-row">
+                        <div class="form-group">
                             <label for="project-name-report">Projektname:</label>
                             <input type="text" id="project-name-report" placeholder="Projektname">
                         </div>
-                        <div class="info-item">
+                        <div class="form-group">
                             <label for="interim-manager-report">Interim Manager:</label>
                             <input type="text" id="interim-manager-report" placeholder="Name des Interim Managers">
                         </div>
-                        <div class="info-item">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
                             <label for="report-date">Berichtsdatum:</label>
                             <input type="date" id="report-date">
                         </div>
-                        <div class="info-item">
+                        <div class="form-group">
                             <label for="reporting-period">Berichtszeitraum:</label>
                             <input type="text" id="reporting-period" placeholder="z.B. KW 28-30">
                         </div>
-                        <div class="info-item">
-                            <label for="overall-status">Gesamtstatus:</label>
-                            <select id="overall-status">
-                                <option value="green">🟢 Grün - Im Plan</option>
-                                <option value="yellow">🟡 Gelb - Achtung</option>
-                                <option value="red">🔴 Rot - Kritisch</option>
-                            </select>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="overall-status">Gesamtstatus:</label>
+                        <select id="overall-status">
+                            <option value="green">🟢 Grün - Im Plan</option>
+                            <option value="yellow">🟡 Gelb - Achtung</option>
+                            <option value="red">🔴 Rot - Kritisch</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="section">
                     <h2>Fortschritt & Meilensteine</h2>
-                    <div class="table-container">
-                        <table class="progress-table">
-                            <thead>
-                                <tr>
-                                    <th>Meilenstein/Ziel</th>
-                                    <th>Plan-Datum</th>
-                                    <th>Aktuell/Prognose</th>
-                                    <th>Status</th>
-                                    <th>Kommentare</th>
-                                </tr>
-                            </thead>
-                            <tbody id="milestones-table-body">
-                                <tr>
-                                    <td><input type="text" placeholder="Milestone/Goal"></td>
-                                    <td><input type="date"></td>
-                                    <td><input type="text" placeholder="Actual/Forecast"></td>
-                                    <td>
-                                        <select>
-                                            <option>Completed</option>
-                                            <option>In progress</option>
-                                            <option>Delayed</option>
-                                            <option>Not started</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="text" placeholder="Comments"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-secondary" onclick="addMilestoneRow()">+ Meilenstein hinzufügen</button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Meilenstein/Ziel</th>
+                                <th>Plan-Datum</th>
+                                <th>Aktuell/Prognose</th>
+                                <th>Status</th>
+                                <th>Kommentare</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="milestones-table-body">
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Milestone/Goal"></td>
+                                <td><input type="date" class="data-table-input"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Actual/Forecast"></td>
+                                <td>
+                                    <select class="data-table-input">
+                                        <option>Completed</option>
+                                        <option>In progress</option>
+                                        <option>Delayed</option>
+                                        <option>Not started</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="data-table-input" placeholder="Comments"></td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addMilestoneReportRow()">+ Meilenstein hinzufügen</button>
                 </div>
 
                 <div class="section">
                     <h2>Top Themen & Herausforderungen</h2>
                     <div class="form-group">
                         <label for="current-challenges">Aktuelle Herausforderungen:</label>
-                        <textarea id="current-challenges" placeholder="Beschreibung der wichtigsten Herausforderungen"></textarea>
+                        <textarea id="current-challenges" placeholder="Beschreibung der wichtigsten Herausforderungen" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="measures-taken">Getroffene Maßnahmen & nächste Schritte:</label>
-                        <textarea id="measures-taken" placeholder="Welche Maßnahmen wurden ergriffen und welche sind geplant?"></textarea>
+                        <textarea id="measures-taken" placeholder="Welche Maßnahmen wurden ergriffen und welche sind geplant?" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
                     <h2>Risikomanagement (R.A.G.)</h2>
-                    <div class="table-container">
-                        <table class="rag-table">
-                            <thead>
-                                <tr>
-                                    <th>Beschreibung des Risikos/Problems</th>
-                                    <th>Auswirkung</th>
-                                    <th>Wahrscheinlichkeit</th>
-                                    <th>Status</th>
-                                    <th>Maßnahmen & Verantwortlicher</th>
-                                </tr>
-                            </thead>
-                            <tbody id="risk-table-body">
-                                <tr>
-                                    <td><input type="text" placeholder="Risk/Issue Description"></td>
-                                    <td><input type="text" placeholder="Impact"></td>
-                                    <td><input type="text" placeholder="Probability"></td>
-                                    <td>
-                                        <select>
-                                            <option>Rot</option>
-                                            <option>Gelb</option>
-                                            <option>Grün</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="text" placeholder="Actions & Owner"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <button class="btn btn-secondary" onclick="addRiskReportRow()">+ Risiko/Problem hinzufügen</button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Beschreibung des Risikos/Problems</th>
+                                <th>Auswirkung</th>
+                                <th>Wahrscheinlichkeit</th>
+                                <th>Status</th>
+                                <th>Maßnahmen & Verantwortlicher</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="risk-report-table-body">
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Risk/Issue Description"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Impact"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Probability"></td>
+                                <td>
+                                    <select class="data-table-input">
+                                        <option>Rot</option>
+                                        <option>Gelb</option>
+                                        <option>Grün</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="data-table-input" placeholder="Actions & Owner"></td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addRiskReportRow()">+ Risiko/Problem hinzufügen</button>
                 </div>
 
                 <div class="section">
                     <h2>Nächste Schritte & Empfehlungen</h2>
                     <div class="form-group">
-                        <label for="next-steps">Geplante nächste Schritte:</label>
-                        <textarea id="next-steps" placeholder="Detaillierte Auflistung der für den nächsten Zeitraum geplanten Aktivitäten"></textarea>
+                        <label for="next-steps-report">Geplante nächste Schritte:</label>
+                        <textarea id="next-steps-report" placeholder="Detaillierte Auflistung der für den nächsten Zeitraum geplanten Aktivitäten" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="recommendations">Empfehlungen an das Management:</label>
-                        <textarea id="recommendations" placeholder="Vorschläge und Empfehlungen zur Entscheidungsfindung"></textarea>
+                        <textarea id="recommendations" placeholder="Vorschläge und Empfehlungen zur Entscheidungsfindung" class="textarea-large"></textarea>
                     </div>
-                </div>
-
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="saveFormReport()">💾 Speichern</button>
-                    <button class="btn btn-secondary" onclick="exportPDFReport()">📄 Als PDF exportieren</button>
-                    <button class="btn btn-success" onclick="printFormReport()">🖨️ Drucken</button>
                 </div>
             </div>
 
             <div id="handover" class="tab-content">
                 <div class="section">
-                    <h2>1. Mandatsübersicht</h2>
-                    <div class="form-grid">
+                    <h2>Mandatsübersicht</h2>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="mandate-project-name">Projekt/Mandatsname:</label>
                             <input type="text" id="mandate-project-name" placeholder="Name des Projekts oder Mandats">
@@ -837,10 +327,18 @@
                             <label for="mandate-client">Kundenunternehmen:</label>
                             <input type="text" id="mandate-client" placeholder="Name des Kundenunternehmens">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="mandate-interim-manager">Interim Manager:</label>
                             <input type="text" id="mandate-interim-manager" placeholder="Name des Interim Managers">
                         </div>
+                        <div class="form-group">
+                            <label for="mandate-role">Rolle/Position:</label>
+                            <input type="text" id="mandate-role" placeholder="Übernommene Rolle/Position">
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="mandate-start-date">Startdatum:</label>
                             <input type="date" id="mandate-start-date">
@@ -849,71 +347,67 @@
                             <label for="mandate-end-date">Enddatum:</label>
                             <input type="date" id="mandate-end-date">
                         </div>
-                        <div class="form-group">
-                            <label for="mandate-role">Rolle/Position:</label>
-                            <input type="text" id="mandate-role" placeholder="Übernommene Rolle/Position">
-                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="mandate-summary">Zusammenfassung der Mandatsziele & -ergebnisse:</label>
-                        <textarea id="mandate-summary" placeholder="Kurze Beschreibung der ursprünglichen Ziele und der tatsächlich erreichten Ergebnisse"></textarea>
+                        <textarea id="mandate-summary" placeholder="Kurze Beschreibung der ursprünglichen Ziele und der tatsächlich erreichten Ergebnisse" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>2. Schlüsselinformationen & Dokumentation</h2>
+                    <h2>Schlüsselinformationen & Dokumentation</h2>
                     <div class="form-group">
                         <label for="key-documents">Liste Schlüssel-Dokumente & Speicherorte:</label>
-                        <textarea id="key-documents" placeholder="Wichtige Dokumente (Konzepte, Berichte, Verträge) und wo sie zu finden sind (SharePoint, Drive, etc.)"></textarea>
+                        <textarea id="key-documents" placeholder="Wichtige Dokumente (Konzepte, Berichte, Verträge) und wo sie zu finden sind (SharePoint, Drive, etc.)" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="it-systems-access">Wichtige IT-Systeme & Zugänge:</label>
-                        <textarea id="it-systems-access" placeholder="Liste der genutzten Systeme, Tools und notwendiger Zugänge/Passwörter (sicher übergeben!)"></textarea>
+                        <textarea id="it-systems-access" placeholder="Liste der genutzten Systeme, Tools und notwendiger Zugänge/Passwörter (sicher übergeben!)" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="contacts-stakeholders">Wichtige Kontakte & Stakeholder:</label>
-                        <textarea id="contacts-stakeholders" placeholder="Übersicht der internen und externen Schlüsselkontakte, Ansprechpartner und ihre Rollen"></textarea>
+                        <textarea id="contacts-stakeholders" placeholder="Übersicht der internen und externen Schlüsselkontakte, Ansprechpartner und ihre Rollen" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="pending-tasks">Offene Aufgaben & nächste Schritte:</label>
-                        <textarea id="pending-tasks" placeholder="Detaillierte Liste aller offenen Aufgaben, Verantwortlichkeiten und Deadlines"></textarea>
+                        <textarea id="pending-tasks" placeholder="Detaillierte Liste aller offenen Aufgaben, Verantwortlichkeiten und Deadlines" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="current-projects-initiatives">Aktuelle Projekte & Initiativen:</label>
-                        <textarea id="current-projects-initiatives" placeholder="Beschreibung laufender Projekte, deren Status und Abhängigkeiten"></textarea>
+                        <textarea id="current-projects-initiatives" placeholder="Beschreibung laufender Projekte, deren Status und Abhängigkeiten" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>3. Finanzielle Übergabe</h2>
+                    <h2>Finanzielle Übergabe</h2>
                     <div class="form-group">
                         <label for="budget-overview">Budgetübersicht & offene Posten:</label>
-                        <textarea id="budget-overview" placeholder="Aktueller Budgetstatus, ausstehende Zahlungen, Rechnungen, etc."></textarea>
+                        <textarea id="budget-overview" placeholder="Aktueller Budgetstatus, ausstehende Zahlungen, Rechnungen, etc." class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="contract-details">Vertragsdetails & Konditionen:</label>
-                        <textarea id="contract-details" placeholder="Wichtige Vertragskonditionen, Laufzeiten und Kündigungsfristen"></textarea>
+                        <textarea id="contract-details" placeholder="Wichtige Vertragskonditionen, Laufzeiten und Kündigungsfristen" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>4. Lessons Learned & Empfehlungen</h2>
+                    <h2>Lessons Learned & Empfehlungen</h2>
                     <div class="form-group">
                         <label for="lessons-learned">Lessons Learned aus dem Mandat:</label>
-                        <textarea id="lessons-learned" placeholder="Erkenntnisse, Erfolgsfaktoren und Herausforderungen aus dem abgeschlossenen Mandat"></textarea>
+                        <textarea id="lessons-learned" placeholder="Erkenntnisse, Erfolgsfaktoren und Herausforderungen aus dem abgeschlossenen Mandat" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="recommendations-handover">Empfehlungen für Nachfolger/Organisation:</label>
-                        <textarea id="recommendations-handover" placeholder="Konkrete Empfehlungen für den Nachfolger oder die Organisation"></textarea>
+                        <textarea id="recommendations-handover" placeholder="Konkrete Empfehlungen für den Nachfolger oder die Organisation" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>5. Formelle Übergabe & Abnahme</h2>
+                    <h2>Formelle Übergabe & Abnahme</h2>
                     <div class="form-group">
-                        <label for="handover-date">Datum der Übergabe:</label>
-                        <input type="date" id="handover-date">
+                        <label for="handover-date-final">Datum der Übergabe:</label>
+                        <input type="date" id="handover-date-final">
                     </div>
                     <div class="form-group">
                         <label for="receiving-person">Übergabe an (Name, Position):</label>
@@ -921,12 +415,12 @@
                     </div>
                     <div class="form-group">
                         <label for="sign-off">Bestätigung/Sign-Off:</label>
-                        <textarea id="sign-off" placeholder="Platz für Unterschriften oder formelle Bestätigung"></textarea>
+                        <textarea id="sign-off" placeholder="Platz für Unterschriften oder formelle Bestätigung" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>6. Checkliste für den Exit-Prozess</h2>
+                    <h2>Checkliste für den Exit-Prozess</h2>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-1">
                         <label for="checklist-1">Alle offenen Aufgaben dokumentiert und übergeben.</label>
@@ -952,43 +446,32 @@
                         <label for="checklist-6">Feedback-Gespräch mit dem Kunden geführt.</label>
                     </div>
                 </div>
-
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="saveFormHandover()">💾 Speichern</button>
-                    <button class="btn btn-secondary" onclick="loadDataHandover()">📂 Daten laden</button>
-                    <button class="btn btn-success" onclick="exportPDFHandover()">📄 Als PDF exportieren</button>
-                </div>
             </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
+            <button class="btn btn-primary" onclick="saveCombinedDocument()">💾 Dokument speichern</button>
+            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
         </div>
     </div>
 
     <script>
-        // Global tab switching function
-        function showTab(tabId, event) {
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
-
-            const navTabs = document.querySelectorAll('.nav-tab');
-            navTabs.forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Initialize first tab as active on load
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstTabButton = document.querySelector('.nav-tab');
-            const firstTabContent = document.querySelector('.tab-content');
-            if (firstTabButton && firstTabContent) {
-                firstTabButton.classList.add('active');
-                firstTabContent.classList.add('active');
+        document.addEventListener("DOMContentLoaded", function() {
+            const firstTabButton = document.querySelector(".nav-tab");
+            if (firstTabButton) {
+                firstTabButton.click();
             }
 
-            // Set current date for kickoff and report (if elements exist)
+            // Set today's date for relevant inputs
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => {
+                if (!input.value) { // Only set if not already set
+                    input.value = today;
+                }
+            });
+            // Initialisierung für Kickoff-Datum (falls vorhanden)
             const kickoffCreationDate = document.getElementById('creation-date');
             if (kickoffCreationDate) {
                 kickoffCreationDate.textContent = new Date().toLocaleDateString('de-DE');
@@ -1003,25 +486,42 @@
             }
         });
 
-        /* SCRIPT FOR KICKOFF TAB */
-        function addDeliverableRow() {
-            const table = document.getElementById('deliverables-table').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
+        function showTab(tabName, event) {
+            // Entfernen der 'active'-Klasse von allen Tab-Inhalten
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
 
+            // Entfernen der 'active'-Klasse von allen Navigations-Buttons
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Hinzufügen der 'active'-Klasse zum ausgewählten Tab-Inhalt
+            document.getElementById(tabName).classList.add('active');
+
+            // Hinzufügen der 'active'-Klasse zum geklickten Navigations-Button
+            if (event) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function addDeliverableRow() {
+            const tbody = document.querySelector('#deliverables-table tbody');
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" class="table-input" placeholder="Aufgabe beschreiben"></td>
-                <td><input type="text" class="table-input" placeholder="Verantwortlicher"></td>
-                <td><input type="date" class="table-input"></td>
+                <td><input type="text" class="data-table-input" placeholder="Aufgabe beschreiben"></td>
+                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
+                <td><input type="date" class="data-table-input"></td>
                 <td>
-                    <select class="table-input">
+                    <select class="data-table-input">
                         <option>Geplant</option>
                         <option>In Arbeit</option>
                         <option>Abgeschlossen</option>
                         <option>Verzögert</option>
                     </select>
                 </td>
-                <td><button onclick="removeRow(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Entfernen</button></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
+            tbody.appendChild(newRow);
         }
 
         function removeRow(button) {
@@ -1037,20 +537,20 @@
                 <h3>Neuer Stakeholder</h3>
                 <div class="stakeholder-details">
                     <div class="stakeholder-detail">
-                        <strong>Name:</strong> <input type="text" class="table-input" placeholder="Name">
+                        <strong>Name:</strong> <input type="text" class="data-table-input" placeholder="Name">
                     </div>
                     <div class="stakeholder-detail">
-                        <strong>Rolle:</strong> <input type="text" class="table-input" placeholder="Rolle">
+                        <strong>Rolle:</strong> <input type="text" class="data-table-input" placeholder="Rolle">
                     </div>
                     <div class="stakeholder-detail">
-                        <strong>Abteilung:</strong> <input type="text" class="table-input" placeholder="Abteilung">
+                        <strong>Abteilung:</strong> <input type="text" class="data-table-input" placeholder="Abteilung">
                     </div>
                     <div class="stakeholder-detail">
-                        <strong>E-Mail:</strong> <input type="email" class="table-input" placeholder="E-Mail">
+                        <strong>E-Mail:</strong> <input type="email" class="data-table-input" placeholder="E-Mail">
                     </div>
                     <div class="stakeholder-detail">
                         <strong>Interesse:</strong>
-                        <select class="table-input interest-level">
+                        <select class="data-table-input interest-level">
                             <option value="low" class="level-low">Niedrig</option>
                             <option value="medium" class="level-medium">Mittel</option>
                             <option value="high" class="level-high">Hoch</option>
@@ -1058,18 +558,18 @@
                     </div>
                     <div class="stakeholder-detail">
                         <strong>Einfluss:</strong>
-                        <select class="table-input influence-level">
+                        <select class="data-table-input influence-level">
                             <option value="low" class="level-low">Niedrig</option>
                             <option value="medium" class="level-medium">Mittel</option>
                             <option value="high" class="level-high">Hoch</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group" style="margin-top: 15px;">
+                <div class="form-group">
                     <label>Kommunikationsstrategie:</label>
-                    <textarea class="table-input" placeholder="Geplante Kommunikationsmaßnahmen"></textarea>
+                    <textarea class="data-table-input" placeholder="Geplante Kommunikationsmaßnahmen"></textarea>
                 </div>
-                <button onclick="removeStakeholderKickoff(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem; margin-top: 10px;">Entfernen</button>
+                <button onclick="removeStakeholderKickoff(this)" class="delete-button">X</button>
             `;
             stakeholderList.appendChild(newStakeholderCard);
         }
@@ -1079,168 +579,550 @@
         }
 
         function addCommunicationRow() {
-            const table = document.getElementById('communication-plan-table');
-            const newRow = table.insertRow();
-            newRow.classList.add('communication-row');
+            const tbody = document.getElementById('communication-plan-table');
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" class="table-input" placeholder="Zielgruppe"></td>
-                <td><input type="text" class="table-input" placeholder="Frequenz"></td>
-                <td><input type="text" class="table-input" placeholder="Kanal"></td>
-                <td><input type="text" class="table-input" placeholder="Format"></td>
-                <td><input type="text" class="table-input" placeholder="Zweck"></td>
-                <td><input type="text" class="table-input" placeholder="Verantwortlicher"></td>
-                <td><button onclick="removeRow(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Entfernen</button></td>
+                <td><input type="text" class="data-table-input" placeholder="Zielgruppe"></td>
+                <td><input type="text" class="data-table-input" placeholder="Frequenz"></td>
+                <td><input type="text" class="data-table-input" placeholder="Kanal"></td>
+                <td><input type="text" class="data-table-input" placeholder="Format"></td>
+                <td><input type="text" class="data-table-input" placeholder="Zweck"></td>
+                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
+            tbody.appendChild(newRow);
         }
 
-        function saveFormKickoff() {
-            const formData = {};
-            const inputs = document.querySelectorAll('#kickoff input, #kickoff textarea, #kickoff select');
-            inputs.forEach(input => {
-                formData[input.id || input.name || input.placeholder] = input.value;
-            });
-            alert('Kickoff Daten gespeichert! (In einer echten Anwendung würden diese persistent gespeichert)');
-            console.log('Kickoff Data:', formData);
-        }
-
-        function exportPDFKickoff() {
-            const element = document.getElementById('kickoff');
-            html2pdf().from(element).save('Interim_Kickoff_Report.pdf');
-        }
-
-        function printFormKickoff() {
-            const element = document.getElementById('kickoff');
-            const printWindow = window.open('', '', 'height=800,width=800');
-            printWindow.document.write('<html><head><title>Interim Management Kickoff</title>');
-            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(element.outerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-        }
-
-        /* SCRIPT FOR REPORT TAB */
-        function addMilestoneRow() {
-            const table = document.getElementById('milestones-table-body');
-            const newRow = table.insertRow();
+        function addMilestoneReportRow() {
+            const tbody = document.getElementById('milestones-table-body');
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" placeholder="Milestone/Goal"></td>
-                <td><input type="date"></td>
-                <td><input type="text" placeholder="Actual/Forecast"></td>
+                <td><input type="text" class="data-table-input" placeholder="Milestone/Goal"></td>
+                <td><input type="date" class="data-table-input"></td>
+                <td><input type="text" class="data-table-input" placeholder="Actual/Forecast"></td>
                 <td>
-                    <select>
+                    <select class="data-table-input">
                         <option>Completed</option>
                         <option>In progress</option>
                         <option>Delayed</option>
                         <option>Not started</option>
                     </select>
                 </td>
-                <td><input type="text" placeholder="Comments"></td>
-                <td><button onclick="removeRow(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Entfernen</button></td>
+                <td><input type="text" class="data-table-input" placeholder="Comments"></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
+            tbody.appendChild(newRow);
         }
 
         function addRiskReportRow() {
-            const table = document.getElementById('risk-table-body');
-            const newRow = table.insertRow();
+            const tbody = document.getElementById('risk-report-table-body');
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" placeholder="Risk/Issue Description"></td>
-                <td><input type="text" placeholder="Impact"></td>
-                <td><input type="text" placeholder="Probability"></td>
+                <td><input type="text" class="data-table-input" placeholder="Risk/Issue Description"></td>
+                <td><input type="text" class="data-table-input" placeholder="Impact"></td>
+                <td><input type="text" class="data-table-input" placeholder="Probability"></td>
                 <td>
-                    <select>
+                    <select class="data-table-input">
                         <option>Rot</option>
                         <option>Gelb</option>
                         <option>Grün</option>
                     </select>
                 </td>
-                <td><input type="text" placeholder="Actions & Owner"></td>
-                <td><button onclick="removeRow(this)" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">Entfernen</button></td>
+                <td><input type="text" class="data-table-input" placeholder="Actions & Owner"></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
+            tbody.appendChild(newRow);
         }
 
-        function saveFormReport() {
-            const formData = {};
-            const inputs = document.querySelectorAll('#report input, #report textarea, #report select');
-            inputs.forEach(input => {
-                formData[input.id || input.name || input.placeholder] = input.value;
+        function printDocument() {
+            alert('Das Dokument wird gedruckt. In einer echten Anwendung würde dies die Druckfunktion des Browsers aufrufen.');
+            window.print();
+        }
+
+        function saveCombinedDocument() {
+            // Funktion zum Sammeln von Daten aus einer Tabelle
+            function getTableData(tableBodyId) {
+                const data = [];
+                document.querySelectorAll(`#${tableBodyId} tr`).forEach(row => {
+                    const rowData = {};
+                    row.querySelectorAll('input, select, textarea').forEach((input, index) => {
+                        const key = input.id || input.name || input.placeholder || `col${index}`;
+                        rowData[key] = input.value;
+                    });
+                    data.push(rowData);
+                });
+                return data;
+            }
+
+            // Funktion zum Erstellen von HTML für Tabellendaten
+            function createTableHtml(headers, data) {
+                let html = '<table class="output-table"><thead><tr>';
+                headers.forEach(header => {
+                    html += `<th>${header}</th>`;
+                });
+                html += '</tr></thead><tbody>';
+                data.forEach(row => {
+                    html += '<tr>';
+                    headers.forEach(header => {
+                        const key = Object.keys(row).find(k => row[k] === row[header] || k.toLowerCase().includes(header.toLowerCase().replace(/ /g, '')));
+                        html += `<td>${row[key] ? row[key].replace(/\n/g, '<br>') : ''}</td>`;
+                    });
+                    html += '</tr>';
+                });
+                html += '</tbody></table>';
+                return html;
+            }
+
+            // --- Daten sammeln für Kickoff ---
+            const projectNameKickoff = document.getElementById('project-name').value;
+            const clientCompany = document.getElementById('client-company').value;
+            const interimManagerKickoff = document.getElementById('interim-manager').value;
+            const roleKickoff = document.getElementById('role').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const assignmentGoals = document.getElementById('assignment-goals').value;
+            const scopeKickoff = document.getElementById('scope').value;
+
+            const stakeholderCards = [];
+            document.querySelectorAll('#stakeholder-list .stakeholder-card').forEach(card => {
+                const name = card.querySelector('.stakeholder-detail input[placeholder="Name"]').value;
+                const role = card.querySelector('.stakeholder-detail input[placeholder="Rolle"]').value;
+                const department = card.querySelector('.stakeholder-detail input[placeholder="Abteilung"]').value;
+                const email = card.querySelector('.stakeholder-detail input[placeholder="E-Mail"]').value;
+                const interest = card.querySelector('.stakeholder-detail select.interest-level').value;
+                const influence = card.querySelector('.stakeholder-detail select.influence-level').value;
+                const strategy = card.querySelector('.form-group textarea[placeholder="Geplante Kommunikationsmaßnahmen"]').value;
+                stakeholderCards.push({ name, role, department, email, interest, influence, strategy });
             });
-            alert('Status Report Daten gespeichert! (In einer echten Anwendung würden diese persistent gespeichert)');
-            console.log('Report Data:', formData);
-        }
 
-        function exportPDFReport() {
-            const element = document.getElementById('report');
-            html2pdf().from(element).save('Interim_Status_Report.pdf');
-        }
+            const deliverables = getTableData('deliverables-table');
+            const communicationPlan = getTableData('communication-plan-table');
+            const neededResources = document.getElementById('needed-resources').value;
+            const accessRequirements = document.getElementById('access-requirements').value;
 
-        function printFormReport() {
-            const element = document.getElementById('report');
-            const printWindow = window.open('', '', 'height=800,width=800');
-            printWindow.document.write('<html><head><title>Interim Management Status Report</title>');
-            printWindow.document.write('<style>' + document.querySelector('style').innerHTML + '</style>');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(element.outerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-        }
+            // --- Daten sammeln für Report ---
+            const projectNameReport = document.getElementById('project-name-report').value;
+            const interimManagerReport = document.getElementById('interim-manager-report').value;
+            const reportDate = document.getElementById('report-date').value;
+            const reportingPeriod = document.getElementById('reporting-period').value;
+            const overallStatus = document.getElementById('overall-status').value;
+            const milestonesReport = getTableData('milestones-table-body');
+            const currentChallenges = document.getElementById('current-challenges').value;
+            const measuresTaken = document.getElementById('measures-taken').value;
+            const risksReport = getTableData('risk-report-table-body');
+            const nextStepsReport = document.getElementById('next-steps-report').value;
+            const recommendations = document.getElementById('recommendations').value;
 
-        /* SCRIPT FOR HANDOVER TAB */
-        function saveFormHandover() {
-            const data = {};
-            const inputs = document.querySelectorAll('#handover input, #handover textarea, #handover select');
-            inputs.forEach(input => {
-                if (input.type === 'checkbox') {
-                    data[input.id] = input.checked;
-                } else {
-                    data[input.id] = input.value;
-                }
+
+            // --- Daten sammeln für Handover ---
+            const mandateProjectName = document.getElementById('mandate-project-name').value;
+            const mandateClient = document.getElementById('mandate-client').value;
+            const mandateInterimManager = document.getElementById('mandate-interim-manager').value;
+            const mandateRole = document.getElementById('mandate-role').value;
+            const mandateStartDate = document.getElementById('mandate-start-date').value;
+            const mandateEndDate = document.getElementById('mandate-end-date').value;
+            const mandateSummary = document.getElementById('mandate-summary').value;
+            const keyDocuments = document.getElementById('key-documents').value;
+            const itSystemsAccess = document.getElementById('it-systems-access').value;
+            const contactsStakeholders = document.getElementById('contacts-stakeholders').value;
+            const pendingTasks = document.getElementById('pending-tasks').value;
+            const currentProjectsInitiatives = document.getElementById('current-projects-initiatives').value;
+            const budgetOverview = document.getElementById('budget-overview').value;
+            const contractDetails = document.getElementById('contract-details').value;
+            const lessonsLearnedHandover = document.getElementById('lessons-learned').value;
+            const recommendationsHandover = document.getElementById('recommendations-handover').value;
+            const handoverDateFinal = document.getElementById('handover-date-final').value;
+            const receivingPerson = document.getElementById('receiving-person').value;
+            const signOff = document.getElementById('sign-off').value;
+
+            const checklistItems = [];
+            document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+                checklistItems.push({ id: checkbox.id, checked: checkbox.checked, label: document.querySelector(`label[for="${checkbox.id}"]`).textContent });
             });
-            alert('Handover Daten gespeichert! (In einer echten Anwendung würden diese in localStorage oder an einen Server gesendet)');
-            console.log('Handover Data:', data);
-            // Example for local storage: localStorage.setItem('handoverData', JSON.stringify(data));
-        }
 
-        function loadDataHandover() {
-            // In a real scenario, you'd load from localStorage or an API
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json'; // Assuming data would be saved as JSON
 
-            input.onchange = e => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = event => {
-                        try {
-                            const data = JSON.parse(event.target.result);
-                            Object.keys(data).forEach(key => {
-                                const element = document.getElementById(key);
-                                if (element) {
-                                    if (element.type === 'checkbox') {
-                                        element.checked = data[key];
-                                    } else {
-                                        element.value = data[key];
-                                    }
-                                }
-                            });
-                        } catch (error) {
-                            alert('Fehler beim Laden der Daten: ' + error.message);
+            // --- HTML-Struktur für den Download erstellen ---
+            let deliverablesHtml = createTableHtml(['Aufgabe/Liefergegenstand', 'Verantwortlicher', 'Fälligkeitsdatum', 'Status'], deliverables);
+            let communicationPlanHtml = createTableHtml(['Zielgruppe', 'Frequenz', 'Kanal', 'Format', 'Zweck', 'Verantwortlicher'], communicationPlan);
+            let milestonesReportHtml = createTableHtml(['Meilenstein/Ziel', 'Plan-Datum', 'Aktuell/Prognose', 'Status', 'Kommentare'], milestonesReport);
+            let risksReportHtml = createTableHtml(['Beschreibung des Risikos/Problems', 'Auswirkung', 'Wahrscheinlichkeit', 'Status', 'Maßnahmen & Verantwortlicher'], risksReport);
+
+            let stakeholderCardsHtml = stakeholderCards.map(s => `
+                <div class="stakeholder-card-output">
+                    <h4>${s.name}</h4>
+                    <p><strong>Rolle:</strong> ${s.role}</p>
+                    <p><strong>Abteilung:</strong> ${s.department}</p>
+                    <p><strong>E-Mail:</strong> ${s.email}</p>
+                    <p><strong>Interesse:</strong> <span class="level-${s.interest}">${s.interest}</span></p>
+                    <p><strong>Einfluss:</strong> <span class="level-${s.influence}">${s.influence}</span></p>
+                    <p><strong>Kommunikationsstrategie:</strong> ${s.strategy.replace(/\n/g, '<br>')}</p>
+                </div>
+            `).join('');
+
+
+            const staticHtmlContent = `
+                <!DOCTYPE html>
+                <html lang="de">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Interim Management Dokumentation (Statisch)</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; line-height: 1.6; color: #333; background: #f0f2f5; }
+                        .report-container { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+                        .header-exported {
+                            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+                            color: white;
+                            padding: 30px;
+                            text-align: center;
+                            border-radius: 8px 8px 0 0;
+                            margin: -30px -30px 30px -30px;
                         }
-                    };
-                    reader.readAsText(file);
-                }
-            };
-            input.click();
+                        .header-exported h1 { font-size: 2.2em; margin-bottom: 10px; font-weight: 300; }
+                        .header-exported p { font-size: 1.1em; opacity: 0.9; }
+                        h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                        h2 { font-size: 1.8em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                        h3 { font-size: 1.3em; margin-bottom: 15px; }
+                        h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                        .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+                        .form-group p {
+                            margin-top: 0;
+                            margin-bottom: 0;
+                            padding: 8px 0;
+                            border-bottom: 1px dotted #ccc;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                        }
+                        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; }
+                        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+                        .output-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                            background: white;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                            table-layout: auto;
+                        }
+                        .output-table th, .output-table td {
+                            padding: 12px 15px;
+                            text-align: left;
+                            border-bottom: 1px solid #e5e7eb;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                        }
+                        .output-table th { background: #f8fafc; font-weight: 600; color: #374151; }
+                        .stakeholder-card-output {
+                            background: #f8f9fa;
+                            padding: 20px;
+                            border-radius: 8px;
+                            border-left: 4px solid #3498db;
+                            margin-bottom: 15px;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                        }
+                        .stakeholder-card-output h4 {
+                            margin-top: 0;
+                            color: #34495e;
+                        }
+                        .stakeholder-card-output p {
+                            margin-bottom: 5px;
+                        }
+                        .level-low { background: #e8f5e8; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
+                        .level-medium { background: #fff3e0; color: #ef6c00; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
+                        .level-high { background: #ffebee; color: #c62828; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
+                        .checklist-item-output {
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 10px;
+                            padding: 10px;
+                            background: #f0f2f5;
+                            border-radius: 5px;
+                        }
+                        .checklist-item-output .checkbox-icon {
+                            margin-right: 10px;
+                            font-size: 1.2em;
+                        }
+                        .checklist-item-output .checkbox-icon.checked { color: #28a745; }
+                        .checklist-item-output .checkbox-icon.unchecked { color: #dc3545; }
+
+                        @media (max-width: 768px) {
+                            .form-row { grid-template-columns: 1fr; }
+                            .report-container { padding: 20px; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-container">
+                        <div class="header-exported">
+                            <h1>Interim Management Dokumentation</h1>
+                            <p>Umfassende Vorlage für die gesamte Interim Management Phase</p>
+                        </div>
+
+                        <div class="content">
+                            <div class="section">
+                                <h2>Interim Management Kickoff Details</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Projektname:</label>
+                                        <p>${projectNameKickoff}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Kundenunternehmen:</label>
+                                        <p>${clientCompany}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Interim Manager:</label>
+                                        <p>${interimManagerKickoff}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Rolle/Position:</label>
+                                        <p>${roleKickoff}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Startdatum:</label>
+                                        <p>${startDate}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Voraussichtliches Enddatum:</label>
+                                        <p>${endDate}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ziele des Einsatzes:</label>
+                                    <p>${assignmentGoals.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Umfang des Mandats:</label>
+                                    <p>${scopeKickoff.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Stakeholder Analyse</h2>
+                                ${stakeholderCardsHtml}
+                            </div>
+
+                            <div class="section">
+                                <h2>Deliverables & Meilensteine</h2>
+                                ${deliverablesHtml}
+                            </div>
+
+                            <div class="section">
+                                <h2>Kommunikationsplan</h2>
+                                ${communicationPlanHtml}
+                            </div>
+
+                            <div class="section">
+                                <h2>Ressourcen & Tools</h2>
+                                <div class="form-group">
+                                    <label>Benötigte Ressourcen (Teammitglieder, Software, Hardware):</label>
+                                    <p>${neededResources.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Zugangsberechtigungen & Systeme:</label>
+                                    <p>${accessRequirements.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Berichtsübersicht</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Projektname:</label>
+                                        <p>${projectNameReport}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Interim Manager:</label>
+                                        <p>${interimManagerReport}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Berichtsdatum:</label>
+                                        <p>${reportDate}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Berichtszeitraum:</label>
+                                        <p>${reportingPeriod}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Gesamtstatus:</label>
+                                    <p>${overallStatus}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Fortschritt & Meilensteine</h2>
+                                ${milestonesReportHtml}
+                            </div>
+
+                            <div class="section">
+                                <h2>Top Themen & Herausforderungen</h2>
+                                <div class="form-group">
+                                    <label>Aktuelle Herausforderungen:</label>
+                                    <p>${currentChallenges.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Getroffene Maßnahmen & nächste Schritte:</label>
+                                    <p>${measuresTaken.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Risikomanagement (R.A.G.)</h2>
+                                ${risksReportHtml}
+                            </div>
+
+                            <div class="section">
+                                <h2>Nächste Schritte & Empfehlungen</h2>
+                                <div class="form-group">
+                                    <label>Geplante nächste Schritte:</label>
+                                    <p>${nextStepsReport.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Empfehlungen an das Management:</label>
+                                    <p>${recommendations.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Mandatsübersicht (Handover)</h2>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Projekt/Mandatsname:</label>
+                                        <p>${mandateProjectName}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Kundenunternehmen:</label>
+                                        <p>${mandateClient}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Interim Manager:</label>
+                                        <p>${mandateInterimManager}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Rolle/Position:</label>
+                                        <p>${mandateRole}</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Startdatum:</label>
+                                        <p>${mandateStartDate}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Enddatum:</label>
+                                        <p>${mandateEndDate}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Zusammenfassung der Mandatsziele & -ergebnisse:</label>
+                                    <p>${mandateSummary.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Schlüsselinformationen & Dokumentation</h2>
+                                <div class="form-group">
+                                    <label>Liste Schlüssel-Dokumente & Speicherorte:</label>
+                                    <p>${keyDocuments.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Wichtige IT-Systeme & Zugänge:</label>
+                                    <p>${itSystemsAccess.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Wichtige Kontakte & Stakeholder:</label>
+                                    <p>${contactsStakeholders.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Offene Aufgaben & nächste Schritte:</label>
+                                    <p>${pendingTasks.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Aktuelle Projekte & Initiativen:</label>
+                                    <p>${currentProjectsInitiatives.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Finanzielle Übergabe</h2>
+                                <div class="form-group">
+                                    <label>Budgetübersicht & offene Posten:</label>
+                                    <p>${budgetOverview.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Vertragsdetails & Konditionen:</label>
+                                    <p>${contractDetails.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Lessons Learned & Empfehlungen (Handover)</h2>
+                                <div class="form-group">
+                                    <label>Lessons Learned aus dem Mandat:</label>
+                                    <p>${lessonsLearnedHandover.replace(/\n/g, '<br>')}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Empfehlungen für Nachfolger/Organisation:</label>
+                                    <p>${recommendationsHandover.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Formelle Übergabe & Abnahme</h2>
+                                <div class="form-group">
+                                    <label>Datum der Übergabe:</label>
+                                    <p>${handoverDateFinal}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Übergabe an (Name, Position):</label>
+                                    <p>${receivingPerson}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Bestätigung/Sign-Off:</label>
+                                    <p>${signOff.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Checkliste für den Exit-Prozess</h2>
+                                ${checklistItems.map(item => `
+                                    <div class="checklist-item-output">
+                                        <span class="checkbox-icon ${item.checked ? 'checked' : 'unchecked'}">${item.checked ? '&#10003;' : '&#10007;'}</span>
+                                        <p>${item.label}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([staticHtmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'InterimManagement-Dokumentation.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('Statische HTML-Dokumentation erstellt!');
         }
 
-        function exportPDFHandover() {
-            const element = document.getElementById('handover');
-            html2pdf().from(element).save('Interim_Handover_Exit_Report.pdf');
+        function exportHandover() {
+            alert('Übergabe-Paket Export würde hier implementiert werden - alle relevanten Dokumente und Daten für nahtlose Übergabe');
         }
     </script>
 </body>
