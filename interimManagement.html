@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interim Management Dokumentationssystem</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Script-Bibliotheken für PDF-Export und OCR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -17,6 +16,7 @@
             <a href="index.html" class="home-button">Zur Startseite</a>
             <h1>Interim Management Dokumentationssystem</h1>
             <p>Umfassende Vorlage für die gesamte Interim Management Phase</p>
+            <div id="documentInfo" style="font-size: 0.8em; color: #666; margin-top: 10px;">Version 1.0 / <script>document.write(new Date().toLocaleDateString('de-DE'))</script></div>
         </div>
 
         <div class="nav-tabs">
@@ -340,82 +340,89 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="mandate-start-date">Startdatum:</label>
+                            <label for="mandate-start-date">Startdatum des Mandats:</label>
                             <input type="date" id="mandate-start-date">
                         </div>
                         <div class="form-group">
-                            <label for="mandate-end-date">Enddatum:</label>
+                            <label for="mandate-end-date">Enddatum des Mandats:</label>
                             <input type="date" id="mandate-end-date">
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="mandate-summary">Zusammenfassung der Mandatsziele & -ergebnisse:</label>
-                        <textarea id="mandate-summary" placeholder="Kurze Beschreibung der ursprünglichen Ziele und der tatsächlich erreichten Ergebnisse" class="textarea-large"></textarea>
+                        <label for="mandate-summary">Zusammenfassung des Mandats & Erfolge:</label>
+                        <textarea id="mandate-summary" placeholder="Kurze Zusammenfassung der Kernaufgaben, Ziele und wichtigsten Erfolge des Interim Mandats" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>Schlüsselinformationen & Dokumentation</h2>
+                    <h2>Wichtige Dokumente & Übergabematerialien</h2>
+                    <table class="data-table" id="handover-documents-table">
+                        <thead>
+                            <tr>
+                                <th>Dokument/Material</th>
+                                <th>Beschreibung</th>
+                                <th>Speicherort/Link</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Dokumentname"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Kurze Beschreibung"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Link oder Pfad"></td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addHandoverDocumentRow()">+ Dokument hinzufügen</button>
+                </div>
+
+                <div class="section">
+                    <h2>Offene Punkte & Empfehlungen für Nachfolger</h2>
                     <div class="form-group">
-                        <label for="key-documents">Liste Schlüssel-Dokumente & Speicherorte:</label>
-                        <textarea id="key-documents" placeholder="Wichtige Dokumente (Konzepte, Berichte, Verträge) und wo sie zu finden sind (SharePoint, Drive, etc.)" class="textarea-large"></textarea>
+                        <label for="open-items">Liste der offenen Punkte & To-Dos:</label>
+                        <textarea id="open-items" placeholder="Alle unerledigten Aufgaben, ungelösten Probleme oder weiterzuführende Initiativen" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="it-systems-access">Wichtige IT-Systeme & Zugänge:</label>
-                        <textarea id="it-systems-access" placeholder="Liste der genutzten Systeme, Tools und notwendiger Zugänge/Passwörter (sicher übergeben!)" class="textarea-large"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contacts-stakeholders">Wichtige Kontakte & Stakeholder:</label>
-                        <textarea id="contacts-stakeholders" placeholder="Übersicht der internen und externen Schlüsselkontakte, Ansprechpartner und ihre Rollen" class="textarea-large"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="pending-tasks">Offene Aufgaben & nächste Schritte:</label>
-                        <textarea id="pending-tasks" placeholder="Detaillierte Liste aller offenen Aufgaben, Verantwortlichkeiten und Deadlines" class="textarea-large"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="current-projects-initiatives">Aktuelle Projekte & Initiativen:</label>
-                        <textarea id="current-projects-initiatives" placeholder="Beschreibung laufender Projekte, deren Status und Abhängigkeiten" class="textarea-large"></textarea>
+                        <label for="recommendations-successor">Empfehlungen für den Nachfolger:</label>
+                        <textarea id="recommendations-successor" placeholder="Wichtige Hinweise, strategische Empfehlungen und Lessons Learned für die Fortführung des Mandats" class="textarea-large"></textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>Finanzielle Übergabe</h2>
-                    <div class="form-group">
-                        <label for="budget-overview">Budgetübersicht & offene Posten:</label>
-                        <textarea id="budget-overview" placeholder="Aktueller Budgetstatus, ausstehende Zahlungen, Rechnungen, etc." class="textarea-large"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contract-details">Vertragsdetails & Konditionen:</label>
-                        <textarea id="contract-details" placeholder="Wichtige Vertragskonditionen, Laufzeiten und Kündigungsfristen" class="textarea-large"></textarea>
-                    </div>
+                    <h2>Ansprechpartner & Kontakte für die Übergabe</h2>
+                    <table class="data-table" id="handover-contacts-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rolle/Beziehung</th>
+                                <th>Kontaktinformationen</th>
+                                <th>Relevanz für Nachfolger</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="data-table-input" placeholder="Name"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Rolle"></td>
+                                <td><input type="text" class="data-table-input" placeholder="E-Mail / Telefon"></td>
+                                <td><input type="text" class="data-table-input" placeholder="Z.B. Entscheidungsgeber, Experte"></td>
+                                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="add-button" onclick="addHandoverContactRow()">+ Ansprechpartner hinzufügen</button>
                 </div>
 
                 <div class="section">
-                    <h2>Lessons Learned & Empfehlungen</h2>
+                    <h2>Exit-Prozess & Lessons Learned</h2>
                     <div class="form-group">
-                        <label for="lessons-learned">Lessons Learned aus dem Mandat:</label>
-                        <textarea id="lessons-learned" placeholder="Erkenntnisse, Erfolgsfaktoren und Herausforderungen aus dem abgeschlossenen Mandat" class="textarea-large"></textarea>
+                        <label for="exit-strategy">Exit-Strategie:</label>
+                        <textarea id="exit-strategy" placeholder="Beschreibung des geplanten Exit-Prozesses und der Sicherstellung eines reibungslosen Übergangs" class="textarea-large"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="recommendations-handover">Empfehlungen für Nachfolger/Organisation:</label>
-                        <textarea id="recommendations-handover" placeholder="Konkrete Empfehlungen für den Nachfolger oder die Organisation" class="textarea-large"></textarea>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h2>Formelle Übergabe & Abnahme</h2>
-                    <div class="form-group">
-                        <label for="handover-date-final">Datum der Übergabe:</label>
-                        <input type="date" id="handover-date-final">
-                    </div>
-                    <div class="form-group">
-                        <label for="receiving-person">Übergabe an (Name, Position):</label>
-                        <input type="text" id="receiving-person" placeholder="Name und Position des Empfängers">
-                    </div>
-                    <div class="form-group">
-                        <label for="sign-off">Bestätigung/Sign-Off:</label>
-                        <textarea id="sign-off" placeholder="Platz für Unterschriften oder formelle Bestätigung" class="textarea-large"></textarea>
+                        <label for="lessons-learned-im">Lessons Learned aus dem Mandat:</label>
+                        <textarea id="lessons-learned-im" placeholder="Wichtige Erkenntnisse und Best Practices, die aus dem Interim Mandat gewonnen wurden" class="textarea-large"></textarea>
                     </div>
                 </div>
 
@@ -423,112 +430,53 @@
                     <h2>Checkliste für den Exit-Prozess</h2>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-1">
-                        <label for="checklist-1">Alle offenen Aufgaben dokumentiert und übergeben.</label>
+                        <label for="checklist-1">Alle offenen Aufgaben dokumentiert und an Nachfolger übergeben</label>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-2">
-                        <label for="checklist-2">Alle wichtigen Dokumente zentral abgelegt und Zugänge geklärt.</label>
+                        <label for="checklist-2">Zugangsberechtigungen geprüft und ggf. deaktiviert</label>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-3">
-                        <label for="checklist-3">IT-Zugänge und Berechtigungen widerrufen oder übergeben.</label>
+                        <label for="checklist-3">Alle relevanten Dokumente und Berichte archiviert</label>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-4">
-                        <label for="checklist-4">Alle finanziellen Aspekte (Rechnungen, Spesen) geklärt.</label>
+                        <label for="checklist-4">Abschlussgespräch mit Kunden/Sponsor durchgeführt</label>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="checklist-5">
-                        <label for="checklist-5">Formelle Übergabe & Abnahme erfolgt.</label>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="checklist-6">
-                        <label for="checklist-6">Feedback-Gespräch mit dem Kunden geführt.</label>
+                        <label for="checklist-5">Rechnungsstellung und administrative Aufgaben abgeschlossen</label>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="actions">
-            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
-            <button class="btn btn-primary" onclick="saveCombinedDocument()">💾 Dokument speichern</button>
-            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
-        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const firstTabButton = document.querySelector(".nav-tab");
-            if (firstTabButton) {
-                firstTabButton.click();
-            }
-
-            // Set today's date for relevant inputs
-            const today = new Date().toISOString().split('T')[0];
-            const dateInputs = document.querySelectorAll('input[type="date"]');
-            dateInputs.forEach(input => {
-                if (!input.value) { // Only set if not already set
-                    input.value = today;
-                }
-            });
-            // Initialisierung für Kickoff-Datum (falls vorhanden)
-            const kickoffCreationDate = document.getElementById('creation-date');
-            if (kickoffCreationDate) {
-                kickoffCreationDate.textContent = new Date().toLocaleDateString('de-DE');
-            }
-            const kickoffLastUpdate = document.getElementById('last-update');
-            if (kickoffLastUpdate) {
-                kickoffLastUpdate.textContent = new Date().toLocaleDateString('de-DE');
-            }
-            const reportDate = document.getElementById('report-date');
-            if (reportDate) {
-                reportDate.valueAsDate = new Date();
-            }
-        });
-
         function showTab(tabName, event) {
-            // Entfernen der 'active'-Klasse von allen Tab-Inhalten
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
-
-            // Entfernen der 'active'-Klasse von allen Navigations-Buttons
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
 
-            // Hinzufügen der 'active'-Klasse zum ausgewählten Tab-Inhalt
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-
-            // Hinzufügen der 'active'-Klasse zum geklickten Navigations-Button
-            if (event) {
-                event.currentTarget.classList.add('active');
-            }
         }
 
-        function addDeliverableRow() {
-            const tbody = document.querySelector('#deliverables-table tbody');
+        // Common function to add rows for tables
+        function addRow(tableId, rowHtml) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
             const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><input type="text" class="data-table-input" placeholder="Aufgabe beschreiben"></td>
-                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
-                <td><input type="date" class="data-table-input"></td>
-                <td>
-                    <select class="data-table-input">
-                        <option>Geplant</option>
-                        <option>In Arbeit</option>
-                        <option>Abgeschlossen</option>
-                        <option>Verzögert</option>
-                    </select>
-                </td>
-                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
-            `;
+            newRow.innerHTML = rowHtml;
             tbody.appendChild(newRow);
         }
 
         function removeRow(button) {
-            const row = button.closest('tr');
-            row.remove();
+            button.closest('tr').remove();
         }
 
+        // Kickoff Tab specific functions
         function addStakeholderKickoff() {
             const stakeholderList = document.getElementById('stakeholder-list');
             const newStakeholderCard = document.createElement('div');
@@ -578,10 +526,26 @@
             button.closest('.stakeholder-card').remove();
         }
 
+        function addDeliverableRow() {
+            const rowHtml = `
+                <td><input type="text" class="data-table-input" placeholder="Aufgabe beschreiben"></td>
+                <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
+                <td><input type="date" class="data-table-input"></td>
+                <td>
+                    <select class="data-table-input">
+                        <option>Geplant</option>
+                        <option>In Arbeit</option>
+                        <option>Abgeschlossen</option>
+                        <option>Verzögert</option>
+                    </select>
+                </td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+            `;
+            addRow('deliverables-table', rowHtml);
+        }
+
         function addCommunicationRow() {
-            const tbody = document.getElementById('communication-plan-table');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
+            const rowHtml = `
                 <td><input type="text" class="data-table-input" placeholder="Zielgruppe"></td>
                 <td><input type="text" class="data-table-input" placeholder="Frequenz"></td>
                 <td><input type="text" class="data-table-input" placeholder="Kanal"></td>
@@ -590,13 +554,12 @@
                 <td><input type="text" class="data-table-input" placeholder="Verantwortlicher"></td>
                 <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
-            tbody.appendChild(newRow);
+            addRow('communication-plan-table', rowHtml);
         }
 
+        // Report Tab specific functions
         function addMilestoneReportRow() {
-            const tbody = document.getElementById('milestones-table-body');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
+            const rowHtml = `
                 <td><input type="text" class="data-table-input" placeholder="Milestone/Goal"></td>
                 <td><input type="date" class="data-table-input"></td>
                 <td><input type="text" class="data-table-input" placeholder="Actual/Forecast"></td>
@@ -611,13 +574,11 @@
                 <td><input type="text" class="data-table-input" placeholder="Comments"></td>
                 <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
-            tbody.appendChild(newRow);
+            addRow('milestones-table-body', rowHtml);
         }
 
         function addRiskReportRow() {
-            const tbody = document.getElementById('risk-report-table-body');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
+            const rowHtml = `
                 <td><input type="text" class="data-table-input" placeholder="Risk/Issue Description"></td>
                 <td><input type="text" class="data-table-input" placeholder="Impact"></td>
                 <td><input type="text" class="data-table-input" placeholder="Probability"></td>
@@ -631,232 +592,70 @@
                 <td><input type="text" class="data-table-input" placeholder="Actions & Owner"></td>
                 <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
             `;
-            tbody.appendChild(newRow);
+            addRow('risk-report-table-body', rowHtml);
         }
 
-        function printDocument() {
-            alert('Das Dokument wird gedruckt. In einer echten Anwendung würde dies die Druckfunktion des Browsers aufrufen.');
-            window.print();
+        // Handover Tab specific functions
+        function addHandoverDocumentRow() {
+            const rowHtml = `
+                <td><input type="text" class="data-table-input" placeholder="Dokumentname"></td>
+                <td><input type="text" class="data-table-input" placeholder="Kurze Beschreibung"></td>
+                <td><input type="text" class="data-table-input" placeholder="Link oder Pfad"></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+            `;
+            addRow('handover-documents-table', rowHtml);
         }
 
-        function saveCombinedDocument() {
-            // Funktion zum Sammeln von Daten aus einer Tabelle
-            function getTableData(tableBodyId) {
-                const data = [];
-                document.querySelectorAll(`#${tableBodyId} tr`).forEach(row => {
-                    const rowData = {};
-                    row.querySelectorAll('input, select, textarea').forEach((input, index) => {
-                        const key = input.id || input.name || input.placeholder || `col${index}`;
-                        rowData[key] = input.value;
-                    });
-                    data.push(rowData);
-                });
-                return data;
-            }
+        function addHandoverContactRow() {
+            const rowHtml = `
+                <td><input type="text" class="data-table-input" placeholder="Name"></td>
+                <td><input type="text" class="data-table-input" placeholder="Rolle"></td>
+                <td><input type="text" class="data-table-input" placeholder="E-Mail / Telefon"></td>
+                <td><input type="text" class="data-table-input" placeholder="Z.B. Entscheidungsgeber, Experte"></td>
+                <td><button onclick="removeRow(this)" class="delete-button">X</button></td>
+            `;
+            addRow('handover-contacts-table', rowHtml);
+        }
 
-            // Funktion zum Erstellen von HTML für Tabellendaten
-            function createTableHtml(headers, data) {
-                let html = '<table class="output-table"><thead><tr>';
-                headers.forEach(header => {
-                    html += `<th>${header}</th>`;
-                });
-                html += '</tr></thead><tbody>';
-                data.forEach(row => {
-                    html += '<tr>';
-                    headers.forEach(header => {
-                        const key = Object.keys(row).find(k => row[k] === row[header] || k.toLowerCase().includes(header.toLowerCase().replace(/ /g, '')));
-                        html += `<td>${row[key] ? row[key].replace(/\n/g, '<br>') : ''}</td>`;
-                    });
-                    html += '</tr>';
-                });
-                html += '</tbody></table>';
-                return html;
-            }
-
-            // --- Daten sammeln für Kickoff ---
-            const projectNameKickoff = document.getElementById('project-name').value;
-            const clientCompany = document.getElementById('client-company').value;
-            const interimManagerKickoff = document.getElementById('interim-manager').value;
-            const roleKickoff = document.getElementById('role').value;
-            const startDate = document.getElementById('start-date').value;
-            const endDate = document.getElementById('end-date').value;
-            const assignmentGoals = document.getElementById('assignment-goals').value;
-            const scopeKickoff = document.getElementById('scope').value;
-
-            const stakeholderCards = [];
-            document.querySelectorAll('#stakeholder-list .stakeholder-card').forEach(card => {
-                const name = card.querySelector('.stakeholder-detail input[placeholder="Name"]').value;
-                const role = card.querySelector('.stakeholder-detail input[placeholder="Rolle"]').value;
-                const department = card.querySelector('.stakeholder-detail input[placeholder="Abteilung"]').value;
-                const email = card.querySelector('.stakeholder-detail input[placeholder="E-Mail"]').value;
-                const interest = card.querySelector('.stakeholder-detail select.interest-level').value;
-                const influence = card.querySelector('.stakeholder-detail select.influence-level').value;
-                const strategy = card.querySelector('.form-group textarea[placeholder="Geplante Kommunikationsmaßnahmen"]').value;
-                stakeholderCards.push({ name, role, department, email, interest, influence, strategy });
-            });
-
-            const deliverables = getTableData('deliverables-table');
-            const communicationPlan = getTableData('communication-plan-table');
-            const neededResources = document.getElementById('needed-resources').value;
-            const accessRequirements = document.getElementById('access-requirements').value;
-
-            // --- Daten sammeln für Report ---
-            const projectNameReport = document.getElementById('project-name-report').value;
-            const interimManagerReport = document.getElementById('interim-manager-report').value;
-            const reportDate = document.getElementById('report-date').value;
-            const reportingPeriod = document.getElementById('reporting-period').value;
-            const overallStatus = document.getElementById('overall-status').value;
-            const milestonesReport = getTableData('milestones-table-body');
-            const currentChallenges = document.getElementById('current-challenges').value;
-            const measuresTaken = document.getElementById('measures-taken').value;
-            const risksReport = getTableData('risk-report-table-body');
-            const nextStepsReport = document.getElementById('next-steps-report').value;
-            const recommendations = document.getElementById('recommendations').value;
-
-
-            // --- Daten sammeln für Handover ---
-            const mandateProjectName = document.getElementById('mandate-project-name').value;
-            const mandateClient = document.getElementById('mandate-client').value;
-            const mandateInterimManager = document.getElementById('mandate-interim-manager').value;
-            const mandateRole = document.getElementById('mandate-role').value;
-            const mandateStartDate = document.getElementById('mandate-start-date').value;
-            const mandateEndDate = document.getElementById('mandate-end-date').value;
-            const mandateSummary = document.getElementById('mandate-summary').value;
-            const keyDocuments = document.getElementById('key-documents').value;
-            const itSystemsAccess = document.getElementById('it-systems-access').value;
-            const contactsStakeholders = document.getElementById('contacts-stakeholders').value;
-            const pendingTasks = document.getElementById('pending-tasks').value;
-            const currentProjectsInitiatives = document.getElementById('current-projects-initiatives').value;
-            const budgetOverview = document.getElementById('budget-overview').value;
-            const contractDetails = document.getElementById('contract-details').value;
-            const lessonsLearnedHandover = document.getElementById('lessons-learned').value;
-            const recommendationsHandover = document.getElementById('recommendations-handover').value;
-            const handoverDateFinal = document.getElementById('handover-date-final').value;
-            const receivingPerson = document.getElementById('receiving-person').value;
-            const signOff = document.getElementById('sign-off').value;
-
-            const checklistItems = [];
-            document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
-                checklistItems.push({ id: checkbox.id, checked: checkbox.checked, label: document.querySelector(`label[for="${checkbox.id}"]`).textContent });
-            });
-
-
-            // --- HTML-Struktur für den Download erstellen ---
-            let deliverablesHtml = createTableHtml(['Aufgabe/Liefergegenstand', 'Verantwortlicher', 'Fälligkeitsdatum', 'Status'], deliverables);
-            let communicationPlanHtml = createTableHtml(['Zielgruppe', 'Frequenz', 'Kanal', 'Format', 'Zweck', 'Verantwortlicher'], communicationPlan);
-            let milestonesReportHtml = createTableHtml(['Meilenstein/Ziel', 'Plan-Datum', 'Aktuell/Prognose', 'Status', 'Kommentare'], milestonesReport);
-            let risksReportHtml = createTableHtml(['Beschreibung des Risikos/Problems', 'Auswirkung', 'Wahrscheinlichkeit', 'Status', 'Maßnahmen & Verantwortlicher'], risksReport);
-
-            let stakeholderCardsHtml = stakeholderCards.map(s => `
-                <div class="stakeholder-card-output">
-                    <h4>${s.name}</h4>
-                    <p><strong>Rolle:</strong> ${s.role}</p>
-                    <p><strong>Abteilung:</strong> ${s.department}</p>
-                    <p><strong>E-Mail:</strong> ${s.email}</p>
-                    <p><strong>Interesse:</strong> <span class="level-${s.interest}">${s.interest}</span></p>
-                    <p><strong>Einfluss:</strong> <span class="level-${s.influence}">${s.influence}</span></p>
-                    <p><strong>Kommunikationsstrategie:</strong> ${s.strategy.replace(/\n/g, '<br>')}</p>
-                </div>
-            `).join('');
-
-
+        // Generate Static HTML function
+        function generateStaticHtml() {
             const staticHtmlContent = `
                 <!DOCTYPE html>
                 <html lang="de">
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Interim Management Dokumentation (Statisch)</title>
+                    <title>Interim Management Dokumentation</title>
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; line-height: 1.6; color: #333; background: #f0f2f5; }
-                        .report-container { max-width: 900px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-                        .header-exported {
-                            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-                            color: white;
-                            padding: 30px;
-                            text-align: center;
-                            border-radius: 8px 8px 0 0;
-                            margin: -30px -30px 30px -30px;
-                        }
-                        .header-exported h1 { font-size: 2.2em; margin-bottom: 10px; font-weight: 300; }
-                        .header-exported p { font-size: 1.1em; opacity: 0.9; }
-                        h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
-                        h2 { font-size: 1.8em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
-                        h3 { font-size: 1.3em; margin-bottom: 15px; }
-                        h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
-                        .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-                        .form-group p {
-                            margin-top: 0;
-                            margin-bottom: 0;
-                            padding: 8px 0;
-                            border-bottom: 1px dotted #ccc;
-                            word-wrap: break-word;
-                            overflow-wrap: break-word;
-                        }
-                        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; }
-                        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-                        .output-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin: 20px 0;
-                            background: white;
-                            border-radius: 8px;
-                            overflow: hidden;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-                            table-layout: auto;
-                        }
-                        .output-table th, .output-table td {
-                            padding: 12px 15px;
-                            text-align: left;
-                            border-bottom: 1px solid #e5e7eb;
-                            word-wrap: break-word;
-                            overflow-wrap: break-word;
-                        }
-                        .output-table th { background: #f8fafc; font-weight: 600; color: #374151; }
-                        .stakeholder-card-output {
-                            background: #f8f9fa;
-                            padding: 20px;
-                            border-radius: 8px;
-                            border-left: 4px solid #3498db;
-                            margin-bottom: 15px;
-                            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-                        }
-                        .stakeholder-card-output h4 {
-                            margin-top: 0;
-                            color: #34495e;
-                        }
-                        .stakeholder-card-output p {
-                            margin-bottom: 5px;
-                        }
-                        .level-low { background: #e8f5e8; color: #2e7d32; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
-                        .level-medium { background: #fff3e0; color: #ef6c00; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
-                        .level-high { background: #ffebee; color: #c62828; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; }
-                        .checklist-item-output {
-                            display: flex;
-                            align-items: center;
-                            margin-bottom: 10px;
-                            padding: 10px;
-                            background: #f0f2f5;
-                            border-radius: 5px;
-                        }
-                        .checklist-item-output .checkbox-icon {
-                            margin-right: 10px;
-                            font-size: 1.2em;
-                        }
-                        .checklist-item-output .checkbox-icon.checked { color: #28a745; }
-                        .checklist-item-output .checkbox-icon.unchecked { color: #dc3545; }
-
-                        @media (max-width: 768px) {
-                            .form-row { grid-template-columns: 1fr; }
-                            .report-container { padding: 20px; }
-                        }
+                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
+                        .container { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .header h1 { color: #333; }
+                        .section { margin-bottom: 30px; border: 1px solid #eee; padding: 15px; border-radius: 5px; }
+                        .section h2 { color: #555; border-bottom: 2px solid #555; padding-bottom: 10px; margin-bottom: 20px; }
+                        .form-group label { font-weight: bold; display: block; margin-bottom: 5px; }
+                        .form-group p { margin-bottom: 15px; background-color: #f9f9f9; padding: 10px; border-radius: 3px; border: 1px solid #e1e1e1; white-space: pre-wrap; word-wrap: break-word;}
+                        .form-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 15px;}
+                        .form-row .form-group { flex: 1; min-width: 300px; }
+                        .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        .data-table th { background-color: #f2f2f2; }
+                        .stakeholder-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; background-color: #fdfdfd; }
+                        .stakeholder-card h3 { margin-top: 0; color: #007bff; }
+                        .stakeholder-details { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+                        .stakeholder-detail { flex: 1; min-width: 200px; }
+                        .checklist-item-output { display: flex; align-items: center; margin-bottom: 10px; }
+                        .checkbox-icon { margin-right: 10px; font-size: 1.2em; }
+                        .checkbox-icon.checked { color: green; }
+                        .checkbox-icon.unchecked { color: red; }
                     </style>
                 </head>
                 <body>
-                    <div class="report-container">
-                        <div class="header-exported">
+                    <div class="container">
+                        <div class="header">
                             <h1>Interim Management Dokumentation</h1>
                             <p>Umfassende Vorlage für die gesamte Interim Management Phase</p>
+                            <div id="documentInfo" style="font-size: 0.8em; color: #666; margin-top: 10px;">Version 1.0 / ${new Date().toLocaleDateString('de-DE')}</div>
                         </div>
 
                         <div class="content">
@@ -865,67 +664,137 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Projektname:</label>
-                                        <p>${projectNameKickoff}</p>
+                                        <p>${document.getElementById('project-name').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Kundenunternehmen:</label>
-                                        <p>${clientCompany}</p>
+                                        <p>${document.getElementById('client-company').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Interim Manager:</label>
-                                        <p>${interimManagerKickoff}</p>
+                                        <p>${document.getElementById('interim-manager').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Rolle/Position:</label>
-                                        <p>${roleKickoff}</p>
+                                        <p>${document.getElementById('role').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Startdatum:</label>
-                                        <p>${startDate}</p>
+                                        <p>${document.getElementById('start-date').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Voraussichtliches Enddatum:</label>
-                                        <p>${endDate}</p>
+                                        <p>${document.getElementById('end-date').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Ziele des Einsatzes:</label>
-                                    <p>${assignmentGoals.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('assignment-goals').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Umfang des Mandats:</label>
-                                    <p>${scopeKickoff.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('scope').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
                                 <h2>Stakeholder Analyse</h2>
-                                ${stakeholderCardsHtml}
+                                ${Array.from(document.querySelectorAll('#stakeholder-list .stakeholder-card')).map((card, index) => `
+                                    <div class="stakeholder-card">
+                                        <h3>Stakeholder ${index + 1}</h3>
+                                        <div class="stakeholder-details">
+                                            <div class="stakeholder-detail">
+                                                <strong>Name:</strong> <p>${card.querySelector('input[placeholder="Name"]').value}</p>
+                                            </div>
+                                            <div class="stakeholder-detail">
+                                                <strong>Rolle:</strong> <p>${card.querySelector('input[placeholder="Rolle"]').value}</p>
+                                            </div>
+                                            <div class="stakeholder-detail">
+                                                <strong>Abteilung:</strong> <p>${card.querySelector('input[placeholder="Abteilung"]').value}</p>
+                                            </div>
+                                            <div class="stakeholder-detail">
+                                                <strong>E-Mail:</strong> <p>${card.querySelector('input[placeholder="E-Mail"]').value}</p>
+                                            </div>
+                                            <div class="stakeholder-detail">
+                                                <strong>Interesse:</strong> <p>${card.querySelector('.interest-level').options[card.querySelector('.interest-level').selectedIndex].text}</p>
+                                            </div>
+                                            <div class="stakeholder-detail">
+                                                <strong>Einfluss:</strong> <p>${card.querySelector('.influence-level').options[card.querySelector('.influence-level').selectedIndex].text}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Kommunikationsstrategie:</label>
+                                            <p>${card.querySelector('textarea[placeholder="Geplante Kommunikationsmaßnahmen"]').value.replace(/\n/g, '<br>')}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
                             </div>
 
                             <div class="section">
                                 <h2>Deliverables & Meilensteine</h2>
-                                ${deliverablesHtml}
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Aufgabe/Liefergegenstand</th>
+                                            <th>Verantwortlicher</th>
+                                            <th>Fälligkeitsdatum</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Array.from(document.querySelectorAll('#deliverables-table tbody tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[3].querySelector('select').options[row.cells[3].querySelector('select').selectedIndex].text}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="section">
                                 <h2>Kommunikationsplan</h2>
-                                ${communicationPlanHtml}
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Zielgruppe</th>
+                                            <th>Frequenz</th>
+                                            <th>Kanal</th>
+                                            <th>Format</th>
+                                            <th>Zweck</th>
+                                            <th>Verantwortlicher</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="communication-plan-table">
+                                        ${Array.from(document.querySelectorAll('#communication-plan-table tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[3].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[4].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[5].querySelector('input').value}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="section">
                                 <h2>Ressourcen & Tools</h2>
                                 <div class="form-group">
                                     <label>Benötigte Ressourcen (Teammitglieder, Software, Hardware):</label>
-                                    <p>${neededResources.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('needed-resources').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Zugangsberechtigungen & Systeme:</label>
-                                    <p>${accessRequirements.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('access-requirements').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -934,173 +803,225 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Projektname:</label>
-                                        <p>${projectNameReport}</p>
+                                        <p>${document.getElementById('project-name-report').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Interim Manager:</label>
-                                        <p>${interimManagerReport}</p>
+                                        <p>${document.getElementById('interim-manager-report').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Berichtsdatum:</label>
-                                        <p>${reportDate}</p>
+                                        <p>${document.getElementById('report-date').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Berichtszeitraum:</label>
-                                        <p>${reportingPeriod}</p>
+                                        <p>${document.getElementById('reporting-period').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Gesamtstatus:</label>
-                                    <p>${overallStatus}</p>
+                                    <p>${document.getElementById('overall-status').options[document.getElementById('overall-status').selectedIndex].text}</p>
                                 </div>
                             </div>
 
                             <div class="section">
                                 <h2>Fortschritt & Meilensteine</h2>
-                                ${milestonesReportHtml}
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Meilenstein/Ziel</th>
+                                            <th>Plan-Datum</th>
+                                            <th>Aktuell/Prognose</th>
+                                            <th>Status</th>
+                                            <th>Kommentare</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="milestones-table-body">
+                                        ${Array.from(document.querySelectorAll('#milestones-table-body tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[3].querySelector('select').options[row.cells[3].querySelector('select').selectedIndex].text}</p></td>
+                                                <td><p>${row.cells[4].querySelector('input').value}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="section">
                                 <h2>Top Themen & Herausforderungen</h2>
                                 <div class="form-group">
                                     <label>Aktuelle Herausforderungen:</label>
-                                    <p>${currentChallenges.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('current-challenges').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Getroffene Maßnahmen & nächste Schritte:</label>
-                                    <p>${measuresTaken.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('measures-taken').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
                                 <h2>Risikomanagement (R.A.G.)</h2>
-                                ${risksReportHtml}
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Beschreibung des Risikos/Problems</th>
+                                            <th>Auswirkung</th>
+                                            <th>Wahrscheinlichkeit</th>
+                                            <th>Status</th>
+                                            <th>Maßnahmen & Verantwortlicher</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="risk-report-table-body">
+                                        ${Array.from(document.querySelectorAll('#risk-report-table-body tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[3].querySelector('select').options[row.cells[3].querySelector('select').selectedIndex].text}</p></td>
+                                                <td><p>${row.cells[4].querySelector('input').value}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="section">
                                 <h2>Nächste Schritte & Empfehlungen</h2>
                                 <div class="form-group">
                                     <label>Geplante nächste Schritte:</label>
-                                    <p>${nextStepsReport.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('next-steps-report').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Empfehlungen an das Management:</label>
-                                    <p>${recommendations.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('recommendations').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
-                                <h2>Mandatsübersicht (Handover)</h2>
+                                <h2>Mandatsübersicht</h2>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Projekt/Mandatsname:</label>
-                                        <p>${mandateProjectName}</p>
+                                        <p>${document.getElementById('mandate-project-name').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Kundenunternehmen:</label>
-                                        <p>${mandateClient}</p>
+                                        <p>${document.getElementById('mandate-client').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Interim Manager:</label>
-                                        <p>${mandateInterimManager}</p>
+                                        <p>${document.getElementById('mandate-interim-manager').value}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Rolle/Position:</label>
-                                        <p>${mandateRole}</p>
+                                        <p>${document.getElementById('mandate-role').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label>Startdatum:</label>
-                                        <p>${mandateStartDate}</p>
+                                        <label>Startdatum des Mandats:</label>
+                                        <p>${document.getElementById('mandate-start-date').value}</p>
                                     </div>
                                     <div class="form-group">
-                                        <label>Enddatum:</label>
-                                        <p>${mandateEndDate}</p>
+                                        <label>Enddatum des Mandats:</label>
+                                        <p>${document.getElementById('mandate-end-date').value}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Zusammenfassung der Mandatsziele & -ergebnisse:</label>
-                                    <p>${mandateSummary.replace(/\n/g, '<br>')}</p>
+                                    <label>Zusammenfassung des Mandats & Erfolge:</label>
+                                    <p>${document.getElementById('mandate-summary').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
-                                <h2>Schlüsselinformationen & Dokumentation</h2>
+                                <h2>Wichtige Dokumente & Übergabematerialien</h2>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dokument/Material</th>
+                                            <th>Beschreibung</th>
+                                            <th>Speicherort/Link</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Array.from(document.querySelectorAll('#handover-documents-table tbody tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="section">
+                                <h2>Offene Punkte & Empfehlungen für Nachfolger</h2>
                                 <div class="form-group">
-                                    <label>Liste Schlüssel-Dokumente & Speicherorte:</label>
-                                    <p>${keyDocuments.replace(/\n/g, '<br>')}</p>
+                                    <label>Liste der offenen Punkte & To-Dos:</label>
+                                    <p>${document.getElementById('open-items').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
-                                    <label>Wichtige IT-Systeme & Zugänge:</label>
-                                    <p>${itSystemsAccess.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Wichtige Kontakte & Stakeholder:</label>
-                                    <p>${contactsStakeholders.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Offene Aufgaben & nächste Schritte:</label>
-                                    <p>${pendingTasks.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Aktuelle Projekte & Initiativen:</label>
-                                    <p>${currentProjectsInitiatives.replace(/\n/g, '<br>')}</p>
+                                    <label>Empfehlungen für den Nachfolger:</label>
+                                    <p>${document.getElementById('recommendations-successor').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
-                                <h2>Finanzielle Übergabe</h2>
-                                <div class="form-group">
-                                    <label>Budgetübersicht & offene Posten:</label>
-                                    <p>${budgetOverview.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Vertragsdetails & Konditionen:</label>
-                                    <p>${contractDetails.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                <h2>Ansprechpartner & Kontakte für die Übergabe</h2>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rolle/Beziehung</th>
+                                            <th>Kontaktinformationen</th>
+                                            <th>Relevanz für Nachfolger</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Array.from(document.querySelectorAll('#handover-contacts-table tbody tr')).map(row => `
+                                            <tr>
+                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
+                                                <td><p>${row.cells[3].querySelector('input').value}</p></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="section">
-                                <h2>Lessons Learned & Empfehlungen (Handover)</h2>
+                                <h2>Exit-Prozess & Lessons Learned</h2>
+                                <div class="form-group">
+                                    <label>Exit-Strategie:</label>
+                                    <p>${document.getElementById('exit-strategy').value.replace(/\n/g, '<br>')}</p>
+                                </div>
                                 <div class="form-group">
                                     <label>Lessons Learned aus dem Mandat:</label>
-                                    <p>${lessonsLearnedHandover.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Empfehlungen für Nachfolger/Organisation:</label>
-                                    <p>${recommendationsHandover.replace(/\n/g, '<br>')}</p>
-                                </div>
-                            </div>
-
-                            <div class="section">
-                                <h2>Formelle Übergabe & Abnahme</h2>
-                                <div class="form-group">
-                                    <label>Datum der Übergabe:</label>
-                                    <p>${handoverDateFinal}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Übergabe an (Name, Position):</label>
-                                    <p>${receivingPerson}</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>Bestätigung/Sign-Off:</label>
-                                    <p>${signOff.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.getElementById('lessons-learned-im').value.replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
                             <div class="section">
                                 <h2>Checkliste für den Exit-Prozess</h2>
-                                ${checklistItems.map(item => `
-                                    <div class="checklist-item-output">
-                                        <span class="checkbox-icon ${item.checked ? 'checked' : 'unchecked'}">${item.checked ? '&#10003;' : '&#10007;'}</span>
-                                        <p>${item.label}</p>
-                                    </div>
-                                `).join('')}
+                                ${Array.from(document.querySelectorAll('.checklist-item')).map(item => {
+                                    const checked = item.querySelector('input[type="checkbox"]').checked;
+                                    const label = item.querySelector('label').innerText;
+                                    return `
+                                        <div class="checklist-item-output">
+                                            <span class="checkbox-icon ${checked ? 'checked' : 'unchecked'}">${checked ? '&#10003;' : '&#10007;'}</span>
+                                            <p>${label}</p>
+                                        </div>
+                                    `;
+                                }).join('')}
                             </div>
                         </div>
                     </div>
