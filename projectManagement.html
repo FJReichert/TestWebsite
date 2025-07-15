@@ -17,7 +17,7 @@
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showTab('project-kickoff', event)">Project Kickoff</button>
             <button class="nav-tab" onclick="showTab('meeting-minutes', event)">Meeting Minutes</button>
-            <button class="nav-tab" onclick="showTab('risk-management', event)">Risk Management</button>
+            <button class="nav-tab" onclick="showTab('risk-management', event)">Risk Management</mbutton>
             <button class="nav-tab" onclick="showTab('lessons-learned', event)">Lessons Learned</button>
             <button class="nav-tab" onclick="showTab('project-handover', event)">Project Handover</button>
         </div>
@@ -485,34 +485,20 @@
         });
 
         function showTab(tabName, event) {
-            console.log('showTab called with tabName:', tabName); // Debugging: Welcher Tab-Name wird übergeben?
-
+            // Entfernen der 'active'-Klasse von allen Tab-Inhalten
             const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => {
-                // Defensive check, although content from querySelectorAll should not be null
-                if (content) {
-                    content.classList.remove('active');
-                }
-            });
+            tabContents.forEach(content => content.classList.remove('active'));
 
+            // Entfernen der 'active'-Klasse von allen Navigations-Buttons
             const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => {
-                // Defensive check, although tab from querySelectorAll should not be null
-                if (tab) {
-                    tab.classList.remove('active');
-                }
-            });
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-            const targetTab = document.getElementById(tabName);
-            console.log('Target tab element for', tabName, ':', targetTab); // Debugging: Wird das Element gefunden?
+            // Hinzufügen der 'active'-Klasse zum ausgewählten Tab-Inhalt
+            // Die vorherige Version hatte hier eine unnötige if-Prüfung, die entfernt wurde.
+            document.getElementById(tabName).classList.add('active');
 
-            if (targetTab) {
-                targetTab.classList.add('active');
-            } else {
-                console.error('FEHLER: Element mit ID "' + tabName + '" wurde nicht gefunden. Überprüfen Sie die IDs in Ihrem HTML.');
-            }
-
-            if (event && event.currentTarget) {
+            // Hinzufügen der 'active'-Klasse zum geklickten Navigations-Button
+            if (event) {
                 event.currentTarget.classList.add('active');
             }
         }
