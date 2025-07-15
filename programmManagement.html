@@ -10,64 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programmmanagement Dokumentationssystem</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Basic styles for the form elements */
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
-        .container { max-width: 1200px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #333; }
-        .header p { color: #666; }
-        .nav-tabs { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .nav-tab { background-color: #eee; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; transition: background-color 0.3s ease; }
-        .nav-tab:hover { background-color: #ddd; }
-        .nav-tab.active { background-color: #007bff; color: white; border-bottom: 2px solid #007bff; }
-        .tab-content { display: none; padding: 20px 0; }
-        .tab-content.active { display: block; }
-        .section { background-color: #f9f9f9; border: 1px solid #e1e1e1; border-radius: 5px; padding: 20px; margin-bottom: 20px; }
-        .section h2 { color: #007bff; margin-top: 0; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
-        .section h3 { color: #555; margin-top: 0; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group input[type="number"],
-        .form-group textarea,
-        .form-group select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        .btn-group { text-align: center; margin-top: 30px; }
-        .btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin: 0 10px; transition: background-color 0.3s ease; }
-        .btn:hover { background-color: #218838; }
-        .add-button { background-color: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        .add-button:hover { background-color: #0056b3; }
-        .delete-button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px; }
-        .delete-button:hover { background-color: #c82333; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .data-table th { background-color: #f2f2f2; font-weight: bold; }
-        .risk-assessment-output { margin-top: 10px; padding: 10px; border: 1px solid #ccc; background-color: #f0f0f0; border-radius: 4px; }
-        .risk-assessment-output p { margin: 5px 0; }
-        .home-button {
-            display: inline-block;
-            background-color: #6c757d;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-bottom: 20px;
-            float: left;
-        }
-        .home-button:hover {
-            background-color: #5a6268;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
