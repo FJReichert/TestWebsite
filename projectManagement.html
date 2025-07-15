@@ -111,8 +111,30 @@
                 <div class="section">
                     <h2>Kommunikation & Stakeholder</h2>
                     <div class="form-group">
-                        <label for="communication-plan">Kommunikationsplan:</label>
-                        <textarea id="communication-plan" placeholder="Frequenz, Kanäle, Teilnehmer der Meetings" class="textarea-large"></textarea>
+                        <h2>Kommunikationsplan für Meetings</h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Meeting-Titel</th>
+                                    <th>Frequenz</th>
+                                    <th>Kanäle</th>
+                                    <th>Teilnehmer</th>
+                                    <th>Verantwortlich</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="communication-plan-tbody">
+                                <tr>
+                                    <td><input type="text" placeholder="Z.B. Wöchentliches Team-Sync"></td>
+                                    <td><input type="text" placeholder="Z.B. Wöchentlich"></td>
+                                    <td><input type="text" placeholder="Z.B. Zoom, E-Mail"></td>
+                                    <td><input type="text" placeholder="Z.B. Projektteam"></td>
+                                    <td><input type="text" placeholder="Name"></td>
+                                    <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-button" onclick="addCommunicationPlanMeeting()">+ Meeting zum Kommunikationsplan hinzufügen</button>
                     </div>
                     <h3>Wichtige Stakeholder</h3>
                     <table class="data-table">
@@ -451,6 +473,19 @@
             contents.forEach(content => content.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
         }
+        function addCommunicationPlanMeeting() {
+        const tbody = document.getElementById('communication-plan-tbody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Z.B. Wöchentliches Team-Sync"></td>
+            <td><input type="text" placeholder="Z.B. Wöchentlich"></td>
+            <td><input type="text" placeholder="Z.B. Zoom, E-Mail"></td>
+            <td><input type="text" placeholder="Z.B. Projektteam"></td>
+            <td><input type="text" placeholder="Name"></td>
+            <td><button class="delete-button" onclick="this.closest('tr').remove()">X</button></td>
+        `;
+        tbody.appendChild(newRow);
+    }
 
         function addTeamMember() {
             const tbody = document.getElementById('team-tbody');
@@ -604,6 +639,47 @@
         }
 
         function generateStaticHtml() {
+            // Helper to escape HTML for display
+            const escapeHtml = (text) => {
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            }
+
+            // Function to get table rows data
+            const getTableRowsHtml = (tableBodyId, columnSelectors, removeButtons = false) => {
+                const rows = Array.from(document.querySelectorAll(`#${tableBodyId} tr`));
+                return rows.map(row => {
+                    const cells = Array.from(row.cells);
+                    let rowHtml = '<tr>';
+                    columnSelectors.forEach((selector, index) => {
+                        let value = '';
+                        if (selector.type === 'input') {
+                            value = cells[index].querySelector('input')?.value || '';
+                        } else if (selector.type === 'textarea') {
+                            value = cells[index].querySelector('textarea')?.value || '';
+                        } else if (selector.type === 'select') {
+                            value = cells[index].querySelector('select')?.options[cells[index].querySelector('select').selectedIndex]?.text || '';
+                        } else if (selector.type === 'span') {
+                            value = cells[index].querySelector('span')?.textContent || '';
+                        }
+                        rowHtml += `<td><p>${escapeHtml(value).replace(/\n/g, '<br>')}</p></td>`;
+                    });
+                    rowHtml += '</tr>';
+                    return rowHtml;
+                }).join('');
+            };
+
+            // Get Communication Plan Table Data
+            const communicationPlanTableHtml = getTableRowsHtml('communication-plan-tbody', [
+                { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }
+            ]);
+
             const staticHtmlContent = `
                 <!DOCTYPE html>
                 <html lang="de">
@@ -645,20 +721,20 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Projektname:</label>
-                                        <p>${document.getElementById('project-name').value}</p>
+                                        <p>${escapeHtml(document.getElementById('project-name').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Projektleiter:</label>
-                                        <p>${document.getElementById('project-leader').value}</p>
+                                        <p>${escapeHtml(document.getElementById('project-leader').value)}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Projektziele:</label>
-                                    <p>${document.getElementById('project-goal').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('project-goal').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Projektumfang (Scope):</label>
-                                    <p>${document.getElementById('project-scope').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('project-scope').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -674,14 +750,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="team-tbody">
-                                        ${Array.from(document.querySelectorAll('#team-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[3].querySelector('input').value}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('team-tbody', [
+                                            { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -697,13 +768,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="milestone-tbody">
-                                        ${Array.from(document.querySelectorAll('#milestone-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('milestone-tbody', [
+                                            { type: 'input' }, { type: 'input' }, { type: 'input' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -713,11 +780,11 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Geschätztes Budget (€):</label>
-                                        <p>${document.getElementById('estimated-budget').value}</p>
+                                        <p>${escapeHtml(document.getElementById('estimated-budget').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Benötigte Ressourcen:</label>
-                                        <p>${document.getElementById('resources-needed').value}</p>
+                                        <p>${escapeHtml(document.getElementById('resources-needed').value)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -725,8 +792,21 @@
                             <div class="section">
                                 <h2>Kommunikation & Stakeholder</h2>
                                 <div class="form-group">
-                                    <label>Kommunikationsplan:</label>
-                                    <p>${document.getElementById('communication-plan').value.replace(/\n/g, '<br>')}</p>
+                                    <h2>Kommunikationsplan für Meetings</h2>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Meeting-Titel</th>
+                                                <th>Frequenz</th>
+                                                <th>Kanäle</th>
+                                                <th>Teilnehmer</th>
+                                                <th>Verantwortlich</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="communication-plan-tbody">
+                                            ${communicationPlanTableHtml}
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <h3>Wichtige Stakeholder</h3>
                                 <table class="data-table">
@@ -738,13 +818,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="stakeholder-tbody">
-                                        ${Array.from(document.querySelectorAll('#stakeholder-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('stakeholder-tbody', [
+                                            { type: 'input' }, { type: 'input' }, { type: 'input' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -753,7 +829,7 @@
                                 <h2>Risikobetrachtung (Initial)</h2>
                                 <div class="form-group">
                                     <label>Initiale Risiken:</label>
-                                    <p>${document.getElementById('initial-risks').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('initial-risks').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -762,26 +838,26 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Meeting-Titel:</label>
-                                        <p>${document.getElementById('meetingName').value}</p>
+                                        <p>${escapeHtml(document.getElementById('meetingName').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Datum:</label>
-                                        <p>${document.getElementById('meetingDate').value}</p>
+                                        <p>${escapeHtml(document.getElementById('meetingDate').value)}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Uhrzeit:</label>
-                                        <p>${document.getElementById('meetingTime').value}</p>
+                                        <p>${escapeHtml(document.getElementById('meetingTime').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Ort/Online-Link:</label>
-                                        <p>${document.getElementById('meetingLocation').value}</p>
+                                        <p>${escapeHtml(document.getElementById('meetingLocation').value)}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Organisator:</label>
-                                    <p>${document.getElementById('organizer').value}</p>
+                                    <p>${escapeHtml(document.getElementById('organizer').value)}</p>
                                 </div>
                             </div>
 
@@ -789,11 +865,11 @@
                                 <h2>Teilnehmer & Abwesende</h2>
                                 <div class="form-group">
                                     <label>Anwesende Teilnehmer:</label>
-                                    <p>${document.getElementById('presentParticipants').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('presentParticipants').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Abwesende Teilnehmer:</label>
-                                    <p>${document.getElementById('absentParticipants').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('absentParticipants').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -808,13 +884,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="agendaTableBody">
-                                        ${Array.from(document.querySelectorAll('#agendaTableBody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                                <td><p>${row.cells[2].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('agendaTableBody', [
+                                            { type: 'input' }, { type: 'textarea' }, { type: 'textarea' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -823,7 +895,7 @@
                                 <h2>Offene Punkte, Probleme & Risiken</h2>
                                 <div class="form-group">
                                     <label>Beschreibung offener Punkte, Probleme oder Risiken:</label>
-                                    <p>${document.getElementById('issuesRisks').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('issuesRisks').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -831,7 +903,7 @@
                                 <h2>Nächste Schritte & Verantwortlichkeiten</h2>
                                 <div class="form-group">
                                     <label>Übersicht der nächsten Schritte:</label>
-                                    <p>${document.getElementById('nextSteps').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('nextSteps').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -851,18 +923,10 @@
                                         </tr>
                                     </thead>
                                     <tbody id="risk-table-body">
-                                        ${Array.from(document.querySelectorAll('#risk-table-body tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[2].querySelector('select').options[row.cells[2].querySelector('select').selectedIndex].text}</p></td>
-                                                <td><p>${row.cells[3].querySelector('select').options[row.cells[3].querySelector('select').selectedIndex].text}</p></td>
-                                                <td><p>${row.cells[4].querySelector('.status-badge').textContent}</p></td>
-                                                <td><p>${row.cells[5].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[6].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[7].querySelector('select').options[row.cells[7].querySelector('select').selectedIndex].text}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('risk-table-body', [
+                                            { type: 'input' }, { type: 'input' }, { type: 'select' }, { type: 'select' },
+                                            { type: 'span' }, { type: 'input' }, { type: 'input' }, { type: 'select' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -871,11 +935,11 @@
                                 <h2>Risikobetrachtung & Strategie</h2>
                                 <div class="form-group">
                                     <label>Gesamtrisikobewertung des Projekts:</label>
-                                    <p>${document.getElementById('overall-risk-assessment').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('overall-risk-assessment').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Risikomanagement-Strategie:</label>
-                                    <p>${document.getElementById('risk-strategy').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('risk-strategy').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -883,15 +947,15 @@
                                 <h2>Lessons Learned Übersicht</h2>
                                 <div class="form-group">
                                     <label>Projektname für Lessons Learned:</label>
-                                    <p>${document.getElementById('ll-project-name').value}</p>
+                                    <p>${escapeHtml(document.getElementById('ll-project-name').value)}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Datum der Erfassung:</label>
-                                    <p>${document.getElementById('ll-date').value}</p>
+                                    <p>${escapeHtml(document.getElementById('ll-date').value)}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Moderator:</label>
-                                    <p>${document.getElementById('ll-facilitator').value}</p>
+                                    <p>${escapeHtml(document.getElementById('ll-facilitator').value)}</p>
                                 </div>
                             </div>
 
@@ -906,13 +970,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="good-lessons-tbody">
-                                        ${Array.from(document.querySelectorAll('#good-lessons-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                                <td><p>${row.cells[2].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('good-lessons-tbody', [
+                                            { type: 'input' }, { type: 'textarea' }, { type: 'textarea' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -928,13 +988,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="bad-lessons-tbody">
-                                        ${Array.from(document.querySelectorAll('#bad-lessons-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                                <td><p>${row.cells[2].querySelector('textarea').value.replace(/\n/g, '<br>')}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('bad-lessons-tbody', [
+                                            { type: 'input' }, { type: 'textarea' }, { type: 'textarea' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -943,7 +999,7 @@
                                 <h2>Empfehlungen für zukünftige Projekte</h2>
                                 <div class="form-group">
                                     <label>Gesamte Empfehlungen:</label>
-                                    <p>${document.getElementById('future-recommendations').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('future-recommendations').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -952,26 +1008,26 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Projektname:</label>
-                                        <p>${document.getElementById('handover-project-name').value}</p>
+                                        <p>${escapeHtml(document.getElementById('handover-project-name').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Übergabedatum:</label>
-                                        <p>${document.getElementById('handover-date').value}</p>
+                                        <p>${escapeHtml(document.getElementById('handover-date').value)}</p>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Übergebende Person/Team:</label>
-                                        <p>${document.getElementById('handover-from').value}</p>
+                                        <p>${escapeHtml(document.getElementById('handover-from').value)}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>Übernehmende Person/Team:</label>
-                                        <p>${document.getElementById('handover-to').value}</p>
+                                        <p>${escapeHtml(document.getElementById('handover-to').value)}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Aktueller Projektstatus:</label>
-                                    <p>${document.getElementById('project-status-handover').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('project-status-handover').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
 
@@ -987,14 +1043,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="open-points-tbody">
-                                        ${Array.from(document.querySelectorAll('#open-points-tbody tr')).map(row => `
-                                            <tr>
-                                                <td><p>${row.cells[0].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[1].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[2].querySelector('input').value}</p></td>
-                                                <td><p>${row.cells[3].querySelector('input').value}</p></td>
-                                            </tr>
-                                        `).join('')}
+                                        ${getTableRowsHtml('open-points-tbody', [
+                                            { type: 'input' }, { type: 'input' }, { type: 'input' }, { type: 'input' }
+                                        ])}
                                     </tbody>
                                 </table>
                             </div>
@@ -1003,15 +1054,15 @@
                                 <h2>Dokumentation & Wissensübergabe</h2>
                                 <div class="form-group">
                                     <label>Wichtige Dokumente & Speicherorte:</label>
-                                    <p>${document.getElementById('document-locations').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('document-locations').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Zugänge zu Tools/Systemen:</label>
-                                    <p>${document.getElementById('tool-access').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('tool-access').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Wichtige Ansprechpartner:</label>
-                                    <p>${document.getElementById('contacts').value.replace(/\n/g, '<br>')}</p>
+                                    <p>${escapeHtml(document.getElementById('contacts').value).replace(/\n/g, '<br>')}</p>
                                 </div>
                             </div>
                         </div>
