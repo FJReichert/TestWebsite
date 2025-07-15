@@ -17,6 +17,7 @@
             <a href="index.html" class="home-button">Zur Startseite</a>
             <h1>Cloud Management Dokumentationssystem</h1>
             <p>Umfassende Dokumentvorlage für alle Projektphasen</p>
+            <div id="documentInfo" style="font-size: 0.8em; color: #666; margin-top: 10px;"></div>
         </div>
 
         <div class="nav-tabs">
@@ -216,7 +217,8 @@
                                 <th>Status</th>
                                 <th>Fällig (Datum)</th>
                                 <th>Kommentare</th>
-                                <th></th> </tr>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody id="aufgabenTable">
                             <tr class="aufgaben-row">
@@ -435,6 +437,18 @@
     </div>
 
     <script>
+        const documentVersion = "1.0";
+        const documentDate = "15. Juli 2025";
+
+        function displayDocumentInfo() {
+            const docInfoElement = document.getElementById('documentInfo');
+            if (docInfoElement) {
+                docInfoElement.innerHTML = `Version: ${documentVersion} | Datum: ${documentDate}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', displayDocumentInfo);
+
         function showTab(tabName, event) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
@@ -453,7 +467,7 @@
             }
         }
 
-        // Add Stakeholder
+        // Add Stakeholder function
         function addStakeholder() {
             const container = document.getElementById('stakeholderContainer');
             const newStakeholder = document.createElement('div');
@@ -484,7 +498,7 @@
             container.appendChild(newStakeholder);
         }
 
-        // Delete Stakeholder
+        // Delete Stakeholder function
         function deleteStakeholder(buttonElement) {
             const item = buttonElement.closest('.stakeholder-item');
             if (item) {
@@ -492,7 +506,7 @@
             }
         }
 
-        // Add Task Row
+        // Add Task Row function
         function addTaskRow() {
             const tableBody = document.getElementById('aufgabenTable');
             const newRow = document.createElement('tr');
@@ -516,7 +530,7 @@
             tableBody.appendChild(newRow);
         }
 
-        // Delete Task Row
+        // Delete Task Row function
         function deleteTaskRow(buttonElement) {
             const row = buttonElement.closest('.aufgaben-row');
             if (row) {
@@ -524,7 +538,7 @@
             }
         }
 
-        // Add Milestone
+        // Add Milestone function
         function addMilestone() {
             const milestonesContainer = document.getElementById('milestones');
             const newMilestone = document.createElement('div');
@@ -549,7 +563,7 @@
             milestonesContainer.appendChild(newMilestone);
         }
 
-        // Delete Milestone
+        // Delete Milestone function
         function deleteMilestone(buttonElement) {
             const item = buttonElement.closest('.milestone-item');
             if (item) {
@@ -591,490 +605,289 @@
             tableBody.appendChild(newRow);
         }
 
+        // Function to print the document
         function printDocument() {
             window.print();
         }
 
+        // Function to save the document as a static HTML file
         function saveDocument() {
-            // Daten aus allen Feldern sammeln - Projektübersicht
-            const kundenorganisation = document.querySelector('#grundlagen input[placeholder="Name der Kundenorganisation"]').value;
-            const projektSponsor = document.querySelector('#grundlagen input[placeholder="Name & Position"]').value;
-            const lenkungsausschuss = document.querySelector('#grundlagen textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]').value;
-
-            const stakeholders = [];
-            document.querySelectorAll('#stakeholderContainer .stakeholder-item').forEach(item => {
-                stakeholders.push({
-                    name: item.querySelector('input[placeholder="Name des Stakeholders"]').value,
-                    firma: item.querySelector('input[placeholder="Firma des Stakeholders"]').value,
-                    email: item.querySelector('input[placeholder="E-Mail des Stakeholders"]').value,
-                    telefonnummer: item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]').value,
-                    aufgabe: item.querySelector('textarea[placeholder="Aufgabe/Rolle des Stakeholders"]').value
-                });
-            });
-
-            const projektname = document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]').value;
-            const projektId = document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]').value;
-            const projektManager = document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]').value;
-            const projektlaufzeitStart = document.querySelector('div[style*="display: flex;"] input[type="date"]:nth-of-type(1)').value;
-            const projektlaufzeitEnde = document.querySelector('div[style*="display: flex;"] input[type="date"]:nth-of-type(2)').value;
-            const projektvision = document.querySelector('#grundlagen textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"]').value;
-            const messbareProjektziele = document.querySelector('#grundlagen textarea[placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"]').value;
-            const businessCase = document.querySelector('#grundlagen textarea[placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"]').value;
-            const projektbeschreibung = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen und des Projektumfangs"]').value;
-            const zeitrahmen = document.querySelector('#grundlagen textarea[placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes sowie kritische Termine"]').value;
-
-            // Vorbereitungsphase
-            const strategischeAusgangslage = document.querySelector('#vorbereitung textarea[placeholder="Analyse der aktuellen IT-Landschaft, Geschäftsstrategie und Motivation für die Cloud-Adoption"]').value;
-            const projektarchitektur = document.querySelector('#vorbereitung textarea[placeholder="Struktur und technische Abhängigkeiten innerhalb des Cloud-Projekts und zu bestehenden Systemen"]').value;
-            const governanceStruktur = document.querySelector('#vorbereitung textarea[placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten (z.B. Cloud Center of Excellence - CCoE)"]').value;
-            const geschaeftsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Beschreibung der übergeordneten Geschäftsanforderungen, die durch die Cloud-Lösung erfüllt werden sollen"]').value;
-            const technischeAnforderungen = document.querySelector('#vorbereitung textarea[placeholder="Detaillierte technische Spezifikationen, Infrastrukturanforderungen und Integrationspunkte"]').value;
-            const sicherheitsanforderungen = document.querySelector('#vorbereitung textarea[placeholder="Spezifische Anforderungen bezüglich Datensicherheit, Datenschutz (DSGVO), Compliance (ISO 27001, BSI C5 etc.) und Zugriffskontrolle"]').value;
-            const nichtFunktionaleAnforderungen = document.querySelector('#vorbereitung textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Verfügbarkeit, Wartbarkeit, Resilienz und Disaster Recovery"]').value;
-            const cloudModell = document.querySelector('#vorbereitung select').value;
-            const cloudAnbieter = document.querySelector('#vorbereitung input[placeholder="Ausgewählte Cloud-Anbieter (z.B. AWS, Azure, Google Cloud)"]').value;
-            const begruendungCloud = document.querySelector('#vorbereitung textarea[placeholder="Detaillierte Begründung basierend auf Analyse, Anforderungen und Business Case"]').value;
-            const migrationsplan = document.querySelector('#vorbereitung textarea[placeholder="Schritte, Phasen und Methoden (Lift & Shift, Replatform, Refactor, Repurchase, Retain, Retire) für die Migration bestehender Systeme und Anwendungen"]').value;
-            const cloudArchitekturDesign = document.querySelector('#vorbereitung textarea[placeholder="Beschreibung der beabsichtigten High-Level Cloud-Architektur, inkl. Netzwerk, Compute, Storage, Datenbanken, etc."]').value;
-            const anfangsInves = document.querySelector('#vorbereitung textarea[placeholder="Details zu einmaligen Investitionen (z.B. Lizenzen, Beratungskosten, initiale Hardware)"]').value;
-            const laufendeKosten = document.querySelector('#vorbereitung textarea[placeholder="Details zu monatlichen/jährlichen Kosten (z.B. Cloud-Nutzung, Support, Management)"]').value;
-            const kostenEinsparungen = document.querySelector('#vorbereitung textarea[placeholder="Quantifizierbare und qualitative Kosteneinsparungen oder Effizienzvorteile durch die Cloud-Lösung"]').value;
-            const budgetverteilung = document.querySelector('#vorbereitung textarea[placeholder="Aufteilung des Gesamtbudgets auf verschiedene Projektphasen, Cloud-Services und Teams"]').value;
-            const ressourcenplanung = document.querySelector('#vorbereitung textarea[placeholder="Benötigte personelle Ressourcen (Cloud-Architekten, Entwickler, Operations) und technische Ressourcen (Tools, Lizenzen)"]').value;
-            const kapazitaetsplanung = document.querySelector('#vorbereitung textarea[placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"]').value;
-
-            // Bearbeitungsphase - Aufgabenverteilung
-            const aufgaben = [];
-            document.querySelectorAll('#aufgabenTable tr.aufgaben-row').forEach(row => {
-                const inputs = row.querySelectorAll('input, select');
-                aufgaben.push({
-                    beschreibung: inputs[0].value,
-                    verantwortlich: inputs[1].value,
-                    status: inputs[2].value,
-                    faellig: inputs[3].value,
-                    kommentare: inputs[4].value
-                });
-            });
-
-            // Bearbeitungsphase - Meilensteine
-            const milestones = [];
-            document.querySelectorAll('#milestones .milestone-item').forEach(item => {
-                milestones.push({
-                    name: item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value,
-                    zieldatum: item.querySelector('input[type="date"]').value,
-                    beschreibung: item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value
-                });
-            });
-
-            // Bearbeitungsphase - Risikomanagement
-            const risikoRows = document.querySelectorAll('#risikoTable tr');
-            let risikoHtml = '';
-            risikoRows.forEach(row => {
-                const inputs = row.querySelectorAll('input, select');
-                risikoHtml += `
-                    <tr>
-                        <td>${inputs[0].value}</td>
-                        <td>${inputs[1].value}</td>
-                        <td>${inputs[2].value}</td>
-                        <td>${inputs[3].value}</td>
-                        <td>${inputs[4].value}</td>
-                    </tr>
-                `;
-            });
-
-            // Bearbeitungsphase - Fortschrittsbericht
-            const aktuelleIssues = document.querySelector('#bearbeitung textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte"]').value;
-            const eskalationsprozesse = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme"]').value;
-            const aktuellerStatus = document.querySelector('#bearbeitung select').value;
-            const abgeschlosseneArbeiten = document.querySelector('#bearbeitung textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Aufgaben und erreichten Ziele"]').value;
-            const naechsteSchritte = document.querySelector('#bearbeitung textarea[placeholder="Übersicht der unmittelbar bevorstehenden Aufgaben und Ziele für den nächsten Berichtszeitraum"]').value;
-            const problemeHerausforderungen = document.querySelector('#bearbeitung textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value;
-            const teststrategie = document.querySelector('#bearbeitung textarea[placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"]').value;
-            const durchgefuehrteTests = document.querySelector('#bearbeitung textarea[placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"]').value;
-            const qualitaetssicherung = document.querySelector('#bearbeitung textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"]').value;
-
-            // Nachbereitung & Kontrolle
-            const projektergebnis = document.querySelector('#nachbereitung textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"]').value;
-            const erreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung aller ursprünglich definierten Ziele, die erreicht wurden, inklusive realisierter Vorteile (Benefits)"]').value;
-            const nichtErreichteZiele = document.querySelector('#nachbereitung textarea[placeholder="Auflistung der Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung und Lessons Learned"]').value;
-            const abweichungenPlan = document.querySelector('#nachbereitung textarea[placeholder="Analyse von Abweichungen vom ursprünglichen Zeitplan, Budget und Projektumfang mit Ursachenanalyse"]').value;
-            const leistungskennzahlen = document.querySelector('#nachbereitung textarea[placeholder="Übersicht über die gemessenen quantitativen und qualitativen Leistungskennzahlen (z.B. Performance, Verfügbarkeit, Kostenoptimierung) der Cloud-Lösung"]').value;
-            const abgleichPlan = document.querySelector('#nachbereitung textarea[placeholder="Vergleich der tatsächlich erreichten Ergebnisse (technisch, finanziell, operativ) mit den initialen Erwartungen und Zielen"]').value;
-            const kundenfeedback = document.querySelector('#nachbereitung textarea[placeholder="Zusammenfassung des gesammelten Kundenfeedbacks, inkl. Zufriedenheitsbewertungen und Anmerkungen"]').value;
-            const monitoringStrategie = document.querySelector('#nachbereitung textarea[placeholder="Beschreibung der implementierten Monitoring-Strategie für die Cloud-Ressourcen und -Anwendungen sowie der verwendeten Tools"]').value;
-            const erfolgsfaktoren = document.querySelector('#nachbereitung textarea[placeholder="Identifizierung der Schlüsselfaktoren, die zum Projekterfolg beigetragen haben, und welche Prozesse oder Praktiken besonders effektiv waren"]').value;
-            const verbesserungspotentiale = document.querySelector('#nachbereitung textarea[placeholder="Analyse von Bereichen, in denen das Projektteam, die Prozesse oder die Technologie verbessert werden könnten"]').value;
-            const empfehlungen = document.querySelector('#nachbereitung textarea[placeholder="Konkrete Empfehlungen, die aus den Lessons Learned abgeleitet wurden, um zukünftige Projekte effizienter und erfolgreicher zu gestalten"]').value;
-            const uebergabedokumente = document.querySelector('#nachbereitung textarea[placeholder="Liste aller übergebenen Dokumente (Architektur, Betriebshandbücher, Konfigurationen), Systeme und die neuen Verantwortlichkeiten im Betrieb"]').value;
-            const schulungenDurchgefuehrt = document.querySelector('#nachbereitung textarea[placeholder="Details zu allen durchgeführten Schulungen für das Betriebsteam und die bereitgestellten Schulungsmaterialien"]').value;
-            const gewaehrleistungSupport = document.querySelector('#nachbereitung textarea[placeholder="Informationen zu Gewährleistungsfristen, Support-Verträgen und Kontaktpersonen nach Projektende"]').value;
-            const formelleProjektabnahme = document.querySelector('#nachbereitung textarea[placeholder="Datum und Details zur formellen Abnahme des Projekts durch den Kunden/Auftraggeber"]').value;
-            const kostenoptimierungsstrategien = document.querySelector('#nachbereitung textarea[placeholder="Beschreibung der Strategien für die kontinuierliche Optimierung der Cloud-Kosten (z.B. Reserved Instances, Spot Instances, Rightsizing)"]').value;
-            const finOpsImplementierung = document.querySelector('#nachbereitung textarea[placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"]').value;
-            const automatisierungOrchestrierung = document.querySelector('#nachbereitung textarea[placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"]').value;
-
-            let stakeholdersHtml = '';
-            stakeholders.forEach(s => {
-                stakeholdersHtml += `
-                    <div class="stakeholder-item">
-                        <h4>${s.name}</h4>
-                        <p><strong>Firma:</strong> ${s.firma}</p>
-                        <p><strong>E-Mail:</strong> ${s.email}</p>
-                        <p><strong>Telefonnummer:</strong> ${s.telefonnummer}</p>
-                        <p><strong>Aufgabe:</strong> ${s.aufgabe.replace(/\n/g, '<br>')}</p>
-                    </div>
-                `;
-            });
-
-            let aufgabenHtml = '';
-            aufgaben.forEach(a => {
-                aufgabenHtml += `
-                    <tr>
-                        <td>${a.beschreibung}</td>
-                        <td>${a.verantwortlich}</td>
-                        <td>${a.status}</td>
-                        <td>${a.faellig}</td>
-                        <td>${a.kommentare}</td>
-                    </tr>
-                `;
-            });
-
-            let milestonesHtml = '';
-            milestones.forEach(m => {
-                milestonesHtml += `
-                    <div class="milestone-item">
-                        <h4>${m.name} (Zieldatum: ${m.zieldatum})</h4>
-                        <p>${m.beschreibung.replace(/\n/g, '<br>')}</p>
-                    </div>
-                `;
-            });
-
+            const content = document.querySelector('.content').innerHTML;
             const staticHtmlContent = `
                 <!DOCTYPE html>
                 <html lang="de">
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Cloud Management Dokumentation (Statisch)</title>
+                    <title>Cloud Management Dokumentation</title>
+                    <link rel="stylesheet" href="styles.css">
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
-                        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px; }
-                        .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; margin-bottom: 30px;}
-                        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
-                        .header p { font-size: 1.1rem; opacity: 0.9; }
-                        .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-                        .section h2 { color: #1e293b; font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
-                        .section h3 { color: #334155; font-size: 1.3rem; margin-bottom: 15px; margin-top: 25px; }
-                        .form-group { margin-bottom: 20px; }
-                        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 8px; }
-                        .form-group p {
-                            margin-top: 0;
-                            margin-bottom: 0;
-                            padding: 8px 0;
-                            border-bottom: 1px dotted #ccc;
-                            word-wrap: break-word; /* Ensure long words break */
-                            overflow-wrap: break-word; /* Modern equivalent */
-                        }
-                        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-                        .table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin: 20px 0;
-                            background: white;
-                            border-radius: 8px;
-                            overflow: hidden;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-                            table-layout: auto; /* Use 'auto' for flexible column widths */
-                        }
-                        .table th, .table td {
-                            padding: 12px 15px;
-                            text-align: left;
-                            border-bottom: 1px solid #e5e7eb;
-                            word-wrap: break-word; /* Ensure text in table cells wraps */
-                            overflow-wrap: break-word; /* Modern equivalent */
-                        }
-                        .table th { background: #f8fafc; font-weight: 600; color: #374151; }
-                        .stakeholder-item, .milestone-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin: 10px 0; position: relative;}
-                        .highlight-box { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid #0ea5e9; padding: 20px; margin: 20px 0; border-radius: 8px; }
-                        @media (max-width: 768px) {
-                            .form-row { grid-template-columns: 1fr; }
-                            .container { padding: 20px; }
-                        }
+                        /* Minimal styles for static export - adjust as needed */
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1, h2, h3 { color: #333; }
+                        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; }
+                        .form-group label { font-weight: bold; margin-top: 10px; display: block; }
+                        .form-group p { margin-bottom: 10px; white-space: pre-wrap; }
+                        .form-row { display: flex; gap: 20px; }
+                        .form-row .form-group { flex: 1; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        /* Hide buttons in static export */
+                        .btn, .delete-button, .nav-tabs, .header .home-button { display: none !important; }
                     </style>
                 </head>
                 <body>
                     <div class="container">
                         <div class="header">
-                            <h1>Cloud Management Dokumentationssystem</h1>
+                            <h1>Cloud Management Dokumentation</h1>
                             <p>Umfassende Dokumentvorlage für alle Projektphasen</p>
+                            <div id="documentInfo" style="font-size: 0.8em; color: #666; margin-top: 10px;">Version: ${documentVersion} | Datum: ${documentDate}</div>
                         </div>
-
                         <div class="content">
-                            <div class="section">
-                                <h2>Projektübersicht</h2>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <h3>Organisationsdaten</h3>
-                                        <label>Kundenorganisation/Unternehmen:</label>
-                                        <p>${kundenorganisation}</p>
+                            <div id="grundlagen" class="tab-content active">
+                                <div class="section">
+                                    <h2>Projektübersicht</h2>
+                                    <h3>Organisationsdaten</h3>
+                                    <label>Kundenorganisation/Unternehmen:</label>
+                                    <p>${document.querySelector('#grundlagen .form-group input[placeholder="Name der Kundenorganisation"]') ? document.querySelector('#grundlagen .form-group input[placeholder="Name der Kundenorganisation"]').value : ''}</p>
 
-                                        <label>Cloud Projekt-Sponsor:</label>
-                                        <p>${projektSponsor}</p>
+                                    <label>Cloud Projekt-Sponsor:</label>
+                                    <p>${document.querySelector('#grundlagen .form-group input[placeholder="Name & Position"]') ? document.querySelector('#grundlagen .form-group input[placeholder="Name & Position"]').value : ''}</p>
 
-                                        <label>Lenkungsausschuss (falls zutreffend):</label>
-                                        <p>${lenkungsausschuss.replace(/\n/g, '<br>')}</p>
+                                    <label>Lenkungsausschuss (falls zutreffend):</label>
+                                    <p>${document.querySelector('#grundlagen .form-group textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]') ? document.querySelector('#grundlagen .form-group textarea[placeholder="Mitglieder des Lenkungsausschusses für das Cloud-Projekt"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                        <h3>Stakeholder/Ansprechpartner</h3>
-                                        ${stakeholdersHtml}
-                                    </div>
-                                    <div class="form-group">
-                                        <h3>Projektdaten</h3>
-                                        <label>Projektname:</label>
-                                        <p>${projektname}</p>
+                                    <h3>Stakeholder/Ansprechpartner</h3>
+                                    ${Array.from(document.querySelectorAll('#stakeholderContainer .stakeholder-item')).map(item => `
+                                        <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 5px;">
+                                            <label>Name:</label>
+                                            <p>${item.querySelector('input[placeholder="Name des Stakeholders"]') ? item.querySelector('input[placeholder="Name des Stakeholders"]').value : ''}</p>
+                                            <label>Firma:</label>
+                                            <p>${item.querySelector('input[placeholder="Firma des Stakeholders"]') ? item.querySelector('input[placeholder="Firma des Stakeholders"]').value : ''}</p>
+                                            <label>E-Mail:</label>
+                                            <p>${item.querySelector('input[placeholder="E-Mail des Stakeholders"]') ? item.querySelector('input[placeholder="E-Mail des Stakeholders"]').value : ''}</p>
+                                            <label>Telefonnummer:</label>
+                                            <p>${item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]') ? item.querySelector('input[placeholder="Telefonnummer des Stakeholders"]').value : ''}</p>
+                                            <label>Aufgabe:</label>
+                                            <p>${item.querySelector('textarea[placeholder="Aufgabe/Rolle des Stakeholders"]') ? item.querySelector('textarea[placeholder="Aufgabe/Rolle des Stakeholders"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                        </div>
+                                    `).join('')}
 
-                                        <label>Projekt-ID:</label>
-                                        <p>${projektId}</p>
+                                    <h3>Projektdaten</h3>
+                                    <label>Projektname:</label>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]') ? document.querySelector('#grundlagen input[placeholder="Bezeichnung des Cloud-Projekts"]').value : ''}</p>
 
-                                        <label>Projektmanager:</label>
-                                        <p>${projektManager}</p>
+                                    <label>Projekt-ID:</label>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]') ? document.querySelector('#grundlagen input[placeholder="Interne Projektkennung"]').value : ''}</p>
 
-                                        <label>Projektlaufzeit:</label>
-                                        <p>${projektlaufzeitStart} bis ${projektlaufzeitEnde}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                    <label>Projektmanager:</label>
+                                    <p>${document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]') ? document.querySelector('#grundlagen input[placeholder="Name des verantwortlichen Projektmanagers"]').value : ''}</p>
+
+                                    <label>Projektlaufzeit:</label>
+                                    <p>${document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)') ? document.querySelector('#grundlagen input[type="date"]:nth-of-type(1)').value : ''} - ${document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)') ? document.querySelector('#grundlagen input[type="date"]:nth-of-type(2)').value : ''}</p>
+
                                     <label>Projektvision & Strategische Ziele:</label>
-                                    <p>${projektvision.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"]') ? document.querySelector('textarea[placeholder="Übergeordnete Vision und strategische Ausrichtung des Cloud-Projekts"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
                                     <label>Messbare Projektziele:</label>
-                                    <p>${messbareProjektziele.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"]') ? document.querySelector('textarea[placeholder="Spezifische, messbare, erreichbare, relevante und zeitgebundene Ziele (SMART-Ziele)"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
                                     <label>Business Case & ROI-Erwartungen:</label>
-                                    <p>${businessCase.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
+                                    <p>${document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"]') ? document.querySelector('textarea[placeholder="Geschäftlicher Nutzen, erwarteter Return on Investment und Begründung des Projekts"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
                                     <label>Projektbeschreibung (Leistungsbeschreibung):</label>
-                                    <p>${projektbeschreibung.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <div class="form-group">
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen und des Projektumfangs"]') ? document.querySelector('textarea[placeholder="Detaillierte Beschreibung der vertraglich festgelegten Leistungen und des Projektumfangs"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
                                     <label>Beauftragter Zeitrahmen:</label>
-                                    <p>${zeitrahmen.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes sowie kritische Termine"]') ? document.querySelector('textarea[placeholder="Detaillierte Zeitplanung und Laufzeit des Projektes sowie kritische Termine"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
-                            <div class="section">
-                                <h2>Vorbereitungsphase</h2>
-                                <h3>1. Projektinitialisierung & Setup</h3>
-                                <div class="form-group">
+                            <div id="vorbereitung" class="tab-content">
+                                <div class="section">
+                                    <h2>Vorbereitungsphase</h2>
+                                    <h3>1. Projektinitialisierung & Setup</h3>
                                     <label>Strategische Ausgangslage & Treiber:</label>
-                                    <p>${strategischeAusgangslage.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('#vorbereitung textarea[placeholder="Analyse der aktuellen IT-Landschaft, Geschäftsstrategie und Motivation für die Cloud-Adoption"]') ? document.querySelector('#vorbereitung textarea[placeholder="Analyse der aktuellen IT-Landschaft, Geschäftsstrategie und Motivation für die Cloud-Adoption"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Projektarchitektur & Abhängigkeiten:</label>
-                                    <p>${projektarchitektur.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('#vorbereitung textarea[placeholder="Struktur und technische Abhängigkeiten innerhalb des Cloud-Projekts und zu bestehenden Systemen"]') ? document.querySelector('#vorbereitung textarea[placeholder="Struktur und technische Abhängigkeiten innerhalb des Cloud-Projekts und zu bestehenden Systemen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Governance-Struktur im Cloud-Projekt:</label>
-                                    <p>${governanceStruktur.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <h3>2. Anforderungsmanagement</h3>
-                                <div class="form-group">
+                                    <p>${document.querySelector('#vorbereitung textarea[placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten (z.B. Cloud Center of Excellence - CCoE)"]') ? document.querySelector('#vorbereitung textarea[placeholder="Entscheidungsstrukturen, Rollen und Verantwortlichkeiten (z.B. Cloud Center of Excellence - CCoE)"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
+                                    <h3>2. Anforderungsmanagement</h3>
                                     <label>Geschäftsanforderungen (Business Requirements):</label>
-                                    <p>${geschaeftsanforderungen.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der übergeordneten Geschäftsanforderungen, die durch die Cloud-Lösung erfüllt werden sollen"]') ? document.querySelector('textarea[placeholder="Beschreibung der übergeordneten Geschäftsanforderungen, die durch die Cloud-Lösung erfüllt werden sollen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Technische Anforderungen (Technical Requirements):</label>
-                                    <p>${technischeAnforderungen.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte technische Spezifikationen, Infrastrukturanforderungen und Integrationspunkte"]') ? document.querySelector('textarea[placeholder="Detaillierte technische Spezifikationen, Infrastrukturanforderungen und Integrationspunkte"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Sicherheits- & Compliance-Anforderungen:</label>
-                                    <p>${sicherheitsanforderungen.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Spezifische Anforderungen bezüglich Datensicherheit, Datenschutz (DSGVO), Compliance (ISO 27001, BSI C5 etc.) und Zugriffskontrolle"]') ? document.querySelector('textarea[placeholder="Spezifische Anforderungen bezüglich Datensicherheit, Datenschutz (DSGVO), Compliance (ISO 27001, BSI C5 etc.) und Zugriffskontrolle"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Nicht-funktionale Anforderungen (Non-Functional Requirements):</label>
-                                    <p>${nichtFunktionaleAnforderungen.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <h3>3. Cloud-Strategie & Design</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Cloud-Modell:</label>
-                                        <p>${cloudModell}</p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Cloud-Anbieter(n):</label>
-                                        <p>${cloudAnbieter}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                    <p>${document.querySelector('textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Verfügbarkeit, Wartbarkeit, Resilienz und Disaster Recovery"]') ? document.querySelector('textarea[placeholder="Anforderungen an Performance, Skalierbarkeit, Verfügbarkeit, Wartbarkeit, Resilienz und Disaster Recovery"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
+                                    <h3>3. Cloud-Strategie & Design</h3>
+                                    <label>Cloud-Modell:</label>
+                                    <p>${document.querySelector('#vorbereitung select') ? document.querySelector('#vorbereitung select').value : ''}</p>
+                                    <label>Cloud-Anbieter(n):</label>
+                                    <p>${document.querySelector('#vorbereitung input[placeholder="Ausgewählte Cloud-Anbieter (z.B. AWS, Azure, Google Cloud)"]') ? document.querySelector('#vorbereitung input[placeholder="Ausgewählte Cloud-Anbieter (z.B. AWS, Azure, Google Cloud)"]').value : ''}</p>
                                     <label>Begründung für die Auswahl des Cloud-Modells & Anbieters:</label>
-                                    <p>${begruendungCloud.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Begründung basierend auf Analyse, Anforderungen und Business Case"]') ? document.querySelector('textarea[placeholder="Detaillierte Begründung basierend auf Analyse, Anforderungen und Business Case"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Migrationsstrategie & -plan:</label>
-                                    <p>${migrationsplan.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Schritte, Phasen und Methoden (Lift & Shift, Replatform, Refactor, Repurchase, Retain, Retire) für die Migration bestehender Systeme und Anwendungen"]') ? document.querySelector('textarea[placeholder="Schritte, Phasen und Methoden (Lift & Shift, Replatform, Refactor, Repurchase, Retain, Retire) für die Migration bestehender Systeme und Anwendungen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Cloud-Architektur Design (High-Level):</label>
-                                    <p>${cloudArchitekturDesign.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <h3>4. Kostenanalyse & Ressourcenplanung</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Anfangsinvestition (CAPEX):</label>
-                                        <p>${anfangsInves.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der beabsichtigten High-Level Cloud-Architektur, inkl. Netzwerk, Compute, Storage, Datenbanken, etc."]') ? document.querySelector('textarea[placeholder="Beschreibung der beabsichtigten High-Level Cloud-Architektur, inkl. Netzwerk, Compute, Storage, Datenbanken, etc."]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                        <label>Laufende Betriebskosten (OPEX):</label>
-                                        <p>${laufendeKosten.replace(/\n/g, '<br>')}</p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Erwartete Kosteneinsparungen & Vorteile:</label>
-                                        <p>${kostenEinsparungen.replace(/\n/g, '<br>')}</p>
-
-                                        <label>Budgetverteilung:</label>
-                                        <p>${budgetverteilung.replace(/\n/g, '<br>')}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                    <h3>4. Kostenanalyse & Ressourcenplanung</h3>
+                                    <label>Anfangsinvestition (CAPEX):</label>
+                                    <p>${document.querySelector('textarea[placeholder="Details zu einmaligen Investitionen (z.B. Lizenzen, Beratungskosten, initiale Hardware)"]') ? document.querySelector('textarea[placeholder="Details zu einmaligen Investitionen (z.B. Lizenzen, Beratungskosten, initiale Hardware)"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <label>Laufende Betriebskosten (OPEX):</label>
+                                    <p>${document.querySelector('textarea[placeholder="Details zu monatlichen/jährlichen Kosten (z.B. Cloud-Nutzung, Support, Management)"]') ? document.querySelector('textarea[placeholder="Details zu monatlichen/jährlichen Kosten (z.B. Cloud-Nutzung, Support, Management)"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <label>Erwartete Kosteneinsparungen & Vorteile:</label>
+                                    <p>${document.querySelector('textarea[placeholder="Quantifizierbare und qualitative Kosteneinsparungen oder Effizienzvorteile durch die Cloud-Lösung"]') ? document.querySelector('textarea[placeholder="Quantifizierbare und qualitative Kosteneinsparungen oder Effizienzvorteile durch die Cloud-Lösung"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                    <label>Budgetverteilung:</label>
+                                    <p>${document.querySelector('textarea[placeholder="Aufteilung des Gesamtbudgets auf verschiedene Projektphasen, Cloud-Services und Teams"]') ? document.querySelector('textarea[placeholder="Aufteilung des Gesamtbudgets auf verschiedene Projektphasen, Cloud-Services und Teams"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Ressourcenplanung (Personal & Technik):</label>
-                                    <p>${ressourcenplanung.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Benötigte personelle Ressourcen (Cloud-Architekten, Entwickler, Operations) und technische Ressourcen (Tools, Lizenzen)"]') ? document.querySelector('textarea[placeholder="Benötigte personelle Ressourcen (Cloud-Architekten, Entwickler, Operations) und technische Ressourcen (Tools, Lizenzen)"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Kapazitätsplanung:</label>
-                                    <p>${kapazitaetsplanung.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"]') ? document.querySelector('textarea[placeholder="Planung der benötigten Cloud-Kapazitäten und deren Skalierung"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
-                            <div class="section">
-                                <h2>Bearbeitungsphase (Implementierung & Migration)</h2>
-                                <h3>1. Aufgabenverteilung & Projektfortschritt</h3>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Aufgabe/Arbeitspaket</th>
-                                            <th>Verantwortlich</th>
-                                            <th>Status</th>
-                                            <th>Fällig (Datum)</th>
-                                            <th>Kommentare</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${aufgabenHtml}
-                                    </tbody>
-                                </table>
-                                <h3>2. Zeitplan und Meilensteine</h3>
-                                <div id="milestones">
-                                    ${milestonesHtml}
-                                </div>
-                                <h3>3. Risikomanagement & Issue-Tracking</h3>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Risiko</th>
-                                            <th>Kategorie</th>
-                                            <th>Eintrittswahrscheinlichkeit</th>
-                                            <th>Auswirkung</th>
-                                            <th>Maßnahme & Verantwortlicher</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${risikoHtml}
-                                    </tbody>
-                                </table>
-                                <div class="form-group">
+                            <div id="bearbeitung" class="tab-content">
+                                <div class="section">
+                                    <h2>Bearbeitungsphase (Implementierung & Migration)</h2>
+                                    <h3>1. Aufgabenverteilung & Projektfortschritt</h3>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Aufgabe/Arbeitspaket</th>
+                                                <th>Verantwortlich</th>
+                                                <th>Status</th>
+                                                <th>Fällig (Datum)</th>
+                                                <th>Kommentare</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${Array.from(document.querySelectorAll('#aufgabenTable .aufgaben-row')).map(row => `
+                                                <tr>
+                                                    <td>${row.querySelector('input[placeholder="Aufgabenbeschreibung"]') ? row.querySelector('input[placeholder="Aufgabenbeschreibung"]').value : ''}</td>
+                                                    <td>${row.querySelector('input[placeholder="Verantwortlich"]') ? row.querySelector('input[placeholder="Verantwortlich"]').value : ''}</td>
+                                                    <td>${row.querySelector('select') ? row.querySelector('select').value : ''}</td>
+                                                    <td>${row.querySelector('input[type="date"]') ? row.querySelector('input[type="date"]').value : ''}</td>
+                                                    <td>${row.querySelector('input[placeholder="Kommentare"]') ? row.querySelector('input[placeholder="Kommentare"]').value : ''}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+
+                                    <h3>2. Zeitplan und Meilensteine</h3>
+                                    ${Array.from(document.querySelectorAll('#milestones .milestone-item')).map(item => `
+                                        <div style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 5px;">
+                                            <label>Meilenstein:</label>
+                                            <p>${item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]') ? item.querySelector('input[placeholder="Meilenstein-Bezeichnung"]').value : ''}</p>
+                                            <label>Zieldatum:</label>
+                                            <p>${item.querySelector('input[type="date"]') ? item.querySelector('input[type="date"]').value : ''}</p>
+                                            <label>Beschreibung & Erfolgskriterien:</label>
+                                            <p>${item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]') ? item.querySelector('textarea[placeholder="Detaillierte Beschreibung des Meilensteins und messbare Erfolgskriterien"]').value.replace(/\\n/g, '<br>') : ''}</p>
+                                        </div>
+                                    `).join('')}
+
+                                    <h3>3. Risikomanagement & Issue-Tracking</h3>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Risiko</th>
+                                                <th>Kategorie</th>
+                                                <th>Eintrittswahrscheinlichkeit</th>
+                                                <th>Auswirkung</th>
+                                                <th>Maßnahme & Verantwortlicher</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${Array.from(document.querySelectorAll('#risikoTable tr')).map(row => `
+                                                <tr>
+                                                    <td>${row.querySelector('input[type="text"]') ? row.querySelector('input[type="text"]').value : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(1)') ? row.querySelector('select:nth-of-type(1)').value : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(2)') ? row.querySelector('select:nth-of-type(2)').value : ''}</td>
+                                                    <td>${row.querySelector('select:nth-of-type(3)') ? row.querySelector('select:nth-of-type(3)').value : ''}</td>
+                                                    <td>${row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]') ? row.querySelector('input[placeholder="Maßnahmen zur Risikominimierung und wer ist verantwortlich"]').value : ''}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
                                     <label>Aktuelle Issues/Probleme:</label>
-                                    <p>${aktuelleIssues.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte"]') ? document.querySelector('textarea[placeholder="Liste der aktuellen Probleme, Blockaden und offenen Punkte"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Eskalationsprozesse:</label>
-                                    <p>${eskalationsprozesse.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <h3>4. Fortschrittsbericht & Statusaktualisierung</h3>
-                                <div class="form-group">
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme"]') ? document.querySelector('textarea[placeholder="Beschreibung der Eskalationswege für kritische Probleme"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
+                                    <h3>4. Fortschrittsbericht & Statusaktualisierung</h3>
                                     <label>Aktueller Gesamtstatus Projekt:</label>
-                                    <p>${aktuellerStatus}</p>
-
+                                    <p>${document.querySelector('select:nth-of-type(4)') ? document.querySelector('select:nth-of-type(4)').value : ''}</p>
                                     <label>Abgeschlossene Arbeiten im Berichtszeitraum:</label>
-                                    <p>${abgeschlosseneArbeiten.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Aufgaben und erreichten Ziele"]') ? document.querySelector('textarea[placeholder="Detaillierte Beschreibung der fertiggestellten Aufgaben und erreichten Ziele"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Nächste geplante Schritte:</label>
-                                    <p>${naechsteSchritte.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Aufgaben und Ziele für den nächsten Berichtszeitraum"]') ? document.querySelector('textarea[placeholder="Übersicht der unmittelbar bevorstehenden Aufgaben und Ziele für den nächsten Berichtszeitraum"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Herausforderungen & Lösungsansätze:</label>
-                                    <p>${problemeHerausforderungen.replace(/\n/g, '<br>')}</p>
-                                </div>
-                                <h3>5. Testmanagement & Qualitätssicherung</h3>
-                                <div class="form-group">
+                                    <p>${document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]') ? document.querySelector('textarea[placeholder="Aktuelle Herausforderungen, aufgetretene Probleme und die geplanten oder bereits eingeleiteten Lösungsansätze"]').value.replace(/\\n/g, '<br>') : ''}</p>
+
+                                    <h3>5. Testmanagement & Qualitätssicherung</h3>
                                     <label>Teststrategie & -pläne:</label>
-                                    <p>${teststrategie.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"]') ? document.querySelector('textarea[placeholder="Beschreibung der Teststrategie (Unit, Integration, UAT, Performance) und der geplanten Testphasen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Durchgeführte Tests & Ergebnisse:</label>
-                                    <p>${durchgefuehrteTests.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"]') ? document.querySelector('textarea[placeholder="Zusammenfassung der Testergebnisse, identifizierten Fehler und deren Status"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Qualitätssicherungsmaßnahmen:</label>
-                                    <p>${qualitaetssicherung.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"]') ? document.querySelector('textarea[placeholder="Maßnahmen zur Sicherstellung der Qualität der Cloud-Lösung (Code Reviews, Compliance-Checks etc.)"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
-                            <div class="section">
-                                <h2>Nachbereitung und Kontrolle (Abschluss & Übergabe)</h2>
-
-                                <h3>1. Abschlussbericht des Cloud-Projekts</h3>
-                                <div class="form-group">
+                            <div id="nachbereitung" class="tab-content">
+                                <div class="section">
+                                    <h2>Nachbereitung und Kontrolle (Abschluss & Übergabe)</h2>
+                                    <h3>1. Abschlussbericht des Cloud-Projekts</h3>
                                     <label>Zusammenfassung der Projektergebnisse:</label>
-                                    <p>${projektergebnis.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"]') ? document.querySelector('textarea[placeholder="Kurze und prägnante Übersicht über die wichtigsten Ergebnisse und Erfolge des Cloud-Projekts"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Erreichte Ziele & Benefits:</label>
-                                    <p>${erreichteZiele.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Ziele, die erreicht wurden, inklusive realisierter Vorteile (Benefits)"]') ? document.querySelector('textarea[placeholder="Auflistung aller ursprünglich definierten Ziele, die erreicht wurden, inklusive realisierter Vorteile (Benefits)"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Nicht erreichte Ziele & Begründung:</label>
-                                    <p>${nichtErreichteZiele.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Auflistung der Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung und Lessons Learned"]') ? document.querySelector('textarea[placeholder="Auflistung der Ziele, die nicht vollständig erreicht wurden, mit detaillierter Begründung und Lessons Learned"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Abweichungen von Plan (Zeit, Budget, Scope):</label>
-                                    <p>${abweichungenPlan.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                    <p>${document.querySelector('textarea[placeholder="Analyse von Abweichungen vom ursprünglichen Zeitplan, Budget und Projektumfang mit Ursachenanalyse"]') ? document.querySelector('textarea[placeholder="Analyse von Abweichungen vom ursprünglichen Zeitplan, Budget und Projektumfang mit Ursachenanalyse"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                <h3>2. Leistungsprüfung & Monitoring</h3>
-                                <div class="form-group">
+                                    <h3>2. Leistungsprüfung & Monitoring</h3>
                                     <label>Leistungskennzahlen (KPIs) & Metriken:</label>
-                                    <p>${leistungskennzahlen.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Übersicht über die gemessenen quantitativen und qualitativen Leistungskennzahlen (z.B. Performance, Verfügbarkeit, Kostenoptimierung) der Cloud-Lösung"]') ? document.querySelector('textarea[placeholder="Übersicht über die gemessenen quantitativen und qualitativen Leistungskennzahlen (z.B. Performance, Verfügbarkeit, Kostenoptimierung) der Cloud-Lösung"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Abgleich der Ergebnisse mit dem ursprünglichen Plan:</label>
-                                    <p>${abgleichPlan.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Vergleich der tatsächlich erreichten Ergebnisse (technisch, finanziell, operativ) mit den initialen Erwartungen und Zielen"]') ? document.querySelector('textarea[placeholder="Vergleich der tatsächlich erreichten Ergebnisse (technisch, finanziell, operativ) mit den initialen Erwartungen und Zielen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Kundenfeedback & Zufriedenheit:</label>
-                                    <p>${kundenfeedback.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Zusammenfassung des gesammelten Kundenfeedbacks, inkl. Zufriedenheitsbewertungen und Anmerkungen"]') ? document.querySelector('textarea[placeholder="Zusammenfassung des gesammelten Kundenfeedbacks, inkl. Zufriedenheitsbewertungen und Anmerkungen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Monitoring-Strategie & -Tools:</label>
-                                    <p>${monitoringStrategie.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der implementierten Monitoring-Strategie für die Cloud-Ressourcen und -Anwendungen sowie der verwendeten Tools"]') ? document.querySelector('textarea[placeholder="Beschreibung der implementierten Monitoring-Strategie für die Cloud-Ressourcen und -Anwendungen sowie der verwendeten Tools"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                <h3>3. Lessons Learned & Best Practices</h3>
-                                <div class="form-group">
+                                    <h3>3. Lessons Learned & Best Practices</h3>
                                     <label>Erfolgsfaktoren & Was gut funktioniert hat:</label>
-                                    <p>${erfolgsfaktoren.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Identifizierung der Schlüsselfaktoren, die zum Projekterfolg beigetragen haben, und welche Prozesse oder Praktiken besonders effektiv waren"]') ? document.querySelector('textarea[placeholder="Identifizierung der Schlüsselfaktoren, die zum Projekterfolg beigetragen haben, und welche Prozesse oder Praktiken besonders effektiv waren"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Verbesserungspotenziale & Was hätte besser gemacht werden können:</label>
-                                    <p>${verbesserungspotentiale.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Analyse von Bereichen, in denen das Projektteam, die Prozesse oder die Technologie verbessert werden könnten"]') ? document.querySelector('textarea[placeholder="Analyse von Bereichen, in denen das Projektteam, die Prozesse oder die Technologie verbessert werden könnten"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Empfehlungen für zukünftige Cloud-Projekte:</label>
-                                    <p>${empfehlungen.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                    <p>${document.querySelector('textarea[placeholder="Konkrete Empfehlungen, die aus den Lessons Learned abgeleitet wurden, um zukünftige Projekte effizienter und erfolgreicher zu gestalten"]') ? document.querySelector('textarea[placeholder="Konkrete Empfehlungen, die aus den Lessons Learned abgeleitet wurden, um zukünftige Projekte effizienter und erfolgreicher zu gestalten"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                <h3>4. Übergabe und formeller Abschluss</h3>
-                                <div class="form-group">
+                                    <h3>4. Übergabe und formeller Abschluss</h3>
                                     <label>Übergabedokumente & Verantwortlichkeiten:</label>
-                                    <p>${uebergabedokumente.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Liste aller übergebenen Dokumente (Architektur, Betriebshandbücher, Konfigurationen), Systeme und die neuen Verantwortlichkeiten im Betrieb"]') ? document.querySelector('textarea[placeholder="Liste aller übergebenen Dokumente (Architektur, Betriebshandbücher, Konfigurationen), Systeme und die neuen Verantwortlichkeiten im Betrieb"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Durchgeführte Schulungen & Materialien:</label>
-                                    <p>${schulungenDurchgefuehrt.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Details zu allen durchgeführten Schulungen für das Betriebsteam und die bereitgestellten Schulungsmaterialien"]') ? document.querySelector('textarea[placeholder="Details zu allen durchgeführten Schulungen für das Betriebsteam und die bereitgestellten Schulungsmaterialien"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Details zu Gewährleistung & Support:</label>
-                                    <p>${gewaehrleistungSupport.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Informationen zu Gewährleistungsfristen, Support-Verträgen und Kontaktpersonen nach Projektende"]') ? document.querySelector('textarea[placeholder="Informationen zu Gewährleistungsfristen, Support-Verträgen und Kontaktpersonen nach Projektende"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Formelle Projektabnahme:</label>
-                                    <p>${formelleProjektabnahme.replace(/\n/g, '<br>')}</p>
-                                </div>
+                                    <p>${document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme des Projekts durch den Kunden/Auftraggeber"]') ? document.querySelector('textarea[placeholder="Datum und Details zur formellen Abnahme des Projekts durch den Kunden/Auftraggeber"]').value.replace(/\\n/g, '<br>') : ''}</p>
 
-                                <h3>5. Kontinuierliche Optimierung & FinOps</h3>
-                                <div class="form-group">
+                                    <h3>5. Kontinuierliche Optimierung & FinOps</h3>
                                     <label>Kostenoptimierungsstrategien:</label>
-                                    <p>${kostenoptimierungsstrategien.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Beschreibung der Strategien für die kontinuierliche Optimierung der Cloud-Kosten (z.B. Reserved Instances, Spot Instances, Rightsizing)"]') ? document.querySelector('textarea[placeholder="Beschreibung der Strategien für die kontinuierliche Optimierung der Cloud-Kosten (z.B. Reserved Instances, Spot Instances, Rightsizing)"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>FinOps-Implementierung (falls zutreffend):</label>
-                                    <p>${finOpsImplementierung.replace(/\n/g, '<br>')}</p>
-
+                                    <p>${document.querySelector('textarea[placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"]') ? document.querySelector('textarea[placeholder="Details zur Implementierung von FinOps-Praktiken und -Tools zur Steuerung der Cloud-Ausgaben"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                     <label>Automatisierung & Orchestrierung:</label>
-                                    <p>${automatisierungOrchestrierung.replace(/\n/g, '<br>')}</p>
+                                    <p>${document.querySelector('textarea[placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"]') ? document.querySelector('textarea[placeholder="Planung für weitere Automatisierung und Orchestrierung von Cloud-Ressourcen"]').value.replace(/\\n/g, '<br>') : ''}</p>
                                 </div>
                             </div>
 
