@@ -209,7 +209,7 @@
                                 </tr>
                             </thead>
                             <tbody id="obligationsTableBody">
-                            </tbody>
+                                </tbody>
                         </table>
                         <button type="button" class="btn btn-secondary" onclick="addObligationRow()">+ Weitere Verpflichtung hinzufügen</button>
                     </div>
@@ -242,7 +242,7 @@
                                 </tr>
                             </thead>
                             <tbody id="paymentTableBody">
-                            </tbody>
+                                </tbody>
                         </table>
                         <button type="button" class="btn btn-secondary" onclick="addPaymentEntry()">+ Zahlungseintrag hinzufügen</button>
                     </div>
@@ -256,6 +256,7 @@
                     <div id="versionHistory">
                         </div>
                     <button type="button" class="btn btn-secondary" onclick="addVersionEntry()">+ Version hinzufügen</button>
+
                     <h3>Interne Notizen</h3>
                     <div class="form-group">
                         <textarea id="internalNotes" placeholder="Fügen Sie hier interne Notizen oder Kommentare hinzu."></textarea>
@@ -277,23 +278,26 @@
                                     <th>Auswirkung</th>
                                     <th>Maßnahme</th>
                                     <th>Verantwortlicher</th>
+                                    <th>Status</th>
                                     <th>Aktion</th>
                                 </tr>
                             </thead>
                             <tbody id="riskTableBody">
-                            </tbody>
+                                </tbody>
                         </table>
-                        <button type="button" class="btn btn-secondary" onclick="addRiskRow()">+ Weiteres Risiko hinzufügen</button>
-                    </div>
-                    <h3>Notfall- und Business Continuity Planung</h3>
-                    <div class="form-group">
-                        <label for="notfallplan">Notfallplan / Business Continuity:</label>
-                        <textarea id="notfallplan" placeholder="Details zu Notfallmaßnahmen und Business Continuity Plänen im Kontext des Vertrags"></textarea>
+                        <button type="button" class="btn btn-secondary" onclick="addRiskEntry()">+ Risiko hinzufügen</button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="printDocument()">📄 Dokument drucken</button>
+            <button class="btn btn-primary" onclick="exportStaticHtml()">💾 Dokument speichern</button>
+            <button class="btn btn-success" onclick="exportHandover()">🔄 Übergabe-Paket exportieren</button>
+        
     </div>
+
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -303,281 +307,661 @@
             }
         });
 
-        function showTab(tabId, event) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+        // Function to show/hide tabs - adjusted to use 'nav-tab' and 'tab-content'
+        function showTab(tabName, event) {
+            let i, tabcontent, navlinks;
 
-            const navTabs = document.querySelectorAll('.nav-tab');
-            navTabs.forEach(tab => tab.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            navlinks = document.getElementsByClassName("nav-tab");
+            for (i = 0; i < navlinks.length; i++) {
+                navlinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            if (event) {
+                event.currentTarget.classList.add("active");
+            }
         }
 
-        function selectContractType(card, type) {
-            const allCards = document.querySelectorAll('.contract-type-card');
-            allCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            document.getElementById('selected-contract-type').value = type;
+        // Set default open tab on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the first tab button and trigger its click event
+            const firstTabButton = document.querySelector(".nav-tab");
+            if (firstTabButton) {
+                firstTabButton.click();
+            }
+        });
+
+        // Specific functions for Contract Management System
+        function selectContractType(cardElement, type) {
+            const cards = document.querySelectorAll('.contract-type-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            cardElement.classList.add('selected');
+            console.log('Selected contract type:', type);
+            // Here you might dynamically load forms or content based on type
         }
 
         function addContact() {
             const container = document.getElementById('additionalContacts');
-            const newContactDiv = document.createElement('div');
-            newContactDiv.classList.add('contact-item');
-            newContactDiv.innerHTML = `
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" placeholder="Name des weiteren Ansprechpartners">
+            const newContactHtml = `
+                <div class="stakeholder-item"> <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" class="contact-name" placeholder="Name des Kontakts">
+                        </div>
+                        <div class="form-group">
+                            <label>E-Mail:</label>
+                            <input type="email" class="contact-email" placeholder="E-Mail des Kontakts">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>E-Mail:</label>
-                        <input type="email" placeholder="E-Mail des weiteren Ansprechpartners">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Telefon:</label>
+                            <input type="tel" class="contact-phone" placeholder="Telefonnummer">
+                        </div>
+                        <div class="form-group">
+                            <label>Position:</label>
+                            <input type="text" class="contact-position" placeholder="Position">
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Telefon:</label>
-                        <input type="tel" placeholder="Telefonnummer">
-                    </div>
-                    <div class="form-group">
-                        <label>Position:</label>
-                        <input type="text" placeholder="Position im Unternehmen">
-                    </div>
-                </div>
-                <button type="button" class="delete-button" onclick="deleteContact(this)">X</button>
-                <hr>
             `;
-            container.appendChild(newContactDiv);
+            container.insertAdjacentHTML('beforeend', newContactHtml);
         }
 
-        function deleteContact(button) {
-            button.closest('.contact-item').remove();
+        function deleteItem(buttonElement) {
+            buttonElement.closest('.stakeholder-item, .obligation-row, .audit-item, .payment-row, .version-item, .risk-row, li').remove();
         }
+
 
         function addObligationRow() {
-            const tableBody = document.getElementById('obligationsTableBody');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><textarea placeholder="Beschreibung"></textarea></td>
-                <td><input type="date"></td>
-                <td><input type="text" placeholder="Verantwortlicher"></td>
-                <td>
-                    <select>
-                        <option>Offen</option>
-                        <option>Erfüllt</option>
-                        <option>Überfällig</option>
-                    </select>
-                </td>
-                <td><button type="button" class="delete-button" onclick="deleteRow(this)">X</button></td>
+            const tbody = document.getElementById('obligationsTableBody');
+            const newRow = `
+                <tr class="obligation-row">
+                    <td><input type="text" class="obligation-description" placeholder="Verpflichtungsbeschreibung"></td>
+                    <td><input type="date" class="obligation-date"></td>
+                    <td><input type="text" class="obligation-responsible" placeholder="Verantwortlicher"></td>
+                    <td>
+                        <select class="obligation-status">
+                            <option>Offen</option>
+                            <option>In Bearbeitung</option>
+                            <option>Erfüllt</option>
+                            <option>Überfällig</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="delete-button" onclick="deleteItem(this)">X</button></td>
+                </tr>
             `;
-            tableBody.appendChild(newRow);
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addAuditEntry() {
             const container = document.getElementById('auditHistory');
-            const newEntryDiv = document.createElement('div');
-            newEntryDiv.classList.add('audit-item');
-            newEntryDiv.innerHTML = `
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Datum des Audits:</label>
-                        <input type="date">
+            const newAuditHtml = `
+                <div class="stakeholder-item audit-item"> <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Datum des Audits:</label>
+                            <input type="date" class="audit-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Auditor:</label>
+                            <input type="text" class="audit-auditor" placeholder="Name des Auditors">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Auditor:</label>
-                        <input type="text" placeholder="Name des Auditors">
+                        <label>Ergebnisse & Empfehlungen:</label>
+                        <textarea class="audit-results" placeholder="Zusammenfassung der Audit-Ergebnisse und Empfehlungen"></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Ergebnisse & Empfehlungen:</label>
-                    <textarea placeholder="Zusammenfassung der Audit-Ergebnisse und empfohlene Maßnahmen"></textarea>
-                </div>
-                <button type="button" class="delete-button" onclick="deleteAuditEntry(this)">X</button>
-                <hr>
             `;
-            container.appendChild(newEntryDiv);
-        }
-
-        function deleteAuditEntry(button) {
-            button.closest('.audit-item').remove();
+            container.insertAdjacentHTML('beforeend', newAuditHtml);
         }
 
         function updateLeistungsstand(value) {
-            document.getElementById('leistungsstand-text').innerText = `${value}% erfüllt`;
+            document.getElementById('leistungsstand-text').textContent = value + '% erfüllt';
         }
 
         function addPaymentEntry() {
-            const tableBody = document.getElementById('paymentTableBody');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><input type="text" placeholder="Rechnungsnummer"></td>
-                <td><input type="date"></td>
-                <td><input type="text" placeholder="Betrag"></td>
-                <td>
-                    <select>
-                        <option>Bezahlt</option>
-                        <option>Offen</option>
-                        <option>Überfällig</option>
-                    </select>
-                </td>
-                <td><button type="button" class="delete-button" onclick="deleteRow(this)">X</button></td>
+            const tbody = document.getElementById('paymentTableBody');
+            const newRow = `
+                <tr class="payment-row">
+                    <td><input type="text" class="payment-invoice" placeholder="Rechnungsnummer"></td>
+                    <td><input type="date" class="payment-date"></td>
+                    <td><input type="text" class="payment-amount" placeholder="Betrag"></td>
+                    <td>
+                        <select class="payment-status">
+                            <option>Offen</option>
+                            <option>Bezahlt</option>
+                            <option>Überfällig</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="delete-button" onclick="deleteItem(this)">X</button></td>
+                </tr>
             `;
-            tableBody.appendChild(newRow);
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
         function addVersionEntry() {
             const container = document.getElementById('versionHistory');
-            const newEntryDiv = document.createElement('div');
-            newEntryDiv.classList.add('version-item');
-            newEntryDiv.innerHTML = `
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Version:</label>
-                        <input type="text" placeholder="z.B. 1.0.1">
+            const newVersionHtml = `
+                <div class="stakeholder-item version-item">
+                    <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Version:</label>
+                            <input type="text" class="version-number" placeholder="z.B. 1.0, 1.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Datum:</label>
+                            <input type="date" class="version-date">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Datum:</label>
-                        <input type="date">
+                        <label>Änderungen:</label>
+                        <textarea class="version-changes" placeholder="Beschreibung der Änderungen in dieser Version"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Autor:</label>
-                        <input type="text" placeholder="Name des Autors">
+                        <input type="text" class="version-author" placeholder="Name des Autors">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Änderungen:</label>
-                    <textarea placeholder="Beschreibung der Änderungen in dieser Version"></textarea>
-                </div>
-                <button type="button" class="delete-button" onclick="deleteVersionEntry(this)">X</button>
-                <hr>
             `;
-            container.appendChild(newEntryDiv);
+            container.insertAdjacentHTML('beforeend', newVersionHtml);
         }
 
-        function deleteVersionEntry(button) {
-            button.closest('.version-item').remove();
+        function addRiskEntry() {
+            const tbody = document.getElementById('riskTableBody');
+            const newRow = `
+                <tr class="risk-row">
+                    <td><input type="text" class="risk-description" placeholder="Risikobeschreibung"></td>
+                    <td>
+                        <select class="risk-category">
+                            <option>Rechtlich</option>
+                            <option>Finanziell</option>
+                            <option>Operationell</option>
+                            <option>Reputation</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="risk-probability">
+                            <option>Niedrig</option>
+                            <option>Mittel</option>
+                            <option>Hoch</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="risk-impact">
+                            <option>Gering</option>
+                            <option>Mittel</option>
+                            <option>Hoch</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="risk-measure" placeholder="Maßnahme zur Minderung"></td>
+                    <td><input type="text" class="risk-responsible" placeholder="Verantwortlicher"></td>
+                    <td>
+                        <select class="risk-status">
+                            <option>Offen</option>
+                            <option>In Bearbeitung</option>
+                            <option>Geschlossen</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="delete-button" onclick="deleteItem(this)">X</button></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', newRow);
         }
 
-        function addRiskRow() {
-            const tableBody = document.getElementById('riskTableBody');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><textarea placeholder="Risikobeschreibung"></textarea></td>
-                <td>
-                    <select>
-                        <option>Finanziell</option>
-                        <option>Rechtlich</option>
-                        <option>Operativ</option>
-                        <option>Technologisch</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option>Niedrig</option>
-                        <option>Mittel</option>
-                        <option>Hoch</option>
-                    </select>
-                </td>
-                <td>
-                    <select>
-                        <option>Gering</option>
-                        <option>Mittel</option>
-                        <option>Hoch</option>
-                    </select>
-                </td>
-                <td><textarea placeholder="Maßnahme"></textarea></td>
-                <td><input type="text" placeholder="Verantwortlicher"></td>
-                <td><button type="button" class="delete-button" onclick="deleteRow(this)">X</button></td>
-            `;
-            tableBody.appendChild(newRow);
+        // Helper function to create a data row div
+        function createDataRow(label, value) {
+            const div = document.createElement('div');
+            div.classList.add('data-row');
+            const labelSpan = document.createElement('span');
+            labelSpan.classList.add('data-label');
+            labelSpan.textContent = label;
+            const valueSpan = document.createElement('span');
+            valueSpan.classList.add('data-value');
+            // Using innerHTML here for potential <br> tags from newlines
+            valueSpan.innerHTML = (value || 'Nicht angegeben').replace(/\n/g, '<br>');
+            div.appendChild(labelSpan);
+            div.appendChild(valueSpan);
+            return div;
         }
 
-        function generateDocumentation() {
-            const vertragsnummer = document.getElementById('vertragsnummer').value || 'Nicht definiert';
-            const vertragsbezeichnung = document.getElementById('vertragsbezeichnung').value || 'Unbenannt';
-            const vertragspartner = document.getElementById('vertragspartner').value || 'Nicht definiert';
-            const vertragsstatus = document.getElementById('vertragsstatus').value || 'Nicht definiert';
-            const vertragsbeginn = document.getElementById('vertragsbeginn').value || 'N/A';
-            const vertragsende = document.getElementById('vertragsende').value || 'N/A';
-            const kuendigungsfrist = document.getElementById('kuendigungsfrist').value || 'N/A';
-            const automatischeVerlaengerung = document.getElementById('automatische-verlaengerung').value || 'Nein';
-            const naechstePruefung = document.getElementById('naechste-pruefung').value || 'N/A';
-            const vertragsgegenstand = document.getElementById('vertragsgegenstand').value || 'Nicht definiert';
-            const lieferbedingungen = document.getElementById('lieferbedingungen').value || 'Nicht definiert';
-            const gesamtwert = document.getElementById('gesamtwert').value || 'N/A';
-            const zahlungsbedingungen = document.getElementById('zahlungsbedingungen').value || 'N/A';
-            const waehrung = document.getElementById('waehrung').value || 'N/A';
-            const zahlungshaeufigkeit = document.getElementById('zahlungshaeufigkeit').value || 'N/A';
+        // Helper function to create a paragraph
+        function createParagraph(text) {
+            const p = document.createElement('p');
+            p.innerHTML = (text || 'Nicht angegeben').replace(/\n/g, '<br>'); // Use innerHTML to preserve line breaks
+            return p;
+        }
 
-            const ansprechpartnerName = document.getElementById('ansprechpartner-name').value || 'N/A';
-            const ansprechpartnerEmail = document.getElementById('ansprechpartner-email').value || 'N/A';
-            const ansprechpartnerTelefon = document.getElementById('ansprechpartner-telefon').value || 'N/A';
-            const ansprechpartnerPosition = document.getElementById('ansprechpartner-position').value || 'N/A';
+        // Export functionality for Contract Management (New Approach: DOM Manipulation)
+        function exportStaticHtml() {
+            // Create a new document to build the static HTML
+            const doc = document.implementation.createHTMLDocument();
+            const head = doc.head;
+            const body = doc.body;
 
-            const uploadedDocuments = Array.from(document.querySelectorAll('#uploadedDocuments li')).map(li => li.textContent.replace('X', '').trim()).join(', ');
+            // Add styles to the new document
+            const style = doc.createElement('style');
+            style.textContent = `
+                /* General Styles for Consistency (from styles.css) */
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background: #f0f2f5; /* Simplified background for static export */
+                    padding: 20px;
+                }
 
-            const staticHtmlContent = `
-                <!DOCTYPE html>
-                <html lang="de">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Vertragsdokumentation</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f4; color: #333; }
-                        .document-container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 900px; margin: 20px auto; }
-                        h1, h2, h3 { color: #333; }
-                        .section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-                        .section:last-child { border-bottom: none; }
-                        .data-row-export { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted #eee; }
-                        .data-label-export { font-weight: bold; }
-                        .data-value-export { text-align: right; }
-                        .document-info { font-size: 0.8em; color: #666; margin-top: 10px; text-align: right;}
-                    </style>
-                </head>
-                <body>
-                    <div class="document-container">
-                        <div class="header">
-                            <h1>Vertragsdokumentation</h1>
-                            <div class="document-info">Version 1.0 (Stand: ${new Date().toLocaleDateString('de-DE')})</div>
-                        </div>
+                .report-container {
+                    max-width: 900px;
+                    margin: 20px auto;
+                    background: white;
+                    padding: 30px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
 
-                        <div class="section">
-                            <h2>Vertragsgrundlagen</h2>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsnummer:</span><span class="data-value-export">${vertragsnummer.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsbezeichnung:</span><span class="data-value-export">${vertragsbezeichnung.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragspartner:</span><span class="data-value-export">${vertragspartner.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsstatus:</span><span class="data-value-export">${vertragsstatus.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsbeginn:</span><span class="data-value-export">${vertragsbeginn.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsende:</span><span class="data-value-export">${vertragsende.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Kündigungsfrist (Tage):</span><span class="data-value-export">${kuendigungsfrist.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Automatische Verlängerung:</span><span class="data-value-export">${automatischeVerlaengerung.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Nächste Prüfung:</span><span class="data-value-export">${naechstePruefung.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Vertragsgegenstand:</span><span class="data-value-export">${vertragsgegenstand.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Lieferbedingungen / SLAs:</span><span class="data-value-export">${lieferbedingungen.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Gesamtwert des Vertrags:</span><span class="data-value-export">${gesamtwert.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Zahlungsbedingungen:</span><span class="data-value-export">${zahlungsbedingungen.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Währung:</span><span class="data-value-export">${waehrung.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Zahlungshäufigkeit:</span><span class="data-value-export">${zahlungshaeufigkeit.replace(/\n/g, '<br>')}</span></div>
-                        </div>
+                .header-exported { /* Custom class for the exported header */
+                    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                    border-radius: 8px 8px 0 0;
+                    margin: -30px -30px 30px -30px; /* Adjust to fill container width */
+                }
 
-                        <div class="section">
-                            <h2>Vertragspartner & Kontakte</h2>
-                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner Name:</span><span class="data-value-export">${ansprechpartnerName.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner E-Mail:</span><span class="data-value-export">${ansprechpartnerEmail.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner Telefon:</span><span class="data-value-export">${ansprechpartnerTelefon.replace(/\n/g, '<br>')}</span></div>
-                            <div class="data-row-export"><span class="data-label-export">Hauptansprechpartner Position:</span><span class="data-value-export">${ansprechpartnerPosition.replace(/\n/g, '<br>')}</span></div>
-                        </div>
+                .header-exported h1 {
+                    font-size: 2.2em;
+                    margin-bottom: 10px;
+                    font-weight: 300;
+                }
 
-                        <div class="section">
-                            <h2>Vertragsdokumente</h2>
-                            <div class="data-row-export"><span class="data-label-export">Hochgeladene Dokumente:</span><span class="data-value-export">${uploadedDocuments.replace(/\n/g, '<br>')}</span></div>
-                        </div>
-                    </div>
-                </body>
-                </html>
+                .header-exported p {
+                    font-size: 1.1em;
+                    opacity: 0.9;
+                }
+                
+                .document-info { font-size: 0.8em; color: rgba(255,255,255,0.7); margin-top: 10px; }
+
+
+                h2, h3, h4 { color: #2c3e50; margin-top: 25px; margin-bottom: 10px; }
+                h2 { font-size: 1.8em; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+                h3 { font-size: 1.3em; margin-bottom: 15px; }
+                h4 { font-size: 1.1em; margin-bottom: 10px; color: #4f46e5; }
+                
+                .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+                .form-group p, .data-item p { margin-bottom: 10px; padding-left: 10px; }
+                .form-group label, .data-item label { font-weight: bold; margin-bottom: 5px; display: block; color: #555; }
+                
+                .data-row { display: flex; margin-bottom: 8px; }
+                .data-label { font-weight: bold; width: 220px; color: #555; flex-shrink: 0; }
+                .data-value { flex-grow: 1; word-wrap: break-word; }
+                p { margin: 0 0 10px 0; }
+                ul { list-style: inside disc; padding-left: 20px; margin-bottom: 10px; }
+                ul li { margin-bottom: 5px; }
+                
+                table.output-table { /* Specific style for tables in the output */
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                    margin-bottom: 20px;
+                    background: white;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                    table-layout: auto;
+                }
+                .output-table th, .output-table td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    vertical-align: top; /* Align content to top for multi-line */
+                }
+                .output-table th { background-color: #f0f4f8; font-weight: bold; }
+                .output-table tr:nth-child(even) { background-color: #fcfdff; }
+
+                .status-badge {
+                    display: inline-block;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    font-size: 0.85em;
+                    font-weight: 600;
+                }
+                .status-badge.entwurf { background-color: #adb5bd; color: white; }
+                .status-badge.verhandlung { background-color: #ffc107; color: #333; }
+                .status-badge.genehmigung { background-color: #17a2b8; color: white; }
+                .status-badge.aktiv { background-color: #28a745; color: white; }
+                .status-badge.pausiert { background-color: #6c757d; color: white; }
+                .status-badge.gekuendigt { background-color: #dc3545; color: white; }
+                .status-badge.abgelaufen { background-color: #6c757d; color: white; }
+                .status-badge.offen { background-color: #007bff; color: white; }
+                .status-badge.inbearbeitung { background-color: #ffc107; color: #333; }
+                .status-badge.erfuellt { background-color: #28a745; color: white; }
+                .status-badge.überfällig { background-color: #dc3545; color: white; }
+                .status-badge.bezahlt { background-color: #28a745; color: white; }
+                .status-badge.niedrig { background-color: #2ecc71; color: white; }
+                .status-badge.mittel { background-color: #f1c40f; color: #333; }
+                .status-badge.hoch { background-color: #e74c3c; color: white; }
+
+
+                @media (max-width: 768px) {
+                    .data-row { flex-direction: column; }
+                    .data-label { width: 100%; margin-bottom: 5px; }
+                    .report-container { padding: 15px; }
+                }
             `;
+            head.appendChild(style);
+
+            // Create main container
+            const containerDiv = doc.createElement('div');
+            containerDiv.classList.add('report-container');
+            body.appendChild(containerDiv);
+
+            // Create and append the header
+            const headerDiv = doc.createElement('div');
+            headerDiv.classList.add('header-exported');
+            const headerH1 = doc.createElement('h1');
+            headerH1.textContent = 'ContractFlow';
+            const headerP = doc.createElement('p');
+            headerP.textContent = 'Professionelles Vertragsmanagement System';
+            const documentInfoDiv = doc.createElement('div');
+            documentInfoDiv.classList.add('document-info');
+            documentInfoDiv.innerHTML = `Version 1.0 (Stand: ${new Date().toLocaleDateString('de-DE')})`;
+
+            headerDiv.appendChild(headerH1);
+            headerDiv.appendChild(headerP);
+            headerDiv.appendChild(documentInfoDiv); // Append version info to exported header
+            containerDiv.appendChild(headerDiv);
+
+            // --- Vertragsgrundlagen ---
+            const h2Grundlagen = doc.createElement('h2');
+            h2Grundlagen.textContent = 'Vertragsgrundlagen';
+            containerDiv.appendChild(h2Grundlagen);
+
+            containerDiv.appendChild(createDataRow('Vertragsnummer:', document.getElementById('vertragsnummer').value));
+            containerDiv.appendChild(createDataRow('Vertragsbezeichnung:', document.getElementById('vertragsbezeichnung').value));
+            containerDiv.appendChild(createDataRow('Vertragspartner:', document.getElementById('vertragspartner').value));
+            containerDiv.appendChild(createDataRow('Vertragsstatus:', `<span class="status-badge ${document.getElementById('vertragsstatus').value.toLowerCase()}">${document.getElementById('vertragsstatus').value}</span>`));
+            containerDiv.appendChild(createDataRow('Vertragsbeginn:', document.getElementById('vertragsbeginn').value));
+            containerDiv.appendChild(createDataRow('Vertragsende:', document.getElementById('vertragsende').value));
+            containerDiv.appendChild(createDataRow('Kündigungsfrist:', (document.getElementById('kuendigungsfrist').value || 'Nicht angegeben') + ' Tage'));
+            containerDiv.appendChild(createDataRow('Automatische Verlängerung:', document.getElementById('automatische-verlaengerung').value));
+            containerDiv.appendChild(createDataRow('Nächste Prüfung:', document.getElementById('naechste-pruefung').value));
+
+            const h3Inhalt = doc.createElement('h3');
+            h3Inhalt.textContent = 'Vertragsinhalt & Leistungen';
+            containerDiv.appendChild(h3Inhalt);
+            containerDiv.appendChild(createDataRow('Vertragsgegenstand:')); // Label only
+            containerDiv.appendChild(createParagraph(document.getElementById('vertragsgegenstand').value));
+            containerDiv.appendChild(createDataRow('Lieferbedingungen / SLAs:')); // Label only
+            containerDiv.appendChild(createParagraph(document.getElementById('lieferbedingungen').value));
+
+            const h3Finanzen = doc.createElement('h3');
+            h3Finanzen.textContent = 'Finanzielle Vereinbarungen';
+            containerDiv.appendChild(h3Finanzen);
+            containerDiv.appendChild(createDataRow('Gesamtwert:', (document.getElementById('gesamtwert').value || 'Nicht angegeben') + ' ' + (document.getElementById('waehrung').value || '')));
+            containerDiv.appendChild(createDataRow('Zahlungsbedingungen:', document.getElementById('zahlungsbedingungen').value));
+            containerDiv.appendChild(createDataRow('Zahlungshäufigkeit:', document.getElementById('zahlungshaeufigkeit').value));
+
+            // --- Vertragspartner & Kontakte ---
+            const h2Kontakte = doc.createElement('h2');
+            h2Kontakte.textContent = 'Vertragspartner & Kontakte';
+            containerDiv.appendChild(h2Kontakte);
+
+            const h3Hauptkontakt = doc.createElement('h3');
+            h3Hauptkontakt.textContent = 'Hauptansprechpartner';
+            containerDiv.appendChild(h3Hauptkontakt);
+            containerDiv.appendChild(createDataRow('Name:', document.getElementById('ansprechpartner-name').value));
+            containerDiv.appendChild(createDataRow('E-Mail:', document.getElementById('ansprechpartner-email').value));
+            containerDiv.appendChild(createDataRow('Telefon:', document.getElementById('ansprechpartner-telefon').value));
+            containerDiv.appendChild(createDataRow('Position:', document.getElementById('ansprechpartner-position').value));
+
+            const h3WeitereKontakte = doc.createElement('h3');
+            h3WeitereKontakte.textContent = 'Weitere Kontakte';
+            containerDiv.appendChild(h3WeitereKontakte);
+
+            const additionalContacts = document.querySelectorAll('#additionalContacts .stakeholder-item');
+            if (additionalContacts.length > 0) {
+                additionalContacts.forEach((contactItem, index) => {
+                    const h4Contact = doc.createElement('h4');
+                    h4Contact.textContent = `Weiterer Kontakt ${index + 1}`;
+                    containerDiv.appendChild(h4Contact);
+                    containerDiv.appendChild(createDataRow('Name:', contactItem.querySelector('.contact-name').value));
+                    containerDiv.appendChild(createDataRow('E-Mail:', contactItem.querySelector('.contact-email').value));
+                    containerDiv.appendChild(createDataRow('Telefon:', contactItem.querySelector('.contact-phone').value));
+                    containerDiv.appendChild(createDataRow('Position:', contactItem.querySelector('.contact-position').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine weiteren Kontakte erfasst.'));
+            }
+
+            // --- Vertragsdokumente ---
+            const h2Dokumente = doc.createElement('h2');
+            h2Dokumente.textContent = 'Vertragsdokumente';
+            containerDiv.appendChild(h2Dokumente);
+
+            const uploadedDocuments = document.querySelectorAll('#uploadedDocuments li');
+            if (uploadedDocuments.length > 0) {
+                const ul = doc.createElement('ul');
+                uploadedDocuments.forEach(docItem => {
+                    const li = doc.createElement('li');
+                    li.textContent = docItem.childNodes[0] ? docItem.childNodes[0].textContent.trim() : 'Nicht angegeben';
+                    ul.appendChild(li);
+                });
+                containerDiv.appendChild(ul);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Dokumente hochgeladen.'));
+            }
+
+            // --- Compliance & Monitoring ---
+            const h2Compliance = doc.createElement('h2');
+            h2Compliance.textContent = 'Compliance & Monitoring';
+            containerDiv.appendChild(h2Compliance);
+
+            const h3Verpflichtungen = doc.createElement('h3');
+            h3Verpflichtungen.textContent = 'Wichtige Verpflichtungen & Fristen';
+            containerDiv.appendChild(h3Verpflichtungen);
+
+            const obligations = document.querySelectorAll('#obligationsTableBody tr');
+            if (obligations.length > 0) {
+                const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Beschreibung', 'Frist', 'Verantwortlicher', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                obligations.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const description = row.querySelector('.obligation-description').value || 'Nicht angegeben';
+                    const date = row.querySelector('.obligation-date').value || 'Nicht angegeben';
+                    const responsible = row.querySelector('.obligation-responsible').value || 'Nicht angegeben';
+                    const statusValue = row.querySelector('.obligation-status').value || 'Nicht angegeben';
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [description, date, responsible, statusHtml].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.innerHTML = value; // Use innerHTML for status badge
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Verpflichtungen erfasst.'));
+            }
+
+            const h3Audit = doc.createElement('h3');
+            h3Audit.textContent = 'Audit-Historie';
+            containerDiv.appendChild(h3Audit);
+
+            const auditEntries = document.querySelectorAll('#auditHistory .audit-item');
+            if (auditEntries.length > 0) {
+                auditEntries.forEach((auditItem, index) => {
+                    const h4Audit = doc.createElement('h4');
+                    h4Audit.textContent = `Audit Eintrag ${index + 1}`;
+                    containerDiv.appendChild(h4Audit);
+                    containerDiv.appendChild(createDataRow('Datum des Audits:', auditItem.querySelector('.audit-date').value));
+                    containerDiv.appendChild(createDataRow('Auditor:', auditItem.querySelector('.audit-auditor').value));
+                    containerDiv.appendChild(createDataRow('Ergebnisse & Empfehlungen:')); // Label only
+                    containerDiv.appendChild(createParagraph(auditItem.querySelector('.audit-results').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Audit-Einträge erfasst.'));
+            }
+
+            // --- Leistungs- & Zahlungsmonitoring ---
+            const h2LeistungZahlung = doc.createElement('h2');
+            h2LeistungZahlung.textContent = 'Leistungs- & Zahlungsmonitoring';
+            containerDiv.appendChild(h2LeistungZahlung);
+
+            const h3Leistungsstand = doc.createElement('h3');
+            h3Leistungsstand.textContent = 'Aktueller Leistungsstand';
+            containerDiv.appendChild(h3Leistungsstand);
+            containerDiv.appendChild(createDataRow('Aktueller Leistungsstand:', (document.getElementById('leistungsstand').value || 'Nicht angegeben') + '% erfüllt'));
+
+            const h3Zahlungshistorie = doc.createElement('h3');
+            h3Zahlungshistorie.textContent = 'Zahlungshistorie';
+            containerDiv.appendChild(h3Zahlungshistorie);
+
+            const paymentEntries = document.querySelectorAll('#paymentTableBody tr');
+            if (paymentEntries.length > 0) {
+                const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Rechnungsnummer', 'Datum', 'Betrag', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                paymentEntries.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const invoice = row.querySelector('.payment-invoice').value || 'Nicht angegeben';
+                    const date = row.querySelector('.payment-date').value || 'Nicht angegeben';
+                    const amount = row.querySelector('.payment-amount').value || 'Nicht angegeben';
+                    const statusValue = row.querySelector('.payment-status').value || 'Nicht angegeben';
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [invoice, date, amount, statusHtml].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.innerHTML = value; // Use innerHTML for status badge
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Zahlungseinträge erfasst.'));
+            }
+
+            // --- Historie & Notizen ---
+            const h2HistorieNotizen = doc.createElement('h2');
+            h2HistorieNotizen.textContent = 'Historie & Notizen';
+            containerDiv.appendChild(h2HistorieNotizen);
+
+            const h3Versionshistorie = doc.createElement('h3');
+            h3Versionshistorie.textContent = 'Versionshistorie';
+            containerDiv.appendChild(h3Versionshistorie);
+
+            const versionEntries = document.querySelectorAll('#versionHistory .version-item');
+            if (versionEntries.length > 0) {
+                versionEntries.forEach((versionItem, index) => {
+                    const h4Version = doc.createElement('h4');
+                    h4Version.textContent = `Version ${versionItem.querySelector('.version-number').value || 'Nicht angegeben'}`;
+                    containerDiv.appendChild(h4Version);
+                    containerDiv.appendChild(createDataRow('Datum:', versionItem.querySelector('.version-date').value));
+                    containerDiv.appendChild(createDataRow('Autor:', versionItem.querySelector('.version-author').value));
+                    containerDiv.appendChild(createDataRow('Änderungen:')); // Label only
+                    containerDiv.appendChild(createParagraph(versionItem.querySelector('.version-changes').value));
+                });
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Versionseinträge erfasst.'));
+            }
+
+            const h3InterneNotizen = doc.createElement('h3');
+            h3InterneNotizen.textContent = 'Interne Notizen';
+            containerDiv.appendChild(h3InterneNotizen);
+            containerDiv.appendChild(createParagraph(document.getElementById('internalNotes').value));
+
+            // --- Risikomanagement ---
+            const h2Risikomanagement = doc.createElement('h2');
+            h2Risikomanagement.textContent = 'Risikomanagement';
+            containerDiv.appendChild(h2Risikomanagement);
+
+            const h3VertraglicheRisiken = doc.createElement('h3');
+            h3VertraglicheRisiken.textContent = 'Vertragliche Risiken';
+            containerDiv.appendChild(h3VertraglicheRisiken);
+
+            const riskEntries = document.querySelectorAll('#riskTableBody tr');
+            if (riskEntries.length > 0) {
+                const table = doc.createElement('table');
+                table.classList.add('output-table'); // Add class for styling
+                const thead = doc.createElement('thead');
+                const tbody = doc.createElement('tbody');
+                table.appendChild(thead);
+                table.appendChild(tbody);
+
+                const headerRow = doc.createElement('tr');
+                ['Beschreibung', 'Kategorie', 'Wahrscheinlichkeit', 'Auswirkung', 'Maßnahme', 'Verantwortlicher', 'Status'].forEach(text => {
+                    const th = doc.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+
+                riskEntries.forEach(row => {
+                    const tr = doc.createElement('tr');
+                    const description = row.querySelector('.risk-description').value || 'Nicht angegeben';
+                    const category = row.querySelector('.risk-category').value || 'Nicht angegeben';
+                    const probabilityValue = row.querySelector('.risk-probability').value || 'Nicht angegeben';
+                    const impactValue = row.querySelector('.risk-impact').value || 'Nicht angegeben';
+                    const measure = row.querySelector('.risk-measure').value || 'Nicht angegeben';
+                    const responsible = row.querySelector('.risk-responsible').value || 'Nicht angegeben';
+                    const statusValue = row.querySelector('.risk-status').value || 'Nicht angegeben';
+                    
+                    const probabilityHtml = `<span class="status-badge ${probabilityValue.toLowerCase().replace(/ /g, '')}">${probabilityValue}</span>`;
+                    const impactHtml = `<span class="status-badge ${impactValue.toLowerCase().replace(/ /g, '')}">${impactValue}</span>`;
+                    const statusHtml = `<span class="status-badge ${statusValue.toLowerCase().replace(/ /g, '')}">${statusValue}</span>`;
+
+                    [description, category, probabilityHtml, impactHtml, measure, responsible, statusHtml].forEach(value => {
+                        const td = doc.createElement('td');
+                        td.innerHTML = value; // Use innerHTML for status badges
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                containerDiv.appendChild(table);
+            } else {
+                containerDiv.appendChild(createParagraph('Keine Risikoeinträge erfasst.'));
+            }
+
+            // Serialize the entire new document to a string
+            const staticHtmlContent = `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
 
             const blob = new Blob([staticHtmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
