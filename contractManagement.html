@@ -31,23 +31,15 @@
                 <div class="section">
                     <h2>Vertragsgrundlagen</h2>
                     <h3>Vertragstyp auswählen</h3>
-                    <div class="contract-type-selector">
-                        <div class="contract-type-card" onclick="selectContractType(this, 'service')">
-                            <h4>Dienstleistungsvertrag</h4>
-                            <p>Beratung, IT-Services, Wartung</p>
-                        </div>
-                        <div class="contract-type-card" onclick="selectContractType(this, 'purchase')">
-                            <h4>Kaufvertrag</h4>
-                            <p>Waren, Produkte, Materialien</p>
-                        </div>
-                        <div class="contract-type-card" onclick="selectContractType(this, 'rental')">
-                            <h4>Mietvertrag</h4>
-                            <p>Räumlichkeiten, Fahrzeuge, Equipment</p>
-                        </div>
-                        <div class="contract-type-card" onclick="selectContractType(this, 'license')">
-                            <h4>Lizenzvertrag</h4>
-                            <p>Software, Patente, Nutzungsrechte</p>
-                        </div>
+                    <div class="form-group">
+                        <label for="contract-type-select">Vertragstyp:</label>
+                        <select id="contract-type-select" name="contract-type">
+                            <option value="">Bitte wählen Sie einen Vertragstyp</option>
+                            <option value="service">Dienstleistungsvertrag</option>
+                            <option value="purchase">Kaufvertrag</option>
+                            <option value="rental">Mietvertrag</option>
+                            <option value="license">Lizenzvertrag</option>
+                        </select>
                     </div>
                     <h3>Vertragsidentifikation</h3>
                     <div class="form-row">
@@ -339,13 +331,7 @@
         });
 
         // Specific functions for Contract Management System
-        function selectContractType(cardElement, type) {
-            const cards = document.querySelectorAll('.contract-type-card');
-            cards.forEach(card => card.classList.remove('selected'));
-            cardElement.classList.add('selected');
-            console.log('Selected contract type:', type);
-            // Here you might dynamically load forms or content based on type
-        }
+        // Removed selectContractType function as it's no longer needed for a <select> element.
 
         function addContact() {
             const container = document.getElementById('additionalContacts');
@@ -687,6 +673,12 @@
             const h2Grundlagen = doc.createElement('h2');
             h2Grundlagen.textContent = 'Vertragsgrundlagen';
             containerDiv.appendChild(h2Grundlagen);
+
+            // Fetch selected contract type from the new select element
+            const contractTypeSelect = document.getElementById('contract-type-select');
+            const selectedContractTypeText = contractTypeSelect.options[contractTypeSelect.selectedIndex].text;
+            containerDiv.appendChild(createDataRow('Vertragstyp:', selectedContractTypeText));
+
 
             containerDiv.appendChild(createDataRow('Vertragsnummer:', document.getElementById('vertragsnummer').value));
             containerDiv.appendChild(createDataRow('Vertragsbezeichnung:', document.getElementById('vertragsbezeichnung').value));
